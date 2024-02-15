@@ -1,17 +1,29 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import Books from "./Books";
+import "./App.css";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import Routing from "./Routing";
+import { BrowserRouter } from "react-router-dom";
+import Navbar from "./components/Navbar";
+
+const theme = extendTheme({
+    config: {
+        useSystemColorMode: false,
+        initialColorMode: "dark",
+    },
+    styles: {
+        global: {},
+    },
+    colorScheme: "dark",
+});
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-    <Books/>
-    </>
-  )
+    return (
+        <ChakraProvider theme={theme}>
+            <BrowserRouter>
+                <Navbar />
+                <Routing />
+            </BrowserRouter>
+        </ChakraProvider>
+    );
 }
 
-export default App
+export default App;
