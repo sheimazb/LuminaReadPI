@@ -4,6 +4,7 @@ import { BsStars } from "react-icons/bs";
 import { TiStar } from "react-icons/ti";
 import { IoNotifications } from "react-icons/io5";
 import { IoMdCart } from "react-icons/io";
+import { FaBookReader } from "react-icons/fa";
 
 const Navbar = () => {
     return (
@@ -15,7 +16,18 @@ const Navbar = () => {
             px="15px"
         >
             <Flex gap={5}>
-                <Text fontSize={"xl"}>Lumina Read</Text>
+                <Text
+                    mb={1}
+                    fontSize={"xl"}
+                    display={"flex"}
+                    alignItems={"center"}
+                    gap={2}
+                >
+                    <Box color="cyan.600">
+                        <FaBookReader />
+                    </Box>
+                    Lumina Read
+                </Text>
 
                 <Flex gap="5px" alignItems={"end"}>
                     <NavLink to="/marketplace">
@@ -34,9 +46,9 @@ const Navbar = () => {
                             Package
                         </Button>
                     </NavLink>
-                    <NavLink to="/">
+                    <NavLink to="/novella">
                         <Button size={"sm"} color={"gray.400"} variant="ghost">
-                            Book
+                            Novella
                         </Button>
                     </NavLink>
                     <NavLink to="/">

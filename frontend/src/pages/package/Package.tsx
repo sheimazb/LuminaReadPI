@@ -8,8 +8,6 @@ import {
     Input,
     InputGroup,
     InputRightElement,
-    ButtonGroup,
-    CardFooter,
     Stack,
     CardBody,
     Heading,
@@ -71,14 +69,16 @@ const Package = () => {
                         </Flex>
                     </Box>
                     <Box position={"absolute"} bottom={4} right={2}>
+                        <Button mt={5} mr={3} size={"sm"}>
+                            Add Book
+                        </Button>
                         <Button mt={5} mr={3} colorScheme="cyan" size={"sm"}>
                             Buy This Pack
                         </Button>
                     </Box>
                 </Flex>
-                <Flex flexDirection={"column"} gap={3} ml={2}>
-                    <Text fontSize={"lg"}>Search Section For books</Text>
-                    <InputGroup size="md" w={300}>
+                <Flex flexDirection={"column"} gap={3} mx={3}>
+                    <InputGroup size="md">
                         <Input
                             borderColor={"gray.700"}
                             placeholder="Search section"
@@ -109,13 +109,13 @@ const Package = () => {
                         <Card
                             maxW="270px"
                             key={index}
-                            bg={"var(--lvl1-darkcolor)"}
+                            bg={"transparent"}
                             border={"var(--bordercolor) solid 1px "}
                             p={0}
                         >
                             <CardBody>
                                 <Image
-                                    src="https://i.gyazo.com/2de8a8974f6ba0aa6d9dedd317e11873.png"
+                                    src="https://i.gyazo.com/e1a2c7bf83cf944a115f0355cbe649ec.png"
                                     alt="Green double couch with wooden legs"
                                     borderRadius="lg"
                                     w={"100%"}
@@ -128,56 +128,14 @@ const Package = () => {
                                     <Text color={"gray.300"} fontSize={"sm"}>
                                         Lorem, ipsum dolor sit amet consectetur.
                                     </Text>
-                                    <Flex alignItems={"center"} gap={3} mt={3}>
-                                        <Image
-                                            src="https://i.gyazo.com/83ece1f06f397ab5928a6b9944a27146.png"
-                                            h={"40px"}
-                                            w={"40px"}
-                                            rounded={"50%"}
-                                        />
-                                        <Box>
-                                            <Text as="b">
-                                                Saif Eddine Jelassi
-                                            </Text>
-                                            <Text
-                                                display={"flex"}
-                                                alignItems={"center"}
-                                                gap={2}
-                                            >
-                                                5 <FaStar />
-                                            </Text>
-                                        </Box>
-                                    </Flex>
+                                    <Button mt={2} size={"sm"}>
+                                        Check novella
+                                    </Button>
                                 </Stack>
                             </CardBody>
-                            <CardFooter
-                                bg={"var(--lvl2-darkcolor)"}
-                                justifyContent={"space-between"}
-                                alignItems={"center"}
-                                m={"-10px 10px 10px 10px"}
-                                rounded={10}
-                            >
-                                <Text
-                                    color="cyan.200"
-                                    fontSize="2xl"
-                                    display={"flex"}
-                                    alignItems={"center"}
-                                    gap={1}
-                                >
-                                    450 <Text fontSize={"xs"}>DT</Text>
-                                </Text>
-                                <ButtonGroup spacing="2">
-                                    <Button variant="ghost" size={"sm"}>
-                                        Add to cart
-                                    </Button>
-                                    <Button size={"sm"} colorScheme="cyan">
-                                        Buy
-                                    </Button>
-                                </ButtonGroup>
-                            </CardFooter>
                         </Card>
                     ))}
-                </Wrap>{" "}
+                </Wrap>
             </Flex>
         </Box>
     );
