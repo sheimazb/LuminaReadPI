@@ -52,22 +52,16 @@ const Navbar = () => {
                 </Flex>
             </Flex>
             <Flex alignItems={"center"} gap={3}>
-                <Button size={"sm"} color={"gray.400"}>
-                    Login
-                </Button>
-                <Button size={"sm"} color={"gray.400"}>
-                    Sign up
-                </Button>
-                <Button size={"sm"} color={"gray.400"}>
+                <Button size={"sm"}>Login</Button>
+                <Button size={"sm"}>Sign up</Button>
+                <Button size={"sm"}>
                     <IoNotifications />
                 </Button>
-                <Button size={"sm"} color={"gray.400"}>
+                <Button size={"sm"}>
                     <IoMdCart />
                 </Button>
 
-                <Button size={"sm"} color={"gray.400"}>
-                    Profile
-                </Button>
+                <Button size={"sm"}>Profile</Button>
                 <Flex
                     w={"40px"}
                     h={"40px"}
