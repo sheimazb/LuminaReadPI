@@ -2,7 +2,7 @@ import { Image, Flex, Box } from "@chakra-ui/react";
 import Login from "./Login";
 import Signup from "./Signup";
 import { useParams } from "react-router-dom";
-
+import image from "../assets/408abbd0-45d0-417e-8998-4baa364b166a.jpg";
 function Auth() {
     const { page } = useParams();
     console.log(page);
@@ -20,7 +20,8 @@ function Auth() {
                     // src="https://i.gyazo.com/b4d5103f2b05bc33c72405d00609aacd.png"
                     // src="https://i.gyazo.com/ecffc0794b4adea89f54036d0653fb08.png"
                     // src="https://i.gyazo.com/1be7fe0eaa2ecc1de5e9c87247266228.png"
-                    src="https://i.gyazo.com/4d2614e46bda0a26c049e4ea38b0ac63.png"
+                    // src="https://i.gyazo.com/4d2614e46bda0a26c049e4ea38b0ac63.png"
+                    src={image}
                     objectFit="cover"
                     w={"100%"}
                 />
