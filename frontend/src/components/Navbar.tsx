@@ -51,6 +51,11 @@ const Navbar = () => {
                             Novella
                         </Button>
                     </NavLink>
+                    <NavLink to="/TTS">
+                        <Button size={"sm"} color={"gray.400"} variant="ghost">
+                            TTS
+                        </Button>
+                    </NavLink>
                     <NavLink to="/">
                         <Button size={"sm"} color={"gray.400"} variant="ghost">
                             About
@@ -64,7 +69,10 @@ const Navbar = () => {
                 </Flex>
             </Flex>
             <Flex alignItems={"center"} gap={3}>
-                <Button size={"sm"}>Login</Button>
+                <NavLink to="/Auth">
+                    <Button size={"sm"}>Login</Button>
+                </NavLink>
+
                 <Button size={"sm"}>Sign up</Button>
                 <Button size={"sm"}>
                     <IoNotifications />
