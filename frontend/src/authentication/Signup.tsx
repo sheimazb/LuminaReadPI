@@ -9,10 +9,8 @@ function Signup() {
             alignItems={"center"}
             p={5}
         >
-            <Text fontSize="2xl" mb={5}>
-                Create an Account
-            </Text>
-            <Divider mb={5} w={"50%"} />
+            <Text fontSize="2xl">Create an Account</Text>
+            <Divider my={8} w={300} />
             <Flex flexDirection={"column"} mb={5}>
                 <Input
                     variant="filled"
@@ -31,14 +29,13 @@ function Signup() {
                     variant="filled"
                     placeholder="Password"
                     type="password"
-                    mb={3}
+                    mb={6}
                     w={300}
                 />
                 <Button colorScheme="blue" mb={3}>
                     Sign Up
                 </Button>
             </Flex>
-            <Divider w={"50%"} />
             <Text mt={4} fontSize="sm">
                 Already have an account?{" "}
                 <Text as="span" color="blue.500" cursor="pointer">
