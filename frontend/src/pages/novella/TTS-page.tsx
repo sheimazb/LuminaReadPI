@@ -1,4 +1,13 @@
-import { Flex, Select, Input, Textarea, Button, Box } from "@chakra-ui/react";
+import {
+    Flex,
+    Select,
+    Input,
+    Textarea,
+    Button,
+    Box,
+    Wrap,
+    Text,
+} from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { FaPause, FaStop } from "react-icons/fa";
 import { VscDebugContinue, VscDebugStart } from "react-icons/vsc";
@@ -15,6 +24,7 @@ const TTS = () => {
     const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(
         null
     );
+    const [currentWordIndex, setCurrentWordIndex] = useState<number>(-1);
 
     useEffect(() => {
         const synth = window.speechSynthesis;
@@ -31,15 +41,36 @@ const TTS = () => {
     }, []);
 
     const speakText = () => {
-        const utterance = new SpeechSynthesisUtterance(textToSpeak);
-        if (selectedVoice) {
-            utterance.voice = selectedVoice;
+        if (synth && synth.paused && utterance) {
+            synth.resume();
+        } else {
+            const newUtterance = new SpeechSynthesisUtterance(textToSpeak);
+            if (selectedVoice) {
+                newUtterance.voice = selectedVoice;
+            }
+            newUtterance.pitch = pitch;
+            newUtterance.rate = rate;
+            newUtterance.volume = volume;
+
+            newUtterance.onboundary = (event) => {
+                const charIndex = event.charIndex;
+                const words = textToSpeak.split(" ");
+                let currentCharIndex = 0;
+                for (let i = 0; i < words.length; i++) {
+                    if (
+                        charIndex >= currentCharIndex &&
+                        charIndex < currentCharIndex + words[i].length
+                    ) {
+                        setCurrentWordIndex(i);
+                        break;
+                    }
+                    currentCharIndex += words[i].length + 1;
+                }
+            };
+
+            synth?.speak(newUtterance);
+            setUtterance(newUtterance);
         }
-        utterance.pitch = pitch;
-        utterance.rate = rate;
-        utterance.volume = volume;
-        synth?.speak(utterance);
-        setUtterance(utterance);
     };
 
     const pauseSpeech = () => {
@@ -48,10 +79,7 @@ const TTS = () => {
 
     const stopSpeech = () => {
         synth?.cancel();
-    };
-
-    const continueSpeech = () => {
-        synth?.resume();
+        setCurrentWordIndex(-1); // Reset word highlight when speech is stopped
     };
 
     const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -60,54 +88,13 @@ const TTS = () => {
 
     return (
         <Flex
-            w={"1400px"}
+            maxW={"1400px"}
             justify="center"
             align="center"
             flexDirection="column"
             m={"40px auto"}
         >
-            <Flex w={"100%"} justify="center" align="center" gap={2}>
-                <Select
-                    value={selectedVoice ? selectedVoice.name : ""}
-                    onChange={(e) => {
-                        const voiceName = e.target.value;
-                        const voice = voices.find(
-                            (voice) => voice.name === voiceName
-                        );
-                        setSelectedVoice(voice || null);
-                    }}
-                >
-                    <option value="">Select a voice...</option>
-                    {voices.map((voice) => (
-                        <option key={voice.name} value={voice.name}>
-                            {voice.name}
-                        </option>
-                    ))}
-                </Select>
-                <Input
-                    type="range"
-                    min="0.1"
-                    max="2"
-                    step="0.1"
-                    value={pitch}
-                    onChange={(e) => setPitch(parseFloat(e.target.value))}
-                />
-                <Input
-                    type="range"
-                    min="0.1"
-                    max="2"
-                    step="0.1"
-                    value={rate}
-                    onChange={(e) => setRate(parseFloat(e.target.value))}
-                />
-                <Input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.1"
-                    value={volume}
-                    onChange={(e) => setVolume(parseFloat(e.target.value))}
-                />
+            <Wrap w={"100%"} gap={2}>
                 <Button onClick={speakText}>
                     <Box fontSize={"md"}>
                         <VscDebugStart />
@@ -123,18 +110,28 @@ const TTS = () => {
                         <FaStop />
                     </Box>
                 </Button>
-                <Button onClick={continueSpeech}>
-                    <Box fontSize={"md"}>
-                        <VscDebugContinue />
-                    </Box>
-                </Button>
-            </Flex>
+            </Wrap>
             <Textarea
                 value={textToSpeak}
                 onChange={handleTextChange}
                 placeholder="Enter text to speak..."
                 style={{ width: "100%", minHeight: "100px", marginTop: "20px" }}
             />
+            <Wrap mt={4} spacing={1}>
+                {textToSpeak.split(" ").map((word, index) => (
+                    <Text
+                        key={index}
+                        bg={
+                            index === currentWordIndex
+                                ? "cyan.900"
+                                : "transparent"
+                        }
+                        rounded={3}
+                    >
+                        {word}
+                    </Text>
+                ))}
+            </Wrap>
         </Flex>
     );
 };
