@@ -1,14 +1,11 @@
-import {
-    Image,
-    Flex,
-    Box,
-    Input,
-    Button,
-    Text,
-    Divider,
-} from "@chakra-ui/react";
+import { Image, Flex, Box } from "@chakra-ui/react";
+import Login from "./Login";
+import Signup from "./Signup";
+import { useParams } from "react-router-dom";
 
 function Auth() {
+    const { page } = useParams();
+    console.log(page);
     return (
         <Flex
             h={"calc(100vh - 60px)"}
@@ -17,52 +14,17 @@ function Auth() {
             alignItems={"center"}
             overflow={"hidden"}
         >
-            <Box w={"100%"} minH={"100%"} rounded={20} overflow={"hidden"}>
+            {page === "signup" ? <Login /> : <Signup />}
+            <Box w={"100%"} minH={"100%"} overflow={"hidden"}>
                 <Image
                     // src="https://i.gyazo.com/b4d5103f2b05bc33c72405d00609aacd.png"
-                    src="https://i.gyazo.com/1be7fe0eaa2ecc1de5e9c87247266228.png"
+                    // src="https://i.gyazo.com/ecffc0794b4adea89f54036d0653fb08.png"
+                    // src="https://i.gyazo.com/1be7fe0eaa2ecc1de5e9c87247266228.png"
+                    src="https://i.gyazo.com/4d2614e46bda0a26c049e4ea38b0ac63.png"
                     objectFit="cover"
                     w={"100%"}
-                    rounded={20}
                 />
             </Box>
-            <Flex
-                flexDirection={"column"}
-                w={"750px"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                p={5}
-            >
-                <Text fontSize="2xl" mb={4}>
-                    Welcome Back!
-                </Text>
-                <Divider mb={4} w={"50%"} />
-                <Flex flexDirection={"column"} mb={4}>
-                    <Input variant="filled" placeholder="Username" mb={3} />
-                    <Input
-                        variant="filled"
-                        placeholder="Password"
-                        type="password"
-                        mb={3}
-                    />
-                    <Button colorScheme="blue" mb={3}>
-                        Login
-                    </Button>
-                    <Text fontSize="sm">
-                        Forgot your password?{" "}
-                        <Text as="span" color="blue.500" cursor="pointer">
-                            Reset here
-                        </Text>
-                    </Text>
-                </Flex>
-                <Divider w={"50%"} />
-                <Text mt={4} fontSize="sm">
-                    Don't have an account?{" "}
-                    <Text as="span" color="blue.500" cursor="pointer">
-                        Sign up now
-                    </Text>
-                </Text>
-            </Flex>
         </Flex>
     );
 }

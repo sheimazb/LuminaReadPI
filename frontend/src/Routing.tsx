@@ -5,7 +5,8 @@ import Package from "./pages/package/Package";
 import Novella from "./pages/novella/Novella";
 import TTS from "./pages/novella/TTS-page";
 import Auth from "./authentication/Auth";
-
+import Login from "./authentication/Login";
+import Signup from "./authentication/Signup";
 function App() {
     return (
         <Routes>
@@ -14,7 +15,10 @@ function App() {
             <Route path="/package" element={<Package />} />
             <Route path="/novella" element={<Novella />} />
             <Route path="/TTS" element={<TTS />} />
-            <Route path="/Auth" element={<Auth />} />
+            <Route path="/Auth/*" element={<Auth />}>
+                <Route path="login" element={<Login />} />
+                <Route path="signup" element={<Signup />} />
+            </Route>
         </Routes>
     );
 }
