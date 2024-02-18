@@ -1,4 +1,5 @@
 import { Box, Flex, Input, Button, Text, Divider } from "@chakra-ui/react";
+import { NavLink } from "react-router-dom";
 
 function Signup() {
     return (
@@ -37,10 +38,12 @@ function Signup() {
                 </Button>
             </Flex>
             <Text mt={4} fontSize="sm">
-                Already have an account?{" "}
-                <Text as="span" color="blue.500" cursor="pointer">
-                    Log in here
-                </Text>
+                Already have an account?
+                <NavLink to="/Auth/login">
+                    <Text as="span" color="blue.500" cursor="pointer" ml={1}>
+                        Log in here
+                    </Text>
+                </NavLink>
             </Text>
         </Flex>
     );

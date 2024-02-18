@@ -87,51 +87,52 @@ const TTS = () => {
     };
 
     return (
-        <Flex
-            maxW={"1400px"}
-            justify="center"
-            align="center"
-            flexDirection="column"
-            m={"40px auto"}
-        >
+        <Flex maxW={"1400px"} flexDirection="column" p={3}>
             <Wrap w={"100%"} gap={2}>
-                <Button onClick={speakText}>
-                    <Box fontSize={"md"}>
+                <Button size={"sm"} onClick={speakText}>
+                    <Box fontSize={"sm"}>
                         <VscDebugStart />
                     </Box>
                 </Button>
-                <Button onClick={pauseSpeech}>
-                    <Box fontSize={"md"}>
+                <Button size={"sm"} onClick={pauseSpeech}>
+                    <Box fontSize={"sm"}>
                         <FaPause />
                     </Box>
                 </Button>
-                <Button onClick={stopSpeech}>
-                    <Box fontSize={"md"}>
+                <Button size={"sm"} onClick={stopSpeech}>
+                    <Box fontSize={"sm"}>
                         <FaStop />
                     </Box>
                 </Button>
             </Wrap>
-            <Textarea
-                value={textToSpeak}
-                onChange={handleTextChange}
-                placeholder="Enter text to speak..."
-                style={{ width: "100%", minHeight: "100px", marginTop: "20px" }}
-            />
-            <Wrap mt={4} spacing={1}>
-                {textToSpeak.split(" ").map((word, index) => (
-                    <Text
-                        key={index}
-                        bg={
-                            index === currentWordIndex
-                                ? "cyan.900"
-                                : "transparent"
-                        }
-                        rounded={3}
-                    >
-                        {word}
-                    </Text>
-                ))}
-            </Wrap>
+            <Flex
+                justifyContent={"space-between"}
+                w={"100%"}
+                flexDirection={"column"}
+            >
+                <Textarea
+                    value={textToSpeak}
+                    onChange={handleTextChange}
+                    placeholder="Enter text to speak..."
+                    w={"100%"}
+                    mt="20px"
+                />
+                <Wrap mt={4} spacing={1}>
+                    {textToSpeak.split(" ").map((word, index) => (
+                        <Text
+                            key={index}
+                            bg={
+                                index === currentWordIndex
+                                    ? "cyan.900"
+                                    : "transparent"
+                            }
+                            rounded={3}
+                        >
+                            {word}
+                        </Text>
+                    ))}
+                </Wrap>
+            </Flex>
         </Flex>
     );
 };

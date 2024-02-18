@@ -15,6 +15,7 @@ import {
     Textarea,
 } from "@chakra-ui/react";
 import { FaCommentAlt } from "react-icons/fa";
+import { NavLink, Outlet } from "react-router-dom";
 const Novella = () => {
     return (
         <Flex w={"1200px"} m={"30px auto"} gap={3} flexDirection={"column"}>
@@ -54,66 +55,21 @@ const Novella = () => {
                     </Flex>
                 </Box>
                 <Box position={"absolute"} bottom={4} left={5}>
-                    <Button mt={5} mr={3} colorScheme="cyan" size={"sm"}>
-                        Read
-                    </Button>{" "}
+                    <NavLink to="/novella/TTS">
+                        <Button mt={5} mr={3} colorScheme="cyan" size={"sm"}>
+                            Read
+                        </Button>
+                    </NavLink>
+                    <NavLink to="/novella/Forum">
+                        <Button mt={5} mr={3} size={"sm"}>
+                            Forum
+                        </Button>
+                    </NavLink>
                 </Box>
             </Flex>
-            <Flex justifyContent={"space-between"} gap={3}>
-                <Flex
-                    w={"100%"}
-                    p={3}
-                    rounded={10}
-                    flexDirection={"column"}
-                    gap={3}
-                >
-                    <Flex alignItems={"center"} gap={3}>
-                        <FaCommentAlt /> <Text>5 Comments</Text>
-                    </Flex>
-                    <Flex flexDirection={"column"} gap={1}>
-                        <Text fontSize={"sm"}>
-                            Comment as Saif Eddine Jelassi
-                        </Text>
-                        <Textarea placeholder="Here is a sample placeholder" />
-                    </Flex>
-                    <Flex alignItems={"start"} gap={3} mt={2}>
-                        <Image
-                            src="https://i.gyazo.com/83ece1f06f397ab5928a6b9944a27146.png"
-                            h={"30px"}
-                            w={"30px"}
-                            rounded={"50%"}
-                        />
-                        <Flex flexDirection={"column"}>
-                            <Flex gap={1} alignItems={"center"}>
-                                <Text as="b">Saif Eddine Jelassi</Text>
-                                <Text fontSize={"sm"}>15 june ,2013</Text>
-                            </Flex>
-                            <Text color={"gray.400"}>
-                                Lorem ipsum dolor, sit amet consectetur
-                                adipisicing elit. Dolore laborum suscipit
-                                temporibus eum nobis atque a, earum esse
-                                accusamus minus vero! Quod dolorum eum ducimus
-                                voluptatum voluptates harum, provident ullam!
-                            </Text>
-                            <Flex gap={2}>
-                                <Button mt={2} size={"xs"}>
-                                    Edit
-                                </Button>
-                                <Button mt={2} size={"xs"}>
-                                    Delete
-                                </Button>
-                            </Flex>
-                        </Flex>
-                    </Flex>
-                </Flex>
-                <Flex
-                    w={"350px"}
-                    border={"var(--bordercolor) solid 1px"}
-                    p={3}
-                    rounded={10}
-                >
-                    News
-                </Flex>
+
+            <Flex w={"100%"} m={"10px auto"} gap={3} flexDirection={"column"}>
+                <Outlet />
             </Flex>
         </Flex>
     );

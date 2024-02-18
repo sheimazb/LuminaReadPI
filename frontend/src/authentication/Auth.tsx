@@ -1,7 +1,5 @@
 import { Image, Flex, Box } from "@chakra-ui/react";
-import Login from "./Login";
-import Signup from "./Signup";
-import { useParams } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import image from "../assets/408abbd0-45d0-417e-8998-4baa364b166a.jpg";
 function Auth() {
     const { page } = useParams();
@@ -14,7 +12,7 @@ function Auth() {
             alignItems={"center"}
             overflow={"hidden"}
         >
-            {page === "signup" ? <Login /> : <Signup />}
+            <Outlet />
             <Box
                 w={"100%"}
                 minH={"100%"}
