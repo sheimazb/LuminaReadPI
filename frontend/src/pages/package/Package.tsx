@@ -44,7 +44,7 @@ const Package = () => {
                     />
                     <Box position={"absolute"} bottom={4} left={4}>
                         <Image
-                            src="https://i.gyazo.com/83ece1f06f397ab5928a6b9944a27146.png"
+                            src="https://i.gyazo.com/df168e15d60588f5f47e2faa9e9cae6c.png"
                             w={12}
                             h={12}
                             rounded={20}

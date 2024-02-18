@@ -125,21 +125,25 @@ const Marketplace = () => {
                                             mt={3}
                                         >
                                             <Image
-                                                src="https://i.gyazo.com/83ece1f06f397ab5928a6b9944a27146.png"
+                                                src="https://i.gyazo.com/df168e15d60588f5f47e2faa9e9cae6c.png"
                                                 h={"40px"}
                                                 w={"40px"}
                                                 rounded={"50%"}
                                             />
                                             <Box>
-                                                <Text as="b">
-                                                    Saif Eddine Jelassi
-                                                </Text>
+                                                <Text>Saif Eddine Jelassi</Text>
                                                 <Text
                                                     display={"flex"}
                                                     alignItems={"center"}
-                                                    gap={2}
+                                                    fontSize={"sm"}
+                                                    color={"yellow.400"}
+                                                    gap={1}
                                                 >
-                                                    5 <FaStar />
+                                                    <FaStar />
+                                                    <FaStar />
+                                                    <FaStar />
+                                                    <FaStar />
+                                                    <FaStar />
                                                 </Text>
                                             </Box>
                                         </Flex>
