@@ -51,10 +51,10 @@ const Profile = () => {
                         <TagLabel>Good Reader</TagLabel>
                     </Tag>
                     <Tag size="md" colorScheme="green" borderRadius="full">
-                        <TagLabel>professional writer</TagLabel>
+                        <TagLabel>Professional Writer</TagLabel>
                     </Tag>
                     <Tag size="md" colorScheme="purple" borderRadius="full">
-                        <TagLabel>High tech</TagLabel>
+                        <TagLabel>High Tech</TagLabel>
                     </Tag>
                 </Flex>
             </Flex>

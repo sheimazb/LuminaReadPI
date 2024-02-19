@@ -114,17 +114,6 @@ const Navbar = () => {
                             Novella
                         </Button>
                     </NavLink>
-
-                    <NavLink to="/">
-                        <Button size={"sm"} color={"gray.400"} variant="ghost">
-                            About
-                        </Button>
-                    </NavLink>
-                    <NavLink to="/">
-                        <Button size={"sm"} color={"gray.400"} variant="ghost">
-                            contact
-                        </Button>
-                    </NavLink>
                 </Flex>
             </Flex>
             <Flex alignItems={"center"} gap={3}>
