@@ -17,6 +17,7 @@ import {
     DrawerOverlay,
     DrawerHeader,
     DrawerBody,
+    Divider,
 } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 import { BsStars } from "react-icons/bs";
@@ -77,19 +78,20 @@ const Navbar = () => {
             px="15px"
         >
             <Flex gap={5}>
-                <Text
-                    mb={1}
-                    fontSize={"xl"}
-                    display={"flex"}
-                    alignItems={"center"}
-                    gap={2}
-                >
-                    <Box color="cyan.600">
-                        <FaBookReader />
-                    </Box>
-                    Lumina Read
-                </Text>
-
+                <NavLink to="/">
+                    <Text
+                        mb={1}
+                        fontSize={"xl"}
+                        display={"flex"}
+                        alignItems={"center"}
+                        gap={2}
+                    >
+                        <Box color="cyan.600">
+                            <FaBookReader />
+                        </Box>
+                        Lumina Read
+                    </Text>
+                </NavLink>
                 <Flex gap="5px" alignItems={"end"}>
                     <NavLink to="/marketplace">
                         <Button
@@ -230,8 +232,9 @@ const Navbar = () => {
                         )}
                     </MenuButton>
                 </Menu>
-
-                <Button size={"sm"}>Profile</Button>
+                <NavLink to="/profile">
+                    <Button size={"sm"}>Profile</Button>
+                </NavLink>
                 <Flex
                     w={"40px"}
                     h={"40px"}
@@ -267,6 +270,7 @@ const Navbar = () => {
                     </Flex>
                 </Flex>
             </Flex>
+
             <Drawer
                 placement="right"
                 onClose={toggleDrawer}
