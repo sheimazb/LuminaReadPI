@@ -77,19 +77,20 @@ const Navbar = () => {
             px="15px"
         >
             <Flex gap={5}>
-                <Text
-                    mb={1}
-                    fontSize={"xl"}
-                    display={"flex"}
-                    alignItems={"center"}
-                    gap={2}
-                >
-                    <Box color="cyan.600">
-                        <FaBookReader />
-                    </Box>
-                    Lumina Read
-                </Text>
-
+                <NavLink to="/">
+                    <Text
+                        mb={1}
+                        fontSize={"xl"}
+                        display={"flex"}
+                        alignItems={"center"}
+                        gap={2}
+                    >
+                        <Box color="cyan.600">
+                            <FaBookReader />
+                        </Box>
+                        Lumina Read
+                    </Text>
+                </NavLink>
                 <Flex gap="5px" alignItems={"end"}>
                     <NavLink to="/marketplace">
                         <Button
@@ -110,17 +111,6 @@ const Navbar = () => {
                     <NavLink to="/novella">
                         <Button size={"sm"} color={"gray.400"} variant="ghost">
                             Novella
-                        </Button>
-                    </NavLink>
-
-                    <NavLink to="/">
-                        <Button size={"sm"} color={"gray.400"} variant="ghost">
-                            About
-                        </Button>
-                    </NavLink>
-                    <NavLink to="/">
-                        <Button size={"sm"} color={"gray.400"} variant="ghost">
-                            contact
                         </Button>
                     </NavLink>
                 </Flex>
@@ -230,8 +220,9 @@ const Navbar = () => {
                         )}
                     </MenuButton>
                 </Menu>
-
-                <Button size={"sm"}>Profile</Button>
+                <NavLink to="/profile">
+                    <Button size={"sm"}>Profile</Button>
+                </NavLink>
                 <Flex
                     w={"40px"}
                     h={"40px"}
@@ -267,6 +258,7 @@ const Navbar = () => {
                     </Flex>
                 </Flex>
             </Flex>
+
             <Drawer
                 placement="right"
                 onClose={toggleDrawer}
