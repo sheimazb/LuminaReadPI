@@ -17,7 +17,6 @@ import {
     DrawerOverlay,
     DrawerHeader,
     DrawerBody,
-    Divider,
 } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 import { BsStars } from "react-icons/bs";

@@ -8,18 +8,22 @@ import {
     Input,
     InputGroup,
     InputRightElement,
-    Stack,
-    CardBody,
-    Heading,
-    Card,
-    Divider,
     Tag,
     TagLabel,
 } from "@chakra-ui/react";
-import { FaSearch, FaStar } from "react-icons/fa";
+import { useState } from "react";
+import { FaSearch, FaStar, FaPlus } from "react-icons/fa"; // Import FaPlus for the add button
 
 const Profile = () => {
+    const [currentColorIndex, setCurrentColorIndex] = useState(1);
+    const colorSchemes = ["red", "cyan", "green"];
+
     const range = (n: number) => [...Array(n).keys()];
+
+    // Function to handle adding a new package
+    const handleAddPackage = () => {
+        console.log("Adding a new package...");
+    };
 
     return (
         <Box maxW={"1230px"} m={"30px auto"}>
@@ -58,7 +62,18 @@ const Profile = () => {
                     </Tag>
                 </Flex>
             </Flex>
-            <Flex mt={10}>
+            <Flex justifyContent="center" mt={5}>
+                <Button
+                    leftIcon={<FaPlus />}
+                    size={"sm"}
+                    colorScheme={colorSchemes[currentColorIndex]}
+                    variant="outline"
+                    onClick={handleAddPackage}
+                >
+                    Add New Package
+                </Button>
+            </Flex>
+            <Flex mt={5}>
                 <InputGroup size="md">
                     <Input
                         borderColor={"gray.700"}
@@ -74,6 +89,7 @@ const Profile = () => {
             <Wrap minH={500} mt={3}>
                 {range(10).map((index) => (
                     <Box
+                        key={index}
                         h={280}
                         w={300}
                         rounded={10}
