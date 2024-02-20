@@ -20,8 +20,6 @@
             setBooks(result.data);
             console.log(result.data);
         }
-
-
         async function save(event)
         {
             event.preventDefault();
@@ -29,11 +27,9 @@
             {
                 await axios.post("http://127.0.0.1:8000/api/save",
                     {
-
                         name: name,
                         description: description,
                         matricule: matricule
-
                     });
                 alert("book Registation Successfully");
                 setId("");
@@ -57,8 +53,6 @@
             setId(books.id);
 
         }
-
-
 
         async function DeleteBook(id)
         {
