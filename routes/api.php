@@ -31,6 +31,10 @@ Route::delete('/delete/{id}',[\App\Http\Controllers\BooksController::class, 'des
 Route::post('/register', [\App\Http\Controllers\AuthUserController::class, 'register']);
 Route::post('/login',  [\App\Http\Controllers\AuthUserController::class, 'login']);
 
+//Add Pack
+Route::post('/AddPack',  [\App\Http\Controllers\PacksController::class, 'store']);
+
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

@@ -27,8 +27,7 @@ class AuthUserController extends Controller
 
             return response()->json(['user' => $user]);
         } catch (Exception $exception) {
-            dd($exception);
-            return response()->json(['message' => 'Erreur lors de l\'enregistrement'], 500);
+            return response()->json(['message' => $exception], 500);
         }
     }
     // Fonction de connexion
