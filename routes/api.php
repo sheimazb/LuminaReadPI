@@ -29,7 +29,7 @@ Route::delete('/delete/{id}',[\App\Http\Controllers\BooksController::class, 'des
 
 //Authentication user
 Route::post('/register', [\App\Http\Controllers\AuthUserController::class, 'register']);
-Route::post('/login', 'AuthController@login');
+Route::post('/login',  [\App\Http\Controllers\AuthUserController::class, 'login']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
