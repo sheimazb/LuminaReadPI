@@ -15,11 +15,23 @@ import {
     Heading,
     Card,
 } from "@chakra-ui/react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { FaFilter, FaList, FaSearch, FaStar } from "react-icons/fa";
 
 const Marketplace = () => {
-    const range = (n: number) => [...Array(n).keys()];
-
+    const [packs, setPacks] = useState([]);
+    useEffect(()=>{
+        (async () =>await Load())();
+    },[]);
+    
+    async function  Load()
+    {
+        const result = await axios.get(
+            "http://127.0.0.1:8000/api/AllPack");
+            setPacks(result.data.pack);
+        console.log(result.data.pack);
+    }
     return (
         <Box>
             <Flex
@@ -91,8 +103,10 @@ const Marketplace = () => {
                     >
                         Filter
                     </Flex>
+
+                    {/*hfhfhhfhhfh */}
                     <Wrap w={"calc(100vw - 300px)"} p={2}>
-                        {range(10).map((index) => (
+                    {packs && packs.map((pack: any, index: number) => (
                             <Card
                                 maxW="300px"
                                 key={index}
@@ -110,14 +124,13 @@ const Marketplace = () => {
                                     />
                                     <Stack mt="3" spacing="1">
                                         <Heading size="md">
-                                            Best Stories For kids
+                                            {pack.title}
                                         </Heading>
                                         <Text
                                             color={"gray.300"}
                                             fontSize={"sm"}
                                         >
-                                            Lorem, ipsum dolor sit amet
-                                            consectetur.
+                                            {pack.description}
                                         </Text>
                                         <Flex
                                             alignItems={"center"}
@@ -163,7 +176,7 @@ const Marketplace = () => {
                                         alignItems={"center"}
                                         gap={1}
                                     >
-                                        450 <Text fontSize={"xs"}>DT</Text>
+                                        {pack.price} <Text fontSize={"xs"}>DT</Text>
                                     </Text>
                                     <ButtonGroup spacing="2">
                                         <Button variant="ghost" size={"sm"}>
@@ -175,6 +188,10 @@ const Marketplace = () => {
                                     </ButtonGroup>
                                 </CardFooter>
                             </Card>
+
+
+
+
                         ))}
                     </Wrap>
                 </Flex>

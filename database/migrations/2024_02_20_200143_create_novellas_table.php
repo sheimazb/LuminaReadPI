@@ -11,16 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('packs', function (Blueprint $table) {
+        Schema::create('novellas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('title');
             $table->string('description');
-            $table->string('category');
-            $table->string('img');
-            $table->string('langue');
-            $table->string('price');
+            $table->string('content');
+            $table->string('progress');
             $table->timestamps();
         });
     }
@@ -30,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('packs');
+        Schema::dropIfExists('novellas');
     }
 };

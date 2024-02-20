@@ -32,7 +32,13 @@ Route::post('/register', [\App\Http\Controllers\AuthUserController::class, 'regi
 Route::post('/login',  [\App\Http\Controllers\AuthUserController::class, 'login']);
 
 //Add Pack
-Route::post('/AddPack',  [\App\Http\Controllers\PacksController::class, 'AddPack']);
+Route::post('/add-pack', [\App\Http\Controllers\PacksController::class, 'AddPack'])->middleware('auth');
+
+Route::get('/AllPack',  [\App\Http\Controllers\PacksController::class, 'AllPack']);
+
+//Add Novella 
+Route::post('/add-novella', [\App\Http\Controllers\NovellaController::class, 'store']);
+Route::get('/list-novella', [\App\Http\Controllers\NovellaController::class, 'index']);
 
 
 
