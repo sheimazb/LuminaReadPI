@@ -19,35 +19,22 @@ class PacksController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function AddPack(Request $request)
     {
-        // Valider les données de la requête
-        $request->validate([
-            'title' => 'required|string',
-            'description' => 'required|string',
-            'category' => 'required|string',
-            'img' => 'required|string',
-            'langue' => 'required|string',
-            'price' => 'required|string',
-        ]);
-        $userId = 1;
-        // Créer un nouveau pack
-        $pack = new Pack([
-            'user_id' => $userId,
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'category' => $request->input('category'),
-            'img' => $request->input('img'),
-            'langue' => $request->input('langue'),
-            'price' => $request->input('price'),
-        ]);
-
-        // Enregistrer le pack dans la base de données
+       
+        try{
+        $pack = new Pack();
+        $pack->title=$request->title;
+        $pack->description=$request->description;
+        $pack->category=$request->category;
+        $pack->img=$request->img;
+        $pack->langue=$request->langue;
+        $pack->price=$request->price;
         $pack->save();
-
-        // Retourner une réponse appropriée
-        return response()->json(['message' => 'Pack created successfully', 'pack' => $pack], 201);
-    
+        return response()->json(['pack' => $pack]);
+        } catch (Exception $exception) {
+            return response()->json(['message' => $exception], 500);
+        }
     }
 
     /**

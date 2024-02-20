@@ -32,7 +32,7 @@ Route::post('/register', [\App\Http\Controllers\AuthUserController::class, 'regi
 Route::post('/login',  [\App\Http\Controllers\AuthUserController::class, 'login']);
 
 //Add Pack
-Route::post('/AddPack',  [\App\Http\Controllers\PacksController::class, 'store']);
+Route::post('/AddPack',  [\App\Http\Controllers\PacksController::class, 'AddPack']);
 
 
 
