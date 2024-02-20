@@ -21,9 +21,9 @@ class PacksController extends Controller
      */
     public function AddPack(Request $request)
     {
-       
         try{
         $pack = new Pack();
+        $pack->user_id=$request->user_id;
         $pack->title=$request->title;
         $pack->description=$request->description;
         $pack->category=$request->category;
