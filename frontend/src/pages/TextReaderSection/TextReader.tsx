@@ -141,7 +141,7 @@ const TextReader = () => {
                     justifyContent={"space-between"}
                     position={"sticky"}
                     top={0}
-                    zIndex={1000}
+                    zIndex={2}
                     bg={"gray.800"}
                     py={2}
                     borderColor={"gray.700"}
@@ -284,9 +284,9 @@ const TextReader = () => {
                         <Flex overflow={"hidden"}>
                             <Text fontSize={"4xl"}>
                                 <Wrap
-                                    spacingY={6}
+                                    spacingY={8}
                                     px={1}
-                                    mt={`-${consecutiveTrueCount * 80}px`}
+                                    mt={`-${consecutiveTrueCount * 86}px`}
                                 >
                                     {textToSpeak
                                         .split(" ")
@@ -300,7 +300,7 @@ const TextReader = () => {
                                                 }
                                                 bg={
                                                     index === currentWordIndex
-                                                        ? "cyan.900"
+                                                        ? "pink.700"
                                                         : "transparent"
                                                 }
                                                 rounded={3}

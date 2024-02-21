@@ -123,6 +123,16 @@ const Navbar = () => {
                             Novella
                         </Button>
                     </NavLink>
+                    <NavLink to="/addNovella">
+                        <Button size={"sm"} color={"gray.400"} variant="ghost">
+                            AddNovella
+                        </Button>
+                    </NavLink>
+                    <NavLink to="/addPackage">
+                        <Button size={"sm"} color={"gray.400"} variant="ghost">
+                            AddPackage
+                        </Button>
+                    </NavLink>
                 </Flex>
             </Flex>
             <Flex alignItems={"center"} gap={3}>
@@ -160,6 +170,7 @@ const Navbar = () => {
                             minWidth: "unset",
                             maxWidth: "350px",
                         }}
+                        zIndex={100}
                     >
                         {notifications.map((notification) => (
                             <MenuItem
