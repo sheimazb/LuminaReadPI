@@ -24,25 +24,38 @@ class AuthUserController extends Controller
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
             $user->save();
+            $token = $user->createToken('auth_token')->plainTextToken;
 
-            return response()->json(['user' => $user]);
+            $cookie = cookie('token', $token, 60 * 24); // 1 day
+            return response()->json(['user' => $user])->withCookie($cookie);
         } catch (Exception $exception) {
-            return response()->json(['message' => $exception], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
+
         }
     }
     // Fonction de connexion
     public function login(Request $request)
-    {
-        // Validation des données
-        $credentials = $request->only('email', 'password');
+{
+    // Validation des données
+    $credentials = $request->only('email', 'password');
 
-        // Tentative de connexion
-        if (Auth::attempt($credentials)) {
-            // Authentification réussie, vous pouvez simplement renvoyer un message de succès ou l'utilisateur
-            return response()->json(['message' => 'Authentification réussie']);
-        } else {
-            // Erreur d'authentification
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
+    // Tentative de connexion
+    if (Auth::attempt($credentials)) {
+        // Récupérer l'utilisateur authentifié
+        $user = Auth::user();
+        
+        // Créer un jeton pour l'utilisateur
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        // Créer un cookie pour stocker le jeton
+        $cookie = cookie('token', $token, 60 * 24); // 1 day
+
+        // Retourner une réponse JSON avec un message de succès et le cookie
+        return response()->json(['message' => 'Authentification réussie'])->withCookie($cookie);
+    } else {
+        // Erreur d'authentification
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
+}
+
 }

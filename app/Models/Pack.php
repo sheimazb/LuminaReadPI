@@ -19,4 +19,11 @@ class Pack extends Model
         'price',
     ];
     use HasFactory;
+    public function usser(){
+        return $this->belongsTo(User::class , 'user_id','id');
+    }
+    public function novellas()
+{
+    return $this->hasMany(Novella::class);
+}
 }
