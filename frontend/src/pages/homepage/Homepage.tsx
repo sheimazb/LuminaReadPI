@@ -34,7 +34,8 @@ const Homepage = () => {
                     <Box textAlign={"center"}>
                         <NavLink to="/TextReader">
                             <Button
-                                colorScheme="gray"
+                                colorScheme="cyan"
+                                variant="outline"
                                 mt={10}
                                 rounded={20}
                                 mr={2}

@@ -92,6 +92,17 @@ const Navbar = () => {
                     </Text>
                 </NavLink>
                 <Flex gap="5px" alignItems={"end"}>
+                    <NavLink to="/TextReader">
+                        <Button
+                            size={"sm"}
+                            color={"gray.400"}
+                            variant="ghost"
+                            gap={1}
+                        >
+                            Text Reader
+                            <BsStars color="cyan" />
+                        </Button>
+                    </NavLink>
                     <NavLink to="/marketplace">
                         <Button
                             size={"sm"}
@@ -100,7 +111,6 @@ const Navbar = () => {
                             gap={1}
                         >
                             Market Place
-                            <BsStars color="cyan" />
                         </Button>
                     </NavLink>
                     <NavLink to="/package">
