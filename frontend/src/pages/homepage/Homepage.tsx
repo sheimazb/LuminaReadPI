@@ -1,5 +1,6 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
 
 const Homepage = () => {
     return (
@@ -31,9 +32,18 @@ const Homepage = () => {
                         footprint on the internet.
                     </Text>
                     <Box textAlign={"center"}>
+                        <NavLink to="/TextReader">
+                            <Button
+                                colorScheme="gray"
+                                mt={10}
+                                rounded={20}
+                                mr={2}
+                            >
+                                Text Reader
+                            </Button>
+                        </NavLink>
                         <Button
                             colorScheme="gray"
-                            w={"max-content"}
                             rightIcon={<FaRegArrowAltCircleRight />}
                             mt={10}
                             variant="outline"

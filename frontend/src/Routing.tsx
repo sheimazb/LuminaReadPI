@@ -9,6 +9,7 @@ import Login from "./authentication/Login";
 import Signup from "./authentication/Signup";
 import Forum from "./pages/novella/Forum";
 import Profile from "./pages/profile/Profile";
+import TextReader from "./pages/TextReaderSection/TextReader";
 function App() {
     return (
         <Routes>
@@ -16,6 +17,7 @@ function App() {
             <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/package" element={<Package />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/TextReader" element={<TextReader />} />
             <Route path="/novella/*" element={<Novella />}>
                 <Route path="" element={<Navigate to="forum" />} />
                 <Route path="TTS" element={<TTS />} />
