@@ -1,5 +1,10 @@
-import "./App.css";
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import {
+    ChakraProvider,
+    extendTheme,
+    useColorMode,
+    IconButton,
+} from "@chakra-ui/react";
+import { FaSun, FaMoon } from "react-icons/fa";
 import Routing from "./Routing";
 import { BrowserRouter } from "react-router-dom";
 import Navbar from "./components/Navbar";
@@ -19,10 +24,20 @@ function App() {
     return (
         <ChakraProvider theme={theme}>
             <BrowserRouter>
-                <Navbar />
-                <Routing />
+                <AppContent />
             </BrowserRouter>
         </ChakraProvider>
+    );
+}
+
+function AppContent() {
+    const { colorMode, toggleColorMode } = useColorMode();
+
+    return (
+        <>
+            <Navbar toggleColorMode={toggleColorMode} colorMode={colorMode} />
+            <Routing />
+        </>
     );
 }
 
