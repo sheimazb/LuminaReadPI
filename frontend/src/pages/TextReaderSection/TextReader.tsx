@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import axios from "axios"; // Import Axios
 import {
     Flex,
     Textarea,
@@ -17,9 +18,7 @@ import { TfiLayoutColumn3Alt } from "react-icons/tfi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 const TextReader = () => {
-    const [textToSpeak, setTextToSpeak] = useState(
-        "Intrigued by the mysterious message, Elara decided to embark on a quest to find the lost. Armed with nothing but her courage and determination, she set out into the heart of the Whispering Woods."
-    );
+    const [textToSpeak, setTextToSpeak] = useState("");
     const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
     const [selectedVoice, setSelectedVoice] =
         useState<SpeechSynthesisVoice | null>(null);
@@ -43,6 +42,23 @@ const TextReader = () => {
     const changeViewtoRow = () => {
         setView(false);
     };
+
+    useEffect(() => {
+        // Fetch text content from the database here
+        fetchTextFromDatabase();
+    }, []);
+
+    const fetchTextFromDatabase = async () => {
+        try {
+            const response = await axios.get(
+                "http://localhost:8000/api/text/65d6703bb63a2"
+            );
+            setTextToSpeak(response.data.text_content);
+        } catch (error) {
+            console.error("Error fetching text:", error);
+        }
+    };
+
     useEffect(() => {
         const synth = window.speechSynthesis;
         setSynth(synth);
@@ -83,10 +99,9 @@ const TextReader = () => {
                 const words = textToSpeak.split(" ");
                 let currentCharIndex = 0;
                 let currentWord = "";
+                let prevIsOverflowing = true;
 
                 for (let i = 0; i < words.length; i++) {
-                    let prevIsOverflowing = true;
-
                     if (
                         charIndex >= currentCharIndex &&
                         charIndex < currentCharIndex + words[i].length
@@ -116,6 +131,11 @@ const TextReader = () => {
                     }
                     currentCharIndex += words[i].length + 1;
                 }
+            };
+
+            newUtterance.onend = () => {
+                setCurrentWordIndex(-1);
+                setConsecutiveTrueCount(0);
             };
 
             synth?.speak(newUtterance);
@@ -290,7 +310,12 @@ const TextReader = () => {
                                 <Wrap
                                     spacingY={8}
                                     px={1}
-                                    mt={`-${consecutiveTrueCount * 86}px`}
+                                    mt={
+                                        isBoxVisible
+                                            ? `-${consecutiveTrueCount * 86}px`
+                                            : 0
+                                    }
+                                    transition="margin-top 0.3s ease-in-out"
                                 >
                                     {textToSpeak
                                         .split(" ")
@@ -304,7 +329,7 @@ const TextReader = () => {
                                                 }
                                                 bg={
                                                     index === currentWordIndex
-                                                        ? "pink.700"
+                                                        ? "cyan.800"
                                                         : "transparent"
                                                 }
                                                 rounded={3}

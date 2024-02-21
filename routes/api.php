@@ -40,6 +40,9 @@ Route::get('/AllPack',  [\App\Http\Controllers\PacksController::class, 'AllPack'
 Route::post('/add-novella', [\App\Http\Controllers\NovellaController::class, 'store']);
 Route::get('/list-novella', [\App\Http\Controllers\NovellaController::class, 'index']);
 
+// Add Text
+Route::post('/AddText', [\App\Http\Controllers\TextController::class, 'AddText']);
+Route::get('/text/{code}', [\App\Http\Controllers\TextController::class, 'getTextByCode']); // New route for getting text by code
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
