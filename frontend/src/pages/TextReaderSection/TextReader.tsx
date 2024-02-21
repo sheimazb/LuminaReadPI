@@ -83,9 +83,10 @@ const TextReader = () => {
                 const words = textToSpeak.split(" ");
                 let currentCharIndex = 0;
                 let currentWord = "";
-                let prevIsOverflowing = isOverflowing;
 
                 for (let i = 0; i < words.length; i++) {
+                    let prevIsOverflowing = true;
+
                     if (
                         charIndex >= currentCharIndex &&
                         charIndex < currentCharIndex + words[i].length
@@ -105,7 +106,10 @@ const TextReader = () => {
                                 setConsecutiveTrueCount(
                                     (prevCount) => prevCount + 1
                                 );
-                                console.log("changet:", consecutiveTrueCount);
+                                console.log(
+                                    "consecutiveTrueCount:",
+                                    consecutiveTrueCount
+                                );
                             }
                         }
                         break;
