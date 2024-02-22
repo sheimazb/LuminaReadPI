@@ -15,31 +15,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/books',[\App\Http\Controllers\BooksController::class, 'index']);
-Route::get('/blog',[\App\Http\Controllers\BlogsController::class, 'index']);
-Route::post('/storeBlog',[\App\Http\Controllers\BlogsController::class]);
+Route::get('/books', [\App\Http\Controllers\BooksController::class, 'index']);
+Route::get('/blog', [\App\Http\Controllers\BlogsController::class, 'index']);
+Route::post('/storeBlog', [\App\Http\Controllers\BlogsController::class]);
 
 
-Route::post('/save',[\App\Http\Controllers\BooksController::class, 'store']);
+Route::post('/save', [\App\Http\Controllers\BooksController::class, 'store']);
 
-Route::put('/update/{id}',[\App\Http\Controllers\BooksController::class, 'update']);
+Route::put('/update/{id}', [\App\Http\Controllers\BooksController::class, 'update']);
 
-Route::delete('/delete/{id}',[\App\Http\Controllers\BooksController::class, 'destroy']);
+Route::delete('/delete/{id}', [\App\Http\Controllers\BooksController::class, 'destroy']);
 
 
 //Authentication user
+    Route::post('/login',  [\App\Http\Controllers\AuthUserController::class, 'login']);
+
 Route::post('/register', [\App\Http\Controllers\AuthUserController::class, 'register']);
-Route::post('/login',  [\App\Http\Controllers\AuthUserController::class, 'login']);
 
-//Add Pack
-Route::post('/add-pack', [\App\Http\Controllers\PacksController::class, 'AddPack'])->middleware('auth');
-
-Route::get('/AllPack',  [\App\Http\Controllers\PacksController::class, 'AllPack']);
-
-//Add Novella 
-Route::post('/add-novella', [\App\Http\Controllers\NovellaController::class, 'store']);
-Route::get('/list-novella', [\App\Http\Controllers\NovellaController::class, 'index']);
-
+    //Add Pack
+    Route::post('/add-pack', [\App\Http\Controllers\PacksController::class, 'AddPack'])->middleware('auth');
+    Route::get('/AllPack',  [\App\Http\Controllers\PacksController::class, 'AllPack']);
+    //Add Novella 
+    Route::post('/add-novella', [\App\Http\Controllers\NovellaController::class, 'store']);
+    Route::get('/list-novella', [\App\Http\Controllers\NovellaController::class, 'index']);
 // Add Text
 Route::post('/AddText', [\App\Http\Controllers\TextController::class, 'AddText']);
 Route::get('/text/{code}', [\App\Http\Controllers\TextController::class, 'getTextByCode']); 
