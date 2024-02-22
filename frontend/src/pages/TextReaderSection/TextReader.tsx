@@ -51,8 +51,9 @@ const TextReader = () => {
     const fetchTextFromDatabase = async () => {
         try {
             const response = await axios.get(
-                "http://localhost:8000/api/text/65d6703bb63a2"
+                "http://localhost:8000/api/text/65d6730d5d46b"
             );
+
             setTextToSpeak(response.data.text_content);
         } catch (error) {
             console.error("Error fetching text:", error);
@@ -166,7 +167,7 @@ const TextReader = () => {
                     position={"sticky"}
                     top={0}
                     zIndex={2}
-                    bg={"gray.800"}
+                    bg={"var(--chakra-colors-chakra-body-bg)"}
                     py={2}
                     borderColor={"gray.700"}
                 >
@@ -233,6 +234,7 @@ const TextReader = () => {
                         rounded={10}
                     >
                         <Button
+                            color={"white"}
                             size={"xs"}
                             onClick={changeViewtoRow}
                             bg={view ? "transparent" : "gray.900"}
@@ -242,6 +244,7 @@ const TextReader = () => {
                             </Box>
                         </Button>
                         <Button
+                            color={"white"}
                             size={"xs"}
                             onClick={changeViewtoColumn}
                             bg={view ? "gray.900" : "transparent"}
@@ -316,6 +319,7 @@ const TextReader = () => {
                                             : 0
                                     }
                                     transition="margin-top 0.3s ease-in-out"
+                                    color={"white"}
                                 >
                                     {textToSpeak
                                         .split(" ")
@@ -353,6 +357,7 @@ const TextReader = () => {
                         transform={"translate(-50%)"}
                         top={-10}
                         onClick={toggleTextVisibility}
+                        color={"white"}
                     >
                         <Box fontSize={"xl"}>
                             {isBoxVisible ? (
