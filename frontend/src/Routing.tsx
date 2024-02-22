@@ -10,6 +10,8 @@ import Signup from "./authentication/Signup";
 import Forum from "./pages/novella/Forum";
 import Profile from "./pages/profile/Profile";
 import TextReader from "./pages/TextReaderSection/TextReader";
+import AddPackage from "./pages/addpackage/AddPackage";
+import AddNovella from "./pages/addnovella/AddNovella";
 function App() {
     return (
         <Routes>
@@ -18,6 +20,8 @@ function App() {
             <Route path="/package" element={<Package />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/TextReader" element={<TextReader />} />
+            <Route path="/AddNovella" element={<AddNovella />} />
+            <Route path="/AddPackage" element={<AddPackage />} />
             <Route path="/novella/*" element={<Novella />}>
                 <Route path="" element={<Navigate to="forum" />} />
                 <Route path="TTS" element={<TTS />} />

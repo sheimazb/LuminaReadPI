@@ -32,14 +32,15 @@ Route::delete('/delete/{id}', [\App\Http\Controllers\BooksController::class, 'de
 
 Route::post('/register', [\App\Http\Controllers\AuthUserController::class, 'register']);
 
-Route::prefix('Utilisateur')->middleware('auth:user')->group(function () {
     //Add Pack
     Route::post('/add-pack', [\App\Http\Controllers\PacksController::class, 'AddPack'])->middleware('auth');
     Route::get('/AllPack',  [\App\Http\Controllers\PacksController::class, 'AllPack']);
     //Add Novella 
     Route::post('/add-novella', [\App\Http\Controllers\NovellaController::class, 'store']);
     Route::get('/list-novella', [\App\Http\Controllers\NovellaController::class, 'index']);
-});
+// Add Text
+Route::post('/AddText', [\App\Http\Controllers\TextController::class, 'AddText']);
+Route::get('/text/{code}', [\App\Http\Controllers\TextController::class, 'getTextByCode']); // New route for getting text by code
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

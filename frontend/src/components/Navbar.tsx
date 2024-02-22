@@ -17,16 +17,20 @@ import {
     DrawerOverlay,
     DrawerHeader,
     DrawerBody,
+    IconButton,
 } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 import { BsStars } from "react-icons/bs";
 import { TiStar } from "react-icons/ti";
 import { IoNotifications } from "react-icons/io5";
 import { IoMdCart } from "react-icons/io";
-import { FaBookReader } from "react-icons/fa";
+import { FaBookReader, FaSun, FaMoon } from "react-icons/fa";
 import CartContent from "./CartContent";
-
-const Navbar = () => {
+interface NavbarProps {
+    toggleColorMode: () => void;
+    colorMode: any;
+}
+const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
     const [cartItems, setCartItems] = useState([
         { id: 1, name: "Book 1", author: "Author 1", price: 10 },
         { id: 2, name: "Book 2", author: "Author 2", price: 15 },
@@ -84,6 +88,7 @@ const Navbar = () => {
                         display={"flex"}
                         alignItems={"center"}
                         gap={2}
+                        color={"gray.50"}
                     >
                         <Box color="cyan.600">
                             <FaBookReader />
@@ -92,6 +97,17 @@ const Navbar = () => {
                     </Text>
                 </NavLink>
                 <Flex gap="5px" alignItems={"end"}>
+                    <NavLink to="/TextReader">
+                        <Button
+                            size={"sm"}
+                            color={"gray.400"}
+                            variant="ghost"
+                            gap={1}
+                        >
+                            Text Reader
+                            <BsStars color="cyan" />
+                        </Button>
+                    </NavLink>
                     <NavLink to="/marketplace">
                         <Button
                             size={"sm"}
@@ -100,7 +116,6 @@ const Navbar = () => {
                             gap={1}
                         >
                             Market Place
-                            <BsStars color="cyan" />
                         </Button>
                     </NavLink>
                     <NavLink to="/package">
@@ -111,6 +126,16 @@ const Navbar = () => {
                     <NavLink to="/novella">
                         <Button size={"sm"} color={"gray.400"} variant="ghost">
                             Novella
+                        </Button>
+                    </NavLink>
+                    <NavLink to="/addNovella">
+                        <Button size={"sm"} color={"gray.400"} variant="ghost">
+                            AddNovella
+                        </Button>
+                    </NavLink>
+                    <NavLink to="/addPackage">
+                        <Button size={"sm"} color={"gray.400"} variant="ghost">
+                            AddPackage
                         </Button>
                     </NavLink>
                 </Flex>
@@ -150,6 +175,7 @@ const Navbar = () => {
                             minWidth: "unset",
                             maxWidth: "350px",
                         }}
+                        zIndex={100}
                     >
                         {notifications.map((notification) => (
                             <MenuItem
@@ -220,6 +246,12 @@ const Navbar = () => {
                         )}
                     </MenuButton>
                 </Menu>
+                <IconButton
+                    size={"sm"}
+                    icon={colorMode === "dark" ? <FaSun /> : <FaMoon />}
+                    onClick={toggleColorMode}
+                    aria-label="Toggle Dark Mode"
+                />
                 <NavLink to="/profile">
                     <Button size={"sm"}>Profile</Button>
                 </NavLink>
