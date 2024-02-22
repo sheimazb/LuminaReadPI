@@ -56,7 +56,31 @@ class TextController extends Controller
 
         return response()->json($text);
     }
+    /**
+     * Update the specified text in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $code
+     * @return \Illuminate\Http\Response
+     */
+    public function updateText(Request $request, $code)
+    {
+        $request->validate([
+            'text_content' => 'required|string',
+        ]);
 
+        $text = Text::where('code', $code)->first();
+
+        if (!$text) {
+            return response()->json(['error' => 'Text not found'], 404);
+        }
+
+        // Update the text content
+        $text->text_content = $request->text_content;
+        $text->save();
+
+        return response()->json($text, 200);
+    }
     /**
      * Generate a unique code.
      *
