@@ -42,7 +42,8 @@ Route::get('/list-novella', [\App\Http\Controllers\NovellaController::class, 'in
 
 // Add Text
 Route::post('/AddText', [\App\Http\Controllers\TextController::class, 'AddText']);
-Route::get('/text/{code}', [\App\Http\Controllers\TextController::class, 'getTextByCode']); // New route for getting text by code
+Route::get('/text/{code}', [\App\Http\Controllers\TextController::class, 'getTextByCode']); 
+Route::put('/updateText/{code}', [\App\Http\Controllers\TextController::class, 'updateText']); 
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
