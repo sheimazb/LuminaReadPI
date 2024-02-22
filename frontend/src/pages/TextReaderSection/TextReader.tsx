@@ -51,7 +51,7 @@ const TextReader = () => {
     const fetchTextFromDatabase = async () => {
         try {
             const response = await axios.get(
-                "http://localhost:8000/api/text/65d6730d5d46b"
+                "http://localhost:8000/api/text/65d6730d5d46b                                                                                                          "
             );
 
             setTextToSpeak(response.data.text_content);
