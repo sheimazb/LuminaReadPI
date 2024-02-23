@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Tabs, TabList, Tab, TabPanels, TabPanel, Select, Heading, Image, CardBody, Stack, Text, Button, Wrap, Card, Flex, Input } from '@chakra-ui/react';
+import { Box, Tabs, TabList, Tab, TabPanels, TabPanel, Select, Heading, Image, CardBody, Stack, Textarea , Button, Wrap, Card, Flex, Input } from '@chakra-ui/react';
 import {useRef , useState} from "react" ;
 
 const AddNovella = () => {
@@ -20,7 +20,6 @@ const AddNovella = () => {
       className="container"
       w="600px"
       margin="3rem auto"
-      bgImage="url('https://assets-global.website-files.com/63f38a8c92397a024fcb9ae8/648851a9881c2a703afc9b15_bg-card-postBorderBig_tablet.webp')"
       bgPosition="0 0"
       bgRepeat="no-repeat"
       bgSize="100% 100%"
@@ -29,15 +28,8 @@ const AddNovella = () => {
       padding="3rem"
       display="flex"
     >
-        <Tabs>
-          <TabList>
-            <Tab>One</Tab>
-            <Tab>Two</Tab>
-            <Tab>Three</Tab>
-          </TabList>
-
-          <TabPanels>
-            <TabPanel>
+       
+        
               <Wrap w={"100%"} p={2}>
                 <Card
                   bg={"transparent"}
@@ -79,26 +71,20 @@ const AddNovella = () => {
                     <Stack mt="3" spacing="1">
                     <Input placeholder='place the title of the novel'  htmlSize={500} width='20rem' height='30px' />
                       <Input mt={2} placeholder='place a description of the novel'  htmlSize={500} width='20rem' height='60px' />
-                      <Select placeholder='' mt={2}>
-  <option value='option1'>write </option>
-  <option value='option2'>Upload</option>
-</Select>
+                      <Textarea
+                            
+                            placeholder="Enter text to speak..."
+                            mt={2}
+                            height={100}
+                        />
                       <Button  mt={2} size={"sm"}>
-                        next 
+                        Add 
                       </Button>
                     </Stack>
                   </CardBody>
                 </Card>
               </Wrap>
-            </TabPanel>
-            <TabPanel>
-              <p>two!</p>
-            </TabPanel>
-            <TabPanel>
-              <p>three!</p>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
+            
     </Box>
   );
 };
