@@ -41,7 +41,11 @@ Route::post('/register', [\App\Http\Controllers\AuthUserController::class, 'regi
 // Add Text
 Route::post('/AddText', [\App\Http\Controllers\TextController::class, 'AddText']);
 Route::get('/text/{code}', [\App\Http\Controllers\TextController::class, 'getTextByCode']); 
-Route::put('/updateText/{code}', [\App\Http\Controllers\TextController::class, 'updateText']); 
+Route::put('/updateText/{code}', [\App\Http\Controllers\TextController::class, 'updateText']);
+// test image
+Route::post('/upload ', [\App\Http\Controllers\PacksController::class,'upload']);
+
+
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
