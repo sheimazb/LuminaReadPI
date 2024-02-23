@@ -31,9 +31,8 @@ Route::delete('/delete/{id}', [\App\Http\Controllers\BooksController::class, 'de
     Route::post('/login',  [\App\Http\Controllers\AuthUserController::class, 'login']);
 
 Route::post('/register', [\App\Http\Controllers\AuthUserController::class, 'register']);
-
     //Add Pack
-    Route::post('/add-pack', [\App\Http\Controllers\PacksController::class, 'AddPack'])->middleware('auth');
+    Route::post('/add-pack/{token}', [\App\Http\Controllers\PacksController::class, 'AddPack'])->middleware('auth');
     Route::get('/AllPack',  [\App\Http\Controllers\PacksController::class, 'AllPack']);
     //Add Novella 
     Route::post('/add-novella', [\App\Http\Controllers\NovellaController::class, 'store']);

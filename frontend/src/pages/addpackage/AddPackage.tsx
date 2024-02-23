@@ -4,214 +4,114 @@ import {
     Image,
     Button,
     Input,
-    FormControl,
-    FormLabel,
-
-    Select 
-
-
+  
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import React from "react";
 
 const AddPackage: React.FC = () => {
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    category: "",
-    img:"",
-    langue:"",
-    price:"",
-});
-
-const handleChange = (e: any) => {
-    setFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
+  const [token, setToken] = useState("");
+    const [formData, setFormData] = useState({
+        title: "",
+        description: "",
+        category: "",
+        img: "",
+        langue: "",
+        price: "",
     });
-};
-  const handlSubmit = async(e:any) => {
-    e.preventDefault();
+    useEffect(() => {
+      const storedToken = localStorage.getItem("token");
+      if (storedToken) {
+          setToken(storedToken);
+      }
+  }, []);
+    const handleChange = (e: any) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    };
+    const handleSubmit = async (e:any) => {
+      e.preventDefault();
 
-        try {
-            const response = await axios.post(
-                "http://127.0.0.1:8000/api/register",
-                formData
-            );
-            console.log("Response:", response.data);
-        } catch (error) {
-            console.error("Error:", error);
-        }
+      try {
+          const response = await axios.post(
+              "http://127.0.0.1:8000/api/add-pack",
+              formData,
+              {
+                  headers: {
+                      Authorization: `Bearer ${token}` // Utiliser le token dans l'en-tête Authorization
+                  }
+              }
+          );
+          console.log("Response:", response.data);
+      } catch (error) {
+          console.error("Error:", error);
+      }
   };
 
+/*
     const inputRef = useRef(null);
     const [image, setImage] = useState("");
-
     const handleImageClick = () => {
         inputRef.current.click();
     };
 
-    const handleImageChange = (event) => {
+    const handleImageChange = (event: any) => {
         const file = event.target.files[0];
         const imageUrl = URL.createObjectURL(file);
         setImage(imageUrl);
     };
+*/
+    return (
+        <Flex>
+          <form onSubmit={handleSubmit}>
+            <Input
+              placeholder="title"
+              onChange={handleChange}
+              name="title"
+              value={formData.title}
 
-  return (
-    <Flex
-    marginTop="4rem"
-    justifyContent="space-evenly"
-    >
-    <Box
-    className="container"
-    w="600px"
-    h="520px"
-    bgImage="url('https://assets-global.website-files.com/63f38a8c92397a024fcb9ae8/648851a9881c2a703afc9b15_bg-card-postBorderBig_tablet.webp')"
-    bgPosition="0 0"
-    bgRepeat="no-repeat"
-    bgSize="100% 100%"
-    flexDirection="column"
-    justifyContent="flex-end"
-    padding="3rem"
-    display="flex"
-  >
-    <Flex className="containerr"
-     flexDirection="column"
-     >
-    <FormControl isRequired
-     >
-<FormLabel 
-marginTop="-10rem"
- >Place the title  of package :</FormLabel>
-<Input placeholder='First name'/>
-</FormControl>
-      <Flex className="content" w="100%" paddingTop={1} justifyContent="space-between"
-       >
-    
-      <Flex 
-marginTop="-4rem"
+            />
+            <Input
+              placeholder="descripation"
+              value={formData.description}
+              onChange={handleChange}
+              name="description"
 
-      onClick={handleImageClick}>
-          {image ? (
-              <Image
-                  src={image}
-                  alt="Selected Image"
-                  className="post-big-border__video is-success anim"
-                  loading="lazy"
-                  data-submit-anim=""
-                  boxSize='180px'
-                  height={"140px"}
-                  objectFit='cover'
+            />
+            <Input    
+              placeholder="category"
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
               />
-          ) : (
-                  <Image
-                  boxSize='180px'
-                  objectFit='cover'
-                  src="https://www.creativefabrica.com/wp-content/uploads/2021/04/05/Image-Upload-Icon-Graphics-10388650-1.jpg"
-                  className="post-big-border__video is-success anim"
+            <Input
+               placeholder="langue"
+               value={formData.langue}
+               onChange={handleChange}
+              name="langue"
 
-              />
-             
-          )}
-          <input 
-           type="file" ref={inputRef} onChange={handleImageChange} style={{ display: "none" }} 
-           ></input>
-      </Flex>  
-    <Input 
-        marginTop="-4rem"
+            />
+            <Input
+               placeholder="price"
+               value={formData.price}
+               onChange={handleChange}
+              name="price"
 
-    placeholder='put your description here !' w="300px" h="180px" />
-
-  </Flex>
-                                <Flex
-                                  justifyContent={"space-between"}
-                                  alignItems={"center"}
-                                  w={"450px"}
-                                  p={1}
-                                  rounded={10}
-                                  marginTop="1rem"
-                              >
-                                   <FormControl isRequired>
-                                  <Input placeholder='place price here '
-                                  w={"180px"}
-                                  color="cyan.200"
-                                  display={"flex"}
-                                  alignItems={"center"}
-                                  gap={1}
-                                  />
-                                  </FormControl>
-                                  
-
-                                  <Select placeholder='Select language'
-                                      marginRight={"-4rem"}
-
-                                       >
-                                  <option value='option1'>Anglais</option>
-                                  <option value='option2'>Arabe</option>
-                                  <option value='option3'>Francais</option>
-                                </Select>
-
-                               
-                                  
-                                    
-                              </Flex>
-                              <Flex
-                                  justifyContent={"space-between"}
-                                  alignItems={"center"}
-                                  w={"450px"}
-                                  p={1}
-                                  rounded={10}
-                                  marginTop="1rem"
-                              >
-                              <Select placeholder='Select'
-                                  w={"180px"}
-                                  >
-                                  <option value='option1'>Kids</option>
-                                  <option value='option2'>IT</option>
-                                  <option value='option3'>Developpement</option>
-                                </Select>
-
-                              <Button
-                                      marginRight={"-4rem"}
-                                       w={"220px"}
-                                        colorScheme="cyan">
-                                          Add Now
-                                      </Button>
-                                      </Flex>
-     
-    </Flex>
-  </Box>
-
-  <Box
-    className="container"
-    w="500px"
-    h="450px"
-    bgImage="url('https://assets-global.website-files.com/63f38a8c92397a024fcb9ae8/6488858e9c6ab83eafdbd7a7_bg-card-postBig2_tablet.webp')"
-    bgPosition="0 0"
-    bgRepeat="no-repeat"
-    bgSize="100% 100%"
-    flexDirection="column"
-    justifyContent="flex-end"
-    padding="3rem"
-    display="flex"
-  >
-    <Flex className="containerr"
-     flexDirection="column"
-     >
-    
-<FormLabel 
-marginTop="-20rem"
-size="xs"
- >Description of a package  : </FormLabel>
- <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Alias voluptates dolorem esse velit praesentium id fuga necessitatibus adipisci earum? Dignissimos harum praesentium nisi totam! Itaque at libero esse recusandae possimus.
- </p>
-     
-    </Flex>
-  </Box>
-  </Flex>
-  );
+            />
+            <Input
+               type="file"
+               name="image"
+               value={formData.img}
+               onChange={handleChange}
+            />
+            <Button type="submit">Add</Button>
+          </form>
+        </Flex>
+    );
 };
 
 export default AddPackage;
