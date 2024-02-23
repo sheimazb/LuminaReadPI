@@ -22,7 +22,7 @@ const CartContent: React.FC<{ items: Item[] }> = ({ items }) => {
                     <Box
                         key={item.id}
                         p={3}
-                        bg={"var(--lvl1-darkcolor)"}
+                        bg={"var(--chakra-colors-chakra-body-bg)"}
                         mb={3}
                         rounded={3}
                     >

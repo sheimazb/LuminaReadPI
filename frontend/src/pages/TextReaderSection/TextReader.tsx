@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios"; // Import Axios
+import axios from "axios";
 import {
     Flex,
     Textarea,
@@ -19,6 +19,8 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 const TextReader = () => {
     const [textToSpeak, setTextToSpeak] = useState("");
+    const [originalText, setOriginalText] = useState("");
+    const [isUpdating, setIsUpdating] = useState(false);
     const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
     const [selectedVoice, setSelectedVoice] =
         useState<SpeechSynthesisVoice | null>(null);
@@ -44,19 +46,35 @@ const TextReader = () => {
     };
 
     useEffect(() => {
-        // Fetch text content from the database here
         fetchTextFromDatabase();
     }, []);
 
     const fetchTextFromDatabase = async () => {
         try {
             const response = await axios.get(
-                "http://localhost:8000/api/text/65d6703bb63a2"
+                "http://localhost:8000/api/text/65d6730d5d46b                                                                                                          "
             );
+
             setTextToSpeak(response.data.text_content);
+            setOriginalText(response.data.text_content);
         } catch (error) {
             console.error("Error fetching text:", error);
         }
+    };
+    const updateTextToDatabase = async () => {
+        setIsUpdating(true);
+        try {
+            let dataToSend = { text_content: textToSpeak };
+
+            await axios.put(
+                `http://localhost:8000/api/updateText/65d6730d5d46b `,
+                dataToSend
+            );
+            setOriginalText(textToSpeak);
+        } catch (error) {
+            console.error("Error Updating text:", error);
+        }
+        setIsUpdating(false);
     };
 
     useEffect(() => {
@@ -65,7 +83,6 @@ const TextReader = () => {
         synth.onvoiceschanged = () => {
             const voices = synth.getVoices();
             setVoices(voices);
-            // Set default voice
             const defaultVoice = voices.find((voice) =>
                 voice.lang.includes("en")
             );
@@ -157,6 +174,8 @@ const TextReader = () => {
         setTextToSpeak(e.target.value);
     };
 
+    const isTextChanged = textToSpeak !== originalText;
+
     return (
         <Box h={"calc(100vh - 180px)"}>
             <Flex maxW={"1400px"} flexDirection="column" p={3} m={"auto"}>
@@ -166,7 +185,7 @@ const TextReader = () => {
                     position={"sticky"}
                     top={0}
                     zIndex={2}
-                    bg={"gray.800"}
+                    bg={"var(--chakra-colors-chakra-body-bg)"}
                     py={2}
                     borderColor={"gray.700"}
                 >
@@ -192,17 +211,21 @@ const TextReader = () => {
                             ml={3}
                             variant="outline"
                             position={"relative"}
+                            onClick={updateTextToDatabase}
+                            isLoading={isUpdating}
                         >
-                            <Box
-                                w={"5px"}
-                                h={"5px"}
-                                rounded={"50%"}
-                                bg={"red"}
-                                position={"absolute"}
-                                top={1}
-                                right={1}
-                            ></Box>
-                            <Box fontSize={"sm"}>Save</Box>
+                            {isTextChanged && (
+                                <Box
+                                    w={"5px"}
+                                    h={"5px"}
+                                    rounded={"50%"}
+                                    bg={"red"}
+                                    position={"absolute"}
+                                    top={1}
+                                    right={1}
+                                ></Box>
+                            )}
+                            <Text fontSize={"sm"}>Save</Text>
                         </Button>
                         <Tag
                             colorScheme="cyan"
@@ -233,6 +256,7 @@ const TextReader = () => {
                         rounded={10}
                     >
                         <Button
+                            color={"white"}
                             size={"xs"}
                             onClick={changeViewtoRow}
                             bg={view ? "transparent" : "gray.900"}
@@ -242,6 +266,7 @@ const TextReader = () => {
                             </Box>
                         </Button>
                         <Button
+                            color={"white"}
                             size={"xs"}
                             onClick={changeViewtoColumn}
                             bg={view ? "gray.900" : "transparent"}
@@ -316,6 +341,7 @@ const TextReader = () => {
                                             : 0
                                     }
                                     transition="margin-top 0.3s ease-in-out"
+                                    color={"white"}
                                 >
                                     {textToSpeak
                                         .split(" ")
@@ -353,6 +379,7 @@ const TextReader = () => {
                         transform={"translate(-50%)"}
                         top={-10}
                         onClick={toggleTextVisibility}
+                        color={"white"}
                     >
                         <Box fontSize={"xl"}>
                             {isBoxVisible ? (

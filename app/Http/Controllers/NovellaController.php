@@ -28,7 +28,6 @@ class NovellaController extends Controller
     {
         try {
             $pack = Pack::findOrFail($pack_id);
-    
             $novella = new Novella();
             $novella->title = $request->title;
             $novella->description = $request->description;

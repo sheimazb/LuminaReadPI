@@ -35,27 +35,25 @@ class AuthUserController extends Controller
     }
     // Fonction de connexion
     public function login(Request $request)
-{
-    // Validation des données
-    $credentials = $request->only('email', 'password');
-
-    // Tentative de connexion
-    if (Auth::attempt($credentials)) {
-        // Récupérer l'utilisateur authentifié
-        $user = Auth::user();
-        
-        // Créer un jeton pour l'utilisateur
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        // Créer un cookie pour stocker le jeton
-        $cookie = cookie('token', $token, 60 * 24); // 1 day
-
-        // Retourner une réponse JSON avec un message de succès et le cookie
-        return response()->json(['message' => 'Authentification réussie'])->withCookie($cookie);
-    } else {
-        // Erreur d'authentification
-        return response()->json(['error' => 'Unauthorized'], 401);
+    {
+        $credentials = $request->only('email', 'password');
+    
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            
+            $token = $user->createToken('auth_token')->plainTextToken;
+    
+            $cookie = cookie('token', $token, 60 * 24); // 1 day
+    
+            return response()->json([
+                'message' => 'Authentification réussie',
+                'token' => $token, 
+            ])->withCookie($cookie);
+        } else {
+            // Erreur d'authentification
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
     }
-}
+    
 
 }

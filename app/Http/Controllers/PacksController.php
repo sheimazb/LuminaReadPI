@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Pack;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 
 class PacksController extends Controller
@@ -58,7 +59,49 @@ class PacksController extends Controller
     {
         //
     }
+    public function upload(Request $request)
+    {
+        // Vérifie si une image a été envoyée
+        if ($request->hasFile('image')) {
+            // Récupère le fichier image
+            $image = $request->file('image');
+            
+            // Génère un nom unique pour l'image
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            
+            // Stocke l'image dans le dossier de stockage 'images' (vous devez créer ce dossier dans le répertoire de stockage de Laravel)
+            $image->storeAs('images', $imageName);
+            
+            // Retourne le chemin de l'image téléchargée
+            return response()->json(['image_path' => 'storage/images/' . $imageName], 200);
+        } else {
+            // Retourne une réponse d'erreur si aucune image n'a été envoyée
+            return response()->json(['error' => 'Aucune image n\'a été envoyée.'], 400);
+        }
+    }
 
+    /**
+     * test filter pack
+     * 
+     */
+    public function filterByCategory(Request $request)
+    {
+        // Vérifier si des catégories sont spécifiées dans la requête
+        if ($request->has('categories')) {
+            $categories = $request->input('categories');
+
+            // Filtrer les packs selon les catégories spécifiées
+            $packs = Pack::whereHas('categories', function ($query) use ($categories) {
+                $query->whereIn('id', $categories);
+            })->get();
+
+            // Retourner les packs filtrés en réponse
+            return response()->json(['packs' => $packs], 200);
+        } else {
+            // Si aucune catégorie spécifiée, retourner une réponse avec un message d'erreur
+            return response()->json(['error' => 'Veuillez spécifier au moins une catégorie.'], 400);
+        }
+    }
     /**
      * Update the specified resource in storage.
      */
