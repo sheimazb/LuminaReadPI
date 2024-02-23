@@ -1,27 +1,47 @@
 import {
     Box,
     Flex,
-    Text,
     Image,
     Button,
-    Wrap,
     Input,
-    InputGroup,
-    InputRightElement,
-    ButtonGroup,
-    CardFooter,
-    Stack,
-    CardBody,
-    Heading,
-    Card,
     FormControl,
     FormLabel,
 } from "@chakra-ui/react";
+import axios from "axios";
 import { useRef, useState } from "react";
 
 import React from "react";
 
 const AddPackage: React.FC = () => {
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    category: "",
+    img:"",
+    langue:"",
+    price:"",
+});
+
+const handleChange = (e: any) => {
+    setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+    });
+};
+  const handlSubmit = async(e:any) => {
+    e.preventDefault();
+
+        try {
+            const response = await axios.post(
+                "http://127.0.0.1:8000/api/register",
+                formData
+            );
+            console.log("Response:", response.data);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+  };
+
     const inputRef = useRef(null);
     const [image, setImage] = useState("");
 
@@ -54,7 +74,10 @@ const AddPackage: React.FC = () => {
                         <FormLabel marginTop="-10rem">
                             Place the title of package :
                         </FormLabel>
-                        <Input placeholder="First name" />
+                        <Input placeholder="Title"
+                        value={formData.title}
+                        onChange={handleChange}
+                        />
                     </FormControl>
                     <Flex
                         className="content"
@@ -94,6 +117,8 @@ const AddPackage: React.FC = () => {
                             placeholder="put your description here !"
                             w="300px"
                             h="180px"
+                            value={formData.description}
+                            onChange={handleChange}
                         />
                     </Flex>
                     <Flex
@@ -112,6 +137,8 @@ const AddPackage: React.FC = () => {
                                 display={"flex"}
                                 alignItems={"center"}
                                 gap={1}
+                                value={formData.title}
+                                onChange={handleChange}
                             />
                         </FormControl>
 
