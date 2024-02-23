@@ -16,6 +16,7 @@ import {
     Card,
     FormControl,
     FormLabel,
+    Select 
 
 } from "@chakra-ui/react";
 import {useRef , useState} from "react" ;
@@ -43,7 +44,7 @@ const AddPackage: React.FC = () => {
     <Box
     className="container"
     w="600px"
-    h="450px"
+    h="520px"
     bgImage="url('https://assets-global.website-files.com/63f38a8c92397a024fcb9ae8/648851a9881c2a703afc9b15_bg-card-postBorderBig_tablet.webp')"
     bgPosition="0 0"
     bgRepeat="no-repeat"
@@ -85,7 +86,7 @@ marginTop="-4rem"
                   <Image
                   boxSize='180px'
                   objectFit='cover'
-                  src="https://i.pinimg.com/564x/04/54/7c/04547c2b354abb70a85ed8a2d1b33e5f.jpg"
+                  src="https://www.creativefabrica.com/wp-content/uploads/2021/04/05/Image-Upload-Icon-Graphics-10388650-1.jpg"
                   className="post-big-border__video is-success anim"
 
               />
@@ -101,7 +102,7 @@ marginTop="-4rem"
     placeholder='put your description here !' w="300px" h="180px" />
 
   </Flex>
-  <Flex
+                                <Flex
                                   justifyContent={"space-between"}
                                   alignItems={"center"}
                                   w={"450px"}
@@ -119,13 +120,43 @@ marginTop="-4rem"
                                   />
                                   </FormControl>
                                   
-                                      <Button
+
+                                  <Select placeholder='Select language'
                                       marginRight={"-4rem"}
-                                       w={"250px"}
+
+                                       >
+                                  <option value='option1'>Anglais</option>
+                                  <option value='option2'>Arabe</option>
+                                  <option value='option3'>Francais</option>
+                                </Select>
+
+                               
+                                  
+                                    
+                              </Flex>
+                              <Flex
+                                  justifyContent={"space-between"}
+                                  alignItems={"center"}
+                                  w={"450px"}
+                                  p={1}
+                                  rounded={10}
+                                  marginTop="1rem"
+                              >
+                              <Select placeholder='Select'
+                                  w={"180px"}
+                                  >
+                                  <option value='option1'>Kids</option>
+                                  <option value='option2'>IT</option>
+                                  <option value='option3'>Developpement</option>
+                                </Select>
+
+                              <Button
+                                      marginRight={"-4rem"}
+                                       w={"220px"}
                                         colorScheme="cyan">
                                           Add Now
                                       </Button>
-                              </Flex>
+                                      </Flex>
      
     </Flex>
   </Box>
