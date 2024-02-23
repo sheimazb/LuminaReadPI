@@ -31,10 +31,8 @@ class PacksController extends Controller
              if (!Auth::check()) {
                  return response()->json(['error' => 'Unauthorized'], 401);
              }
- 
              // Obtenez l'utilisateur authentifié
              $user = Auth::user();
- 
              // Créez un nouveau pack avec l'ID de l'utilisateur authentifié
              $pack = new Pack();
              $pack->user_id = $user->id;
