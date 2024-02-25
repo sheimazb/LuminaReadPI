@@ -1,20 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import {
-    Flex,
-    Textarea,
-    Button,
-    Box,
-    Wrap,
-    Text,
-    Tag,
-    TagLabel,
-    TagRightIcon,
-} from "@chakra-ui/react";
-import { FaCopy, FaPause, FaStepForward, FaStop } from "react-icons/fa";
-import { IoQrCodeOutline } from "react-icons/io5";
-import { MdTableRows } from "react-icons/md";
-import { TfiLayoutColumn3Alt } from "react-icons/tfi";
+import { Flex, Button, Box, Wrap, Text } from "@chakra-ui/react";
+import { FaPause, FaStepForward, FaStop } from "react-icons/fa";
+
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 const TTS = () => {
     const [textToSpeak, setTextToSpeak] = useState("");
@@ -197,53 +185,18 @@ const TTS = () => {
                                 <FaStop />
                             </Box>
                         </Button>
-                        <Button
-                            size={"sm"}
-                            colorScheme="cyan"
-                            ml={3}
-                            variant="outline"
-                            position={"relative"}
-                            onClick={updateTextToDatabase}
-                            isLoading={isUpdating}
-                        >
-                            {isTextChanged && (
-                                <Box
-                                    w={"5px"}
-                                    h={"5px"}
-                                    rounded={"50%"}
-                                    bg={"red"}
-                                    position={"absolute"}
-                                    top={1}
-                                    right={1}
-                                ></Box>
-                            )}
-                            <Text fontSize={"sm"}>Save</Text>
-                        </Button>
-                        <Tag
-                            colorScheme="cyan"
-                            variant="solid"
-                            ml={3}
-                            cursor={"pointer "}
-                        >
-                            <TagLabel>Copy Link</TagLabel>
-                            <TagRightIcon boxSize="12px" as={FaCopy} />
-                        </Tag>
-                        <Tag
-                            bg={"gray.900"}
-                            border={"solid 1px "}
-                            borderColor={"gray.600"}
-                            variant="solid"
-                            cursor={"pointer "}
-                        >
-                            <TagLabel>
-                                <IoQrCodeOutline />
-                            </TagLabel>
-                        </Tag>
                     </Flex>
                 </Flex>
 
-                <Flex justifyContent={"space-between"} w={"100%"} gap={3}>
-                    <Wrap spacing={1} p={3} rounded={10} mt={2}>
+                <Flex
+                    justifyContent={"space-between"}
+                    flexDirection={"column"}
+                    w={"100%"}
+                >
+                    <Text mt={6} fontSize="sm" color={"cyan.500"}>
+                        Expected Reading Time: {expectedReadingTime}
+                    </Text>
+                    <Wrap spacing={1} p={3} rounded={10} mt={1}>
                         {textToSpeak.split(" ").map((word, index) => (
                             <Text
                                 key={index}
