@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { Flex, Input, Button, Text, Divider } from "@chakra-ui/react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-
 function Signup() {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         password: "",
     });
-
+    const navigate = useNavigate();
     const handleChange = (e: any) => {
         setFormData({
             ...formData,
@@ -26,6 +25,11 @@ function Signup() {
                 formData
             );
             console.log("Response:", response.data);
+
+            if (response.status === 201) {
+                navigate("/Auth/login");
+            } else {
+            }
         } catch (error) {
             console.error("Error:", error);
         }

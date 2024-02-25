@@ -27,12 +27,30 @@ Route::put('/update/{id}', [\App\Http\Controllers\BooksController::class, 'updat
 Route::delete('/delete/{id}', [\App\Http\Controllers\BooksController::class, 'destroy']);
 
 
-//Authentication user
-    Route::post('/login',  [\App\Http\Controllers\AuthUserController::class, 'login']);
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
-Route::post('/register', [\App\Http\Controllers\AuthUserController::class, 'register']);
+Route::group(['middleware' => ['jwt.auth','api-header']], function () {
+
+    // all routes to protected resources are registered here
+    Route::get('users/list', function(){
+        $users = App\Models\User::all();
+
+        $response = ['success'=>true, 'data'=>$users];
+
+        return response()->json($response, 201);
+    });
+    Route::post('/add-pack', [\App\Http\Controllers\PacksController::class, 'AddPack']);
+});
+Route::group(['middleware' => 'api-header'], function () {
+    Route::post('/login',  [\App\Http\Controllers\AuthUserController::class, 'login']);
+    Route::post('/register', [\App\Http\Controllers\AuthUserController::class, 'register']);
+
+});
+//Authentication user
+
     //Add Pack
-    Route::post('/add-pack/{token}', [\App\Http\Controllers\PacksController::class, 'AddPack'])->middleware('auth');
     Route::get('/AllPack',  [\App\Http\Controllers\PacksController::class, 'AllPack']);
     //Add Novella 
     Route::post('/add-novella', [\App\Http\Controllers\NovellaController::class, 'store']);

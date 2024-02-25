@@ -7,53 +7,80 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Exception;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AuthUserController extends Controller
 {
-    public function register(Request $request)
+    private function getToken($email, $password)
     {
+        $token = null;
+        
         try {
-            $request->validate([
-                'name' => 'required|string',
-                'email' => 'required|email|unique:users',
-                'password' => 'required|string|min:6',
+            if (!$token = JWTAuth::attempt(['email'=>$email, 'password'=>$password])) {
+                return response()->json([
+                    'response' => 'error',
+                    'message' => 'Password or email is invalid',
+                    'token'=> $token
+                ]);
+            }
+        } catch (JWTException $e) {
+            return response()->json([
+                'response' => 'error',
+                'message' => 'Token creation failed $e',
             ]);
-
-            $user = new User();
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $user->save();
-            $token = $user->createToken('auth_token')->plainTextToken;
-
-            $cookie = cookie('token', $token, 60 * 24); // 1 day
-            return response()->json(['user' => $user])->withCookie($cookie);
-        } catch (Exception $exception) {
-            return response()->json(['message' => $exception->getMessage()], 500);
-
         }
+
+        return $token;
     }
-    // Fonction de connexion
+
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
-    
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            
-            $token = $user->createToken('auth_token')->plainTextToken;
-    
-            $cookie = cookie('token', $token, 60 * 24); // 1 day
-    
-            return response()->json([
-                'message' => 'Authentification réussie',
-                'token' => $token, 
-            ])->withCookie($cookie);
-        } else {
-            // Erreur d'authentification
-            return response()->json(['error' => 'Unauthorized'], 401);
+
+        $user = User::where('email', $request->email)->get()->first();
+
+        if ($user && Hash::check($request->password, $user->password))
+        {
+            $token = self::getToken($request->email, $request->password);
+            $user->auth_token = $token;
+            $user->save();
+
+            $response = ['success'=>true, 'data'=>['id'=>$user->id,'auth_token'=>$user->auth_token,'name'=>$user->name, 'email'=>$user->email]];
         }
+        else
+            $response = ['success'=>false, 'data'=>'Record doesnt exists'];
+
+        return response()->json($response, 201);
     }
-    
+
+    public function register(Request $request)
+    {
+        $payload = [
+            'password'=>Hash::make($request->password),
+            'email'=>$request->email,
+            'name'=>$request->name,
+            'auth_token'=> ''
+        ];
+
+        $user = new User($payload);
+        if ($user->save()) {
+
+            $token = self::getToken($request->email, $request->password);
+
+            if (!is_string($token))  return response()->json(['success'=>false,'data'=>'Token generation failed'], 201);
+
+            $user = User::where('email', $request->email)->get()->first();
+
+            $user->auth_token = $token; 
+
+            $user->save();
+
+            $response = ['success'=>true, 'data'=>['name'=>$user->name,'id'=>$user->id,'email'=>$request->email,'auth_token'=>$token]];
+        } else
+            $response = ['success'=>false, 'data'=>'Couldnt register user'];
+
+
+        return response()->json($response, 201);
+    }
 
 }
