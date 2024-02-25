@@ -27,15 +27,15 @@ class PacksController extends Controller
     public function AddPack(Request $request)
 {
     try {
-        // Assurez-vous que l'utilisateur est authentifié
-        if (!Auth::check()) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-        // Obtenez l'utilisateur authentifié
-        $user = Auth::user();
-        // Créez un nouveau pack avec l'ID de l'utilisateur authentifié
+     // Check if user is authenticated
+     if (!Auth::check()) {
+        return response()->json(['success' => false, 'message' => 'User not authenticated'], 401);
+    }
+
+    // Get the authenticated user's ID
+    $userId = Auth::id();
         $pack = new Pack();
-        $pack->user_id = $user->id;
+        $pack->user_id = $userId;
         $pack->title = $request->title;
         $pack->description = $request->description;
         $pack->category = $request->category;
