@@ -1,115 +1,114 @@
-import {
-    Box,
-    Flex,
-    Image,
-    Button,
-    Input,
-  
-} from "@chakra-ui/react";
+import { Flex, Input, Button } from "@chakra-ui/react";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const AddPackage: React.FC = () => {
-  const [token, setToken] = useState("");
+    const [token, setToken] = useState("");
     const [formData, setFormData] = useState({
         title: "",
         description: "",
         category: "",
-        img: "",
+        img: null,
         langue: "",
         price: "",
     });
+
     useEffect(() => {
-      const storedToken = localStorage.getItem("token");
-      if (storedToken) {
-          setToken(storedToken);
-      }
-  }, []);
-    const handleChange = (e: any) => {
+        const storedToken = localStorage.getItem("token");
+        if (storedToken) {
+            setToken(storedToken);
+        }
+    }, []);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value,
+            [name]: value,
         });
     };
-    const handleSubmit = async (e:any) => {
-      e.preventDefault();
 
-      try {
-          const response = await axios.post(
-              "http://127.0.0.1:8000/api/add-pack",
-              formData,
-              {
-                  headers: {
-                      Authorization: `Bearer ${token}` // Utiliser le token dans l'en-tête Authorization
-                  }
-              }
-          );
-          console.log("Response:", response.data);
-      } catch (error) {
-          console.error("Error:", error);
-      }
-  };
+  /*  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const file = e.target.files[0];
+            setFormData({
+                ...formData,
+                img: file,
+            });
+        }
+    };*/
 
-/*
-    const inputRef = useRef(null);
-    const [image, setImage] = useState("");
-    const handleImageClick = () => {
-        inputRef.current.click();
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        try {
+            const formDataToSend = new FormData();
+            formDataToSend.append("title", formData.title);
+            formDataToSend.append("description", formData.description);
+            formDataToSend.append("category", formData.category);
+            formDataToSend.append("langue", formData.langue);
+            formDataToSend.append("price", formData.price);
+            if (formData.img) {
+                formDataToSend.append("image", formData.img);
+            }
+
+            const response = await axios.post(
+                "http://127.0.0.1:8000/api/add-pack",
+                formDataToSend,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data", // Ajout du Content-Type pour indiquer que des fichiers sont envoyés
+                    },
+                }
+            );
+
+            console.log("Response:", response.data);
+        } catch (error) {
+            console.error("Error:", error);
+        }
     };
 
-    const handleImageChange = (event: any) => {
-        const file = event.target.files[0];
-        const imageUrl = URL.createObjectURL(file);
-        setImage(imageUrl);
-    };
-*/
     return (
-        <Flex>
-          <form onSubmit={handleSubmit}>
-            <Input
-              placeholder="title"
-              onChange={handleChange}
-              name="title"
-              value={formData.title}
-
-            />
-            <Input
-              placeholder="descripation"
-              value={formData.description}
-              onChange={handleChange}
-              name="description"
-
-            />
-            <Input    
-              placeholder="category"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              />
-            <Input
-               placeholder="langue"
-               value={formData.langue}
-               onChange={handleChange}
-              name="langue"
-
-            />
-            <Input
-               placeholder="price"
-               value={formData.price}
-               onChange={handleChange}
-              name="price"
-
-            />
-            <Input
-               type="file"
-               name="image"
-               value={formData.img}
-               onChange={handleChange}
-            />
-            <Button type="submit">Add</Button>
-          </form>
+        <Flex align="center" justify="center">
+            <form onSubmit={handleSubmit}>
+                <Input
+                    placeholder="Title"
+                    onChange={handleChange}
+                    name="title"
+                    value={formData.title}
+                />
+                <Input
+                    placeholder="Description"
+                    onChange={handleChange}
+                    name="description"
+                    value={formData.description}
+                />
+                <Input
+                    placeholder="Category"
+                    onChange={handleChange}
+                    name="category"
+                    value={formData.category}
+                />
+                <Input
+                    placeholder="Langue"
+                    onChange={handleChange}
+                    name="langue"
+                    value={formData.langue}
+                />
+                <Input
+                    placeholder="Price"
+                    onChange={handleChange}
+                    name="price"
+                    value={formData.price}
+                />
+                <Input
+                    type="file"
+                    name="image"
+                   // onChange={handleImageChange}
+                />
+                <Button type="submit">Add</Button>
+            </form>
         </Flex>
     );
 };

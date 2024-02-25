@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Image,
     Button,
@@ -37,7 +37,14 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
         { id: 3, name: "Book 3", author: "Author 3", price: 20 },
     ]);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
+    const [token, setToken] = useState("");
+    useEffect(() => {
+        const storedToken = localStorage.getItem("token");
+        if (storedToken) {
+            setToken(storedToken);
+        }
+    }, []);
+    console.log(token);
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
     };
@@ -133,6 +140,7 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                             AddNovella
                         </Button>
                     </NavLink>
+                    {/** NavLink to={`/addPackage/${token}`}*/}
                     <NavLink to="/addPackage">
                         <Button size={"sm"} color={"gray.400"} variant="ghost">
                             AddPackage
