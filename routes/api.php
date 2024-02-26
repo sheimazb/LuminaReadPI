@@ -45,18 +45,19 @@ Route::group(['middleware' => ['jwt.auth','api-header']], function () {
     Route::post('/add-novella/{pack_id}', [\App\Http\Controllers\NovellaController::class, 'store']);
 
 });
+Route::middleware(['auth:api'])->group(function () {
+    Route::post('/Addcomments', [\App\Http\Controllers\CommentController::class, 'Addcomments']);
+    Route::put('/comments/{id}', [\App\Http\Controllers\CommentController::class, 'update']);
+    Route::delete('/comments/{id}', [\App\Http\Controllers\CommentController::class, 'destroy']);
+});
 
 Route::group(['middleware' => 'api-header'], function () {
     Route::post('/login',  [\App\Http\Controllers\AuthUserController::class, 'login']);
     Route::post('/register', [\App\Http\Controllers\AuthUserController::class, 'register']);
 
 });
-//Authentication user
 
-    //Add Pack
     Route::get('/AllPack',  [\App\Http\Controllers\PacksController::class, 'AllPack']);
-    //Add Novella 
-
     Route::get('/list-novella', [\App\Http\Controllers\NovellaController::class, 'index']);
 // Add Text
 Route::post('/AddText', [\App\Http\Controllers\TextController::class, 'AddText']);

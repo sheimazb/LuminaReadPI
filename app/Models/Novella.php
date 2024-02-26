@@ -22,4 +22,8 @@ class Novella extends Model
     public function packs(){
         return $this->belongsTo(Pack::class , 'pack_id','id');
     }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
