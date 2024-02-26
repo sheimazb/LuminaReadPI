@@ -43,7 +43,7 @@ class PacksController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
-            $data = "public/images"; // chemin de destination pour stocker les images
+            $data = "public/images/packs"; // chemin de destination pour stocker les images
             $image->move(public_path($data), $imageName);
             $pack->img = $imageName;
         }

@@ -21,7 +21,7 @@ function App() {
             <Route path="/package" element={<Package />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/TextReader" element={<TextReader />} />
-            <Route path="/AddNovella" element={<AddNovella />} />
+            <Route path="/AddNovella/:pack_id" element={<AddNovella />} />
             <Route path="/AddPackage" element={<AddPackage />} />
             <Route path="/novella/*" element={<Novella />}>
                 <Route path="" element={<Navigate to="forum" />} />

@@ -42,7 +42,10 @@ Route::group(['middleware' => ['jwt.auth','api-header']], function () {
         return response()->json($response, 201);
     });
     Route::post('/add-pack', [\App\Http\Controllers\PacksController::class, 'AddPack']);
+    Route::post('/add-novella/{pack_id}', [\App\Http\Controllers\NovellaController::class, 'store']);
+
 });
+
 Route::group(['middleware' => 'api-header'], function () {
     Route::post('/login',  [\App\Http\Controllers\AuthUserController::class, 'login']);
     Route::post('/register', [\App\Http\Controllers\AuthUserController::class, 'register']);
@@ -53,7 +56,7 @@ Route::group(['middleware' => 'api-header'], function () {
     //Add Pack
     Route::get('/AllPack',  [\App\Http\Controllers\PacksController::class, 'AllPack']);
     //Add Novella 
-    Route::post('/add-novella', [\App\Http\Controllers\NovellaController::class, 'store']);
+
     Route::get('/list-novella', [\App\Http\Controllers\NovellaController::class, 'index']);
 // Add Text
 Route::post('/AddText', [\App\Http\Controllers\TextController::class, 'AddText']);

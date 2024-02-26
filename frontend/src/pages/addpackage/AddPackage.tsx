@@ -4,7 +4,14 @@ import React, { useEffect, useState } from "react";
 
 const AddPackage: React.FC = () => {
     const [token, setToken] = useState("");
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<{
+        title: string;
+        description: string;
+        category: string;
+        img: File | null; // Spécifiez que img peut être de type File ou null
+        langue: string;
+        price: string;
+    }>({
         title: "",
         description: "",
         category: "",
@@ -27,8 +34,7 @@ const AddPackage: React.FC = () => {
             [name]: value,
         });
     };
-
-  /*  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
             setFormData({
@@ -36,7 +42,9 @@ const AddPackage: React.FC = () => {
                 img: file,
             });
         }
-    };*/
+    };
+    
+    
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -105,7 +113,8 @@ const AddPackage: React.FC = () => {
                 <Input
                     type="file"
                     name="image"
-                   // onChange={handleImageChange}
+                    onChange={handleImageChange}
+
                 />
                 <Button type="submit">Add</Button>
             </form>
