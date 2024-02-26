@@ -130,7 +130,7 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                             Package
                         </Button>
                     </NavLink>
-                    <NavLink to="/novella">
+                    <NavLink to="/novella/1">
                         <Button size={"sm"} color={"gray.400"} variant="ghost">
                             Novella
                         </Button>

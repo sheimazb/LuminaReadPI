@@ -1,20 +1,4 @@
-import {
-    Box,
-    Flex,
-    Text,
-    Image,
-    Button,
-    Wrap,
-    Input,
-    InputGroup,
-    InputRightElement,
-    Stack,
-    CardBody,
-    Heading,
-    Card,
-    Textarea,
-} from "@chakra-ui/react";
-import { FaCommentAlt } from "react-icons/fa";
+import { Box, Flex, Text, Image, Button } from "@chakra-ui/react";
 import { NavLink, Outlet } from "react-router-dom";
 const Novella = () => {
     return (
