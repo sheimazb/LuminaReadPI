@@ -129,6 +129,7 @@ const AddNovella:React.FC = () => {
                 <Button type="submit">Add</Button>
 
             </form>
+
         </Box>
     );
 };

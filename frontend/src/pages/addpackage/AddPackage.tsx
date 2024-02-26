@@ -1,4 +1,5 @@
-import { Flex, Input, Button } from "@chakra-ui/react";
+
+import { Box, Flex, Image, Button, Input } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -29,6 +30,7 @@ const AddPackage: React.FC = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
+
         setFormData({
             ...formData,
             [name]: value,
@@ -75,13 +77,15 @@ const AddPackage: React.FC = () => {
         } catch (error) {
             console.error("Error:", error);
         }
+
     };
 
     return (
-        <Flex align="center" justify="center">
+
+        <Flex>
             <form onSubmit={handleSubmit}>
                 <Input
-                    placeholder="Title"
+                    placeholder="title"
                     onChange={handleChange}
                     name="title"
                     value={formData.title}
@@ -114,7 +118,6 @@ const AddPackage: React.FC = () => {
                     type="file"
                     name="image"
                     onChange={handleImageChange}
-
                 />
                 <Button type="submit">Add</Button>
             </form>

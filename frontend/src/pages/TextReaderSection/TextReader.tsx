@@ -92,7 +92,7 @@ const TextReader = () => {
 
     useEffect(() => {
         const words = textToSpeak.split(" ").filter((word) => word !== "");
-        const readingSpeed = 200;
+        const readingSpeed = 160;
         const readingTimeInMinutes = words.length / readingSpeed;
         const minutes = Math.floor(readingTimeInMinutes);
         const seconds = Math.ceil((readingTimeInMinutes - minutes) * 60);
@@ -108,7 +108,7 @@ const TextReader = () => {
                 newUtterance.voice = selectedVoice;
             }
             newUtterance.pitch = 1;
-            newUtterance.rate = 1;
+            newUtterance.rate = 0.7;
             newUtterance.volume = 1;
 
             newUtterance.onboundary = (event) => {
@@ -340,7 +340,7 @@ const TextReader = () => {
                                             ? `-${consecutiveTrueCount * 86}px`
                                             : 0
                                     }
-                                    transition="margin-top 0.3s ease-in-out"
+                                    transition="margin-top 0.2s ease-in-out"
                                     color={"white"}
                                 >
                                     {textToSpeak
@@ -349,7 +349,8 @@ const TextReader = () => {
                                             <Text
                                                 key={index}
                                                 ref={
-                                                    index === currentWordIndex
+                                                    index ===
+                                                    currentWordIndex + 1
                                                         ? textRef
                                                         : null
                                                 }

@@ -4,7 +4,6 @@ import {
     useColorMode,
     IconButton,
 } from "@chakra-ui/react";
-import { FaSun, FaMoon } from "react-icons/fa";
 import Routing from "./Routing";
 import { BrowserRouter } from "react-router-dom";
 import Navbar from "./components/Navbar";
