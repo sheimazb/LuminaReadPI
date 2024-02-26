@@ -10,10 +10,16 @@ class Novella extends Model
     protected $table = 'novellas';
     protected $primaryKey = 'id';
     protected $fillable = [
+        'pack_id',
         'title',
         'description',
+        'img',
         'content',
         'progress',
     ];
     use HasFactory;
+
+    public function packs(){
+        return $this->belongsTo(Pack::class , 'pack_id','id');
+    }
 }

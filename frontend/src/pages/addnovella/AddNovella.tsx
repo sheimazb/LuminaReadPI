@@ -1,92 +1,136 @@
-import React from 'react';
-import { Box, Tabs, TabList, Tab, TabPanels, TabPanel, Select, Heading, Image, CardBody, Stack, Textarea , Button, Wrap, Card, Flex, Input } from '@chakra-ui/react';
-import {useRef , useState} from "react" ;
+import React, { useEffect } from "react";
+import {
+    Box,
+   
+    Button,
+   
+    Input,
+} from "@chakra-ui/react";
+import {  useState } from "react";
+import axios from "axios";
 
-const AddNovella = () => {
-  const inputRef = useRef(null);
-  const [image, setImage] = useState("");
+const AddNovella:React.FC = () => {
+  const [token, setToken] = useState("");
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+        setToken(storedToken);
+    }
+}, []);
+    const [formData, setFormData] = useState<{
+        title: string;
+        description: string;
+        img: File | null; // Spécifiez que img peut être de type File ou null
+        content: string;
+        progress: string;
+    }>({
+        title: "",
+        description: "",
+        img: null,
+        content: "",
+        progress: "",
+    });
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
 
-  const handleImageClick = () => {
-      inputRef.current.click();
-  };
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
 
-  const handleImageChange = (event) => {
-      const file = event.target.files[0];
-      const imageUrl = URL.createObjectURL(file);
-      setImage(imageUrl);
-  };
-  return (
-    <Box
-      className="container"
-      w="600px"
-      margin="3rem auto"
-      bgPosition="0 0"
-      bgRepeat="no-repeat"
-      bgSize="100% 100%"
-      flexDirection="column"
-      justifyContent="flex-end"
-      padding="3rem"
-      display="flex"
-    >
-       
-        
-              <Wrap w={"100%"} p={2}>
-                <Card
-                  bg={"transparent"}
-                  border={"var(--bordercolor) solid 1px "}
-                  p={0}
-                >
-                  <CardBody>
-                  <Box 
-  w="600px"
-      onClick={handleImageClick}>
-          {image ? (
-              <Image
-                  src={image}
-                  alt="Selected Image"
-                  className="post-big-border__video is-success anim"
-                  loading="lazy"
-                  data-submit-anim=""
-                  objectFit='cover'
-                  borderRadius="lg"
-                  w={"100%"}
-                  h="140px"
-              />
-          ) : (
-                  <Image
-                  borderRadius='full'
-                  boxSize='150px'
-                  objectFit='cover'
-                  src="https://www.creativefabrica.com/wp-content/uploads/2021/04/05/Image-Upload-Icon-Graphics-10388650-1.jpg"
-                  className="post-big-border__video is-success anim"
+        try {
+            // Extract pack ID from URL
+            const url = window.location.href;
+            const packId = url.split("/").pop(); // Assuming the pack ID is at the end of the URL
 
-              />
-             
-          )}
-          <input 
-           type="file" ref={inputRef} onChange={handleImageChange} style={{ display: "none" }} 
-           ></input>
-      </Box>  
-                  
-                    <Stack mt="3" spacing="1">
-                    <Input placeholder='place the title of the novel'  htmlSize={500} width='20rem' height='30px' />
-                      <Input mt={2} placeholder='place a description of the novel'  htmlSize={500} width='20rem' height='60px' />
-                      <Textarea
-                            
-                            placeholder="Enter text to speak..."
-                            mt={2}
-                            height={100}
-                        />
-                      <Button  mt={2} size={"sm"}>
-                        Add 
-                      </Button>
-                    </Stack>
-                  </CardBody>
-                </Card>
-              </Wrap>
-            
-    </Box>
-  );
+            const formDataToSend = new FormData();
+            formDataToSend.append("title", formData.title);
+            formDataToSend.append("description", formData.description);
+            formDataToSend.append("content", formData.content);
+            formDataToSend.append("progress", formData.progress);
+            if (formData.img) {
+                formDataToSend.append("image", formData.img);
+            }
+
+            const response = await axios.post(
+                `http://127.0.0.1:8000/api/add-novella/${packId}`, // Inject pack ID into the URL
+                formDataToSend,
+                {
+                  headers:{
+                    Authorization:`Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
+                  },
+                }
+                
+            );
+
+            console.log("Response:", response.data);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const file = e.target.files[0];
+            setFormData({
+                ...formData,
+                img: file,
+            });
+        }
+    };
+    return (
+        <Box
+            className="container"
+            w="600px"
+            margin="3rem auto"
+            bgPosition="0 0"
+            bgRepeat="no-repeat"
+            bgSize="100% 100%"
+            flexDirection="column"
+            justifyContent="flex-end"
+            padding="3rem"
+            display="flex"
+        >
+            <form onSubmit={handleSubmit}>
+            <Input
+                    placeholder="Title"
+                    onChange={handleChange}
+                    name="title"
+                    value={formData.title}
+                />
+                <Input
+                    placeholder="Description"
+                    onChange={handleChange}
+                    name="description"
+                    value={formData.description}
+                />
+                <Input
+                    placeholder="Langue"
+                    onChange={handleChange}
+                    name="content"
+                    value={formData.content}
+                />
+                <Input
+                    placeholder="Price"
+                    onChange={handleChange}
+                    name="progress"
+                    value={formData.progress}
+                />
+                <Input
+                    type="file"
+                    name="image"
+                    onChange={handleImageChange}
+
+                />
+                <Button type="submit">Add</Button>
+
+            </form>
+        </Box>
+    );
 };
 
 export default AddNovella;

@@ -135,7 +135,7 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                             Novella
                         </Button>
                     </NavLink>
-                    <NavLink to="/addNovella">
+                    <NavLink to="/addNovella/2">
                         <Button size={"sm"} color={"gray.400"} variant="ghost">
                             AddNovella
                         </Button>

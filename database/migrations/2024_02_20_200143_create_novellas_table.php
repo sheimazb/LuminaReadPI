@@ -13,8 +13,11 @@ return new class extends Migration
     {
         Schema::create('novellas', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('pack_id');
+            $table->foreign('pack_id')->references('id')->on('packs')->onDelete('cascade');
             $table->string('title');
             $table->string('description');
+            $table->string('img');
             $table->string('content');
             $table->string('progress');
             $table->timestamps();
