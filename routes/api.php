@@ -3,6 +3,9 @@
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +31,7 @@ Route::delete('/delete/{id}', [\App\Http\Controllers\BooksController::class, 'de
 
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
+    
     return $request->user();
 });
 
@@ -35,18 +39,23 @@ Route::group(['middleware' => ['jwt.auth','api-header']], function () {
 
     // all routes to protected resources are registered here
     Route::get('users/list', function(){
+    
         $users = App\Models\User::all();
 
         $response = ['success'=>true, 'data'=>$users];
 
         return response()->json($response, 201);
     });
+    Route::get('/getUSer',  [\App\Http\Controllers\AuthUserController::class, 'getUser']);
     Route::post('/add-pack', [\App\Http\Controllers\PacksController::class, 'AddPack']);
     Route::post('/add-novella/{pack_id}', [\App\Http\Controllers\NovellaController::class, 'store']);
+    Route::post('/editUser',  [\App\Http\Controllers\AuthUserController::class, 'editUser']);
+    Route::get('/packk', [\App\Http\Controllers\PacksController::class, 'getPacksByUserId']);
 
 });
 
 Route::group(['middleware' => 'api-header'], function () {
+    
     Route::post('/login',  [\App\Http\Controllers\AuthUserController::class, 'login']);
     Route::post('/register', [\App\Http\Controllers\AuthUserController::class, 'register']);
 

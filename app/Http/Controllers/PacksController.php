@@ -101,6 +101,19 @@ class PacksController extends Controller
             return response()->json(['error' => 'Veuillez spécifier au moins une catégorie.'], 400);
         }
     }
+    public function getPacksByUserId()
+{
+    try {
+        $userId = "3";
+
+        $packs = Pack::where('user_id', $userId)->get();
+
+        return response()->json(['packs' => $packs], 200);
+    } catch (Exception $exception) {
+        return response()->json(['message' => $exception->getMessage()], 500);
+    }
+}
+
     /**
      * Update the specified resource in storage.
      */
