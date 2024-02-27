@@ -1,9 +1,4 @@
-import {
-    ChakraProvider,
-    extendTheme,
-    useColorMode,
-    IconButton,
-} from "@chakra-ui/react";
+import { ChakraProvider, extendTheme, useColorMode } from "@chakra-ui/react";
 import Routing from "./Routing";
 import { BrowserRouter } from "react-router-dom";
 import Navbar from "./components/Navbar";

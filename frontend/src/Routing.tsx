@@ -23,7 +23,7 @@ function App() {
             <Route path="/TextReader" element={<TextReader />} />
             <Route path="/AddNovella/:pack_id" element={<AddNovella />} />
             <Route path="/AddPackage" element={<AddPackage />} />
-            <Route path="/novella/*" element={<Novella />}>
+            <Route path="/novella/:id/*" element={<Novella />}>
                 <Route path="" element={<Navigate to="forum" />} />
                 <Route path="TTS" element={<TTS />} />
                 <Route path="forum" element={<Forum />} />

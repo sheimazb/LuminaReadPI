@@ -29,6 +29,10 @@ Route::put('/update/{id}', [\App\Http\Controllers\BooksController::class, 'updat
 
 Route::delete('/delete/{id}', [\App\Http\Controllers\BooksController::class, 'destroy']);
 
+Route::post('/Addcomments', [\App\Http\Controllers\CommentController::class, 'Addcomments']);
+Route::put('/comments/{id}', [\App\Http\Controllers\CommentController::class, 'update']);
+Route::delete('/comments/{id}', [\App\Http\Controllers\CommentController::class, 'destroy']);
+Route::get('/novellas/{novella_id}/comments', [\App\Http\Controllers\CommentController::class, 'getCommentsByNovellaId']);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     
@@ -36,14 +40,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => ['jwt.auth','api-header']], function () {
-
-    // all routes to protected resources are registered here
     Route::get('users/list', function(){
     
         $users = App\Models\User::all();
-
         $response = ['success'=>true, 'data'=>$users];
-
         return response()->json($response, 201);
     });
     Route::get('/getUSer',  [\App\Http\Controllers\AuthUserController::class, 'getUser']);
@@ -53,19 +53,17 @@ Route::group(['middleware' => ['jwt.auth','api-header']], function () {
     Route::get('/packk', [\App\Http\Controllers\PacksController::class, 'getPacksByUserId']);
 
 });
-
+    
 Route::group(['middleware' => 'api-header'], function () {
     
     Route::post('/login',  [\App\Http\Controllers\AuthUserController::class, 'login']);
     Route::post('/register', [\App\Http\Controllers\AuthUserController::class, 'register']);
 
 });
-//Authentication user
 
-    //Add Pack
-    Route::get('/AllPack',  [\App\Http\Controllers\PacksController::class, 'AllPack']);
-    //Add Novella 
-
+//list Pack
+Route::get('/AllPack',  [\App\Http\Controllers\PacksController::class, 'AllPack']);
+//list Novella 
     Route::get('/list-novella', [\App\Http\Controllers\NovellaController::class, 'index']);
 // Add Text
 Route::post('/AddText', [\App\Http\Controllers\TextController::class, 'AddText']);
