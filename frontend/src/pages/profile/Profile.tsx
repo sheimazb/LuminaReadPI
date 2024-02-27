@@ -23,6 +23,13 @@ import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 import { FaSearch, FaStar } from "react-icons/fa"; // Import FaPlus for the add button
+
+interface User {
+    id: number;
+    name: string;
+    email: string;
+    // Ajoutez d'autres propriétés selon vos besoins
+}
 const Profile: React.FC = () => {
     const [token, setToken] = useState("");
     const [packs, setPacks] = useState([]);
@@ -114,20 +121,29 @@ const Profile: React.FC = () => {
             setToken(storedToken);
         }
     }, []);
-    const [user, setUser] = useState<any>();
+
+    const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
-        (async () => await Load())();
+        (async () => await loadUserData(3))();
     }, []);
-    async function Load() {
-        const response = await axios.get("http://127.0.0.1:8000/api/getUSer", {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "multipart/form-data",
-            },
-        });
-        setUser(response.data);
+
+    async function loadUserData(userId: number): Promise<void> {
+        try {
+            const response = await axios.get<User>(`http://127.0.0.1:8000/api/users/${userId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+            setUser(response.data);
+        } catch (error) {
+            console.error("Erreur lors du chargement de l'utilisateur :", error);
+        }
     }
+console.log(user);
+
+    
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [imageURL, setImageURL] = useState<string | null>(null);
     return (

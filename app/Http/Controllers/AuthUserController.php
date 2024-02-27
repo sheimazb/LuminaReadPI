@@ -73,22 +73,25 @@ class AuthUserController extends Controller
         return response()->json($response, 201);
     }
 
-    public function getUser()
+    public function getUser(int $id)
     {
-        if (!Auth::check()) {
-            return response()->json(['success' => false, 'message' => 'User not authenticated'], 401);
+        $authHeader = request()->header('Authorization');
+        if (!str_starts_with($authHeader, 'Bearer ')) {
+            return response()->json(['message' => 'Invalid token'], 401);
         }
     
-        $id = Auth::id();
-    
-        $user = User::findOrFail($id);
+        try {
+            $user = User::where('id', $id)->firstOrFail();
+        } catch (\Exception $e) {
+            // Handle exception when record not found (i.e., throw custom error or redirect)
+            abort(404);
+        }
     
         return response()->json([
             'success' => true,
             'user' => $user
         ]);
     }
-
     public function editUser(Request $request)
     {
         $userId = Auth::id();

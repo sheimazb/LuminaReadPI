@@ -27,7 +27,7 @@ const Forum = () => {
     const fetchData = async () => {
         try {
             const response = await fetch(
-                "http://localhost:8000/api/novellas/1/comments"
+                "http://127.0.0.1:8000/api/novellas/1/comments"
             );
             const data = await response.json();
             setComments(data.comments);
@@ -56,7 +56,7 @@ const Forum = () => {
         try {
             setAddingComment(true);
             const response = await axios.post(
-                "http://localhost:8000/api/Addcomments",
+                "http://127.0.0.1:8000/api/Addcomments",
                 {
                     novella_id: 1,
                     user_id: 3,
@@ -89,7 +89,7 @@ const Forum = () => {
             }));
 
             const response = await axios.delete(
-                `http://localhost:8000/api/comments/${id}`
+                `http://127.0.0.1:8000/api/comments/${id}`
             );
             if (response.status === 200) {
                 fetchData();
@@ -114,7 +114,7 @@ const Forum = () => {
             }));
 
             const response = await axios.put(
-                `http://localhost:8000/api/comments/${id}`,
+                `http://127.0.0.1:8000/api/comments/${id}`,
                 {
                     content: updatedContent,
                 }

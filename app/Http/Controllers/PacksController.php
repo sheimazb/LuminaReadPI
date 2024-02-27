@@ -104,7 +104,7 @@ class PacksController extends Controller
     public function getPacksByUserId()
 {
     try {
-        $userId = "3";
+        $userId = Auth::id();
 
         $packs = Pack::where('user_id', $userId)->get();
 
