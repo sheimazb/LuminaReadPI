@@ -28,31 +28,27 @@ interface User {
     id: number;
     name: string;
     email: string;
+    img: string;
+    description: string;
+    // Ajoutez d'autres propriétés selon vos besoins
+}
+interface Pack {
+    id: number;
+    user_id: number;
+    title: string;
+    description: string;
+    category: string;
+    img: string;
+    langue: string;
+    price: string;
     // Ajoutez d'autres propriétés selon vos besoins
 }
 const Profile: React.FC = () => {
-    const [token, setToken] = useState("");
+    //Models
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    //useStatement
     const [packs, setPacks] = useState([]);
-    useEffect(() => {
-        LoadPack();
-    }, []);
-    
-    async function LoadPack() {
-        try {
-            const result = await axios.get("http://127.0.0.1:8000/api/packk", {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "multipart/form-data",
-                }
-            });
-            setPacks(result.data.pack);
-            console.log(result.data.pack);
-        } catch (error) {
-            console.error("Error loading packs:", error);
-        }
-    }
-   console.log('papa',packs);
-    
+    const [imageURL, setImageURL] = useState<string | null>(null);
     const [formData, setFormData] = useState<{
         name: string;
         description: string;
@@ -64,6 +60,59 @@ const Profile: React.FC = () => {
         email: "",
         img: null,
     });
+    const [user, setUser] = useState<User>({
+        id: 0,
+        name: "",
+        email: "",
+        img: "",
+        description: "",
+    });
+    //useEffectively
+
+    //fetch connected user
+    useEffect(() => {
+        (async () => await fetchUser())();
+    }, []);
+    async function fetchUser() {
+        const token = localStorage.getItem("token"); // Récupérer le token JWT depuis le stockage local
+        const response = await axios.get("http://127.0.0.1:8000/api/users", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        setUser(response.data.user);
+        console.log(response.data.user);
+    }
+
+    //Load the packed data according to connected usager
+    useEffect(() => {
+        (async () => await loadPackData())();
+    }, []);
+
+    async function loadPackData(): Promise<void> {
+        try {
+            const token = localStorage.getItem("token"); // Récupérer le token JWT depuis le stockage local
+
+            const response = await axios.get(
+                `http://127.0.0.1:8000/api/packk`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                    },
+                }
+            );
+            setPacks(response.data.packs);
+            console.log(response.data.packs);
+        } catch (error) {
+            console.error(
+                "Erreur lors du chargement de l'utilisateur :",
+                error
+            );
+        }
+    }
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
 
@@ -73,17 +122,6 @@ const Profile: React.FC = () => {
         });
     };
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            const file = e.target.files[0];
-            const url = URL.createObjectURL(file);
-            setImageURL(url);
-            setFormData({
-                ...formData,
-                img: file,
-            });
-        }
-    };
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -95,6 +133,7 @@ const Profile: React.FC = () => {
             if (formData.img) {
                 formDataToSend.append("image", formData.img);
             }
+            const token = localStorage.getItem("token"); // Récupérer le token JWT depuis le stockage local
 
             const response = await axios.post(
                 "http://127.0.0.1:8000/api/editUser",
@@ -112,54 +151,36 @@ const Profile: React.FC = () => {
             console.error("Error:", error);
         }
     };
-
-    const range = (n: number) => [...Array(n).keys()];
-
-    useEffect(() => {
-        const storedToken = localStorage.getItem("token");
-        if (storedToken) {
-            setToken(storedToken);
-        }
-    }, []);
-
-    const [user, setUser] = useState<User | null>(null);
-
-    useEffect(() => {
-        (async () => await loadUserData(3))();
-    }, []);
-
-    async function loadUserData(userId: number): Promise<void> {
-        try {
-            const response = await axios.get<User>(`http://127.0.0.1:8000/api/users/${userId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const file = e.target.files[0];
+            const url = URL.createObjectURL(file);
+            setImageURL(url);
+            setFormData({
+                ...formData,
+                img: file,
             });
-            setUser(response.data);
-        } catch (error) {
-            console.error("Erreur lors du chargement de l'utilisateur :", error);
         }
-    }
-console.log(user);
+    };
 
-    
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [imageURL, setImageURL] = useState<string | null>(null);
     return (
         <Box maxW={"1230px"} m={"30px auto"}>
             <Flex flexDirection={"column"} gap={1} alignItems={"left"}>
                 <Flex flexDirection={"column"} gap={1} alignItems={"center"}>
                     <Box position="relative" display="inline-block">
-                        <Image src="" w={16} h={16} rounded={20} ml={1} />
+                        <Image
+                            src={user.img}
+                            w={16}
+                            h={16}
+                            rounded={20}
+                            ml={1}
+                        />
                     </Box>
-                    <Text fontSize={"xl"}></Text>
+                    <Text fontSize={"xl"}>{user.name}</Text>
 
-                    <Text
-                        color={"gray.400"}
-                        maxW={300}
-                        textAlign={"center"}
-                    ></Text>
+                    <Text color={"gray.400"} maxW={300} textAlign={"center"}>
+                        {user.description}
+                    </Text>
                     <Flex gap={1}>
                         <Tag size="md" colorScheme="cyan" borderRadius="full">
                             <TagLabel>Pro</TagLabel>
@@ -185,47 +206,63 @@ console.log(user);
                                 <ModalBody>
                                     <Box>
                                         <Flex gap={1} direction={"column"}>
-                                        <Box display={"flex"} justifyContent={"center"}>
-            {imageURL ? (
-                <img
-                    src={imageURL}
-                    alt="Profile"
-                    style={{
-                        width: "100px",
-                        height: "100px",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                    }}
-                />
-            ) : (
-                <label htmlFor="profile-image-input">
-                    <div
-                        style={{
-                            width: "100px",
-                            height: "100px",
-                            borderRadius: "50%",
-                            backgroundColor: "transparent",
-                            border: "1px dashed",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            cursor: "pointer",
-                        }}
-                    >
-                        <span style={{ fontSize: "24px", color: "white" }}>+</span>
-                    </div>
-            <label htmlFor="profile-image-input">Edit profile photo</label>
-
-                </label>
-            )}
-            <input
-                id="profile-image-input"
-                type="file"
-                accept="image/*"
-                style={{ display: "none" }}
-                onChange={handleImageChange}
-            />
-        </Box>
+                                            <Box
+                                                display={"flex"}
+                                                justifyContent={"center"}
+                                            >
+                                                {imageURL ? (
+                                                    <img
+                                                        src={imageURL}
+                                                        alt="Profile"
+                                                        style={{
+                                                            width: "100px",
+                                                            height: "100px",
+                                                            borderRadius: "50%",
+                                                            objectFit: "cover",
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <label htmlFor="profile-image-input">
+                                                        <div
+                                                            style={{
+                                                                width: "100px",
+                                                                height: "100px",
+                                                                borderRadius:
+                                                                    "50%",
+                                                                backgroundColor:
+                                                                    "transparent",
+                                                                border: "1px dashed",
+                                                                display: "flex",
+                                                                justifyContent:
+                                                                    "center",
+                                                                alignItems:
+                                                                    "center",
+                                                                cursor: "pointer",
+                                                            }}
+                                                        >
+                                                            <span
+                                                                style={{
+                                                                    fontSize:
+                                                                        "24px",
+                                                                    color: "white",
+                                                                }}
+                                                            >
+                                                                +
+                                                            </span>
+                                                        </div>
+                                                        <label htmlFor="profile-image-input">
+                                                            Edit profile photo
+                                                        </label>
+                                                    </label>
+                                                )}
+                                                <input
+                                                    id="profile-image-input"
+                                                    type="file"
+                                                    accept="image/*"
+                                                    style={{ display: "none" }}
+                                                    onChange={handleImageChange}
+                                                />
+                                            </Box>
                                             <label>Edit name</label>
                                             <Input
                                                 placeholder=" name"
@@ -278,7 +315,7 @@ console.log(user);
                 </InputGroup>
             </Flex>
             <Wrap minH={500} mt={3}>
-                {range(10).map((index) => (
+                {packs.map((pack: Pack, index: number) => (
                     <Box
                         key={index}
                         h={280}
@@ -290,18 +327,22 @@ console.log(user);
                         p={2}
                     >
                         <Image
-                            src="https://i.gyazo.com/933ed1aa06f63a98d12891af67fbcee0.jpg"
-                            maxH={120}
+                           src={pack.img}
+                           maxH={120}
                             w={"100%"}
                             objectFit={"cover"}
                             rounded={5}
                         />
+
                         <Text as={"b"} mt={2}>
-                            Lorem ipsum dolor sit amet adipi .
+                        {pack.title}
                         </Text>
+
                         <Text color={"gray.400"}>
-                            Lorem ipsum dolor sit amet adipi amet adipi .
+                        {pack.description}
+
                         </Text>
+
                         <Flex
                             alignItems={"center"}
                             gap={"5px"}
@@ -310,11 +351,16 @@ console.log(user);
                             mt={3}
                         >
                             <FaStar />
+
                             <FaStar />
+
                             <FaStar />
+
                             <FaStar />
+
                             <FaStar />
                         </Flex>
+
                         <Button mt={3} w={"100%"}>
                             Check
                         </Button>

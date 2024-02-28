@@ -1,9 +1,10 @@
 
-import { Flex, Button, Input } from "@chakra-ui/react";
+import { Flex, Button, Input ,useToast} from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const AddPackage: React.FC = () => {
+    const toast = useToast();
     const [token, setToken] = useState("");
     const [formData, setFormData] = useState<{
         title: string;
@@ -72,10 +73,33 @@ const AddPackage: React.FC = () => {
                     },
                 }
             );
-
+            toast({
+                title: "Success",
+                description: "Added pack successfully!",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+            });
             console.log("Response:", response.data);
-        } catch (error) {
+        } catch (error:any) {
             console.error("Error:", error);
+            if (error.response && error.response.data.message) {
+                toast({
+                    title: "Error",
+                    description: error.response.data.message,
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
+            } else {
+                toast({
+                    title: "Error",
+                    description: "Failed to add pack. Please try again.",
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
         }
 
     };

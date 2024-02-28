@@ -46,7 +46,7 @@ Route::group(['middleware' => ['jwt.auth','api-header']], function () {
         $response = ['success'=>true, 'data'=>$users];
         return response()->json($response, 201);
     });
-    Route::get('/users/{userId}', [\App\Http\Controllers\AuthUserController::class, 'getUser']);
+    Route::get('/users', [\App\Http\Controllers\AuthUserController::class, 'getUser']);
     Route::post('/add-pack', [\App\Http\Controllers\PacksController::class, 'AddPack']);
     Route::post('/add-novella/{pack_id}', [\App\Http\Controllers\NovellaController::class, 'store']);
     Route::post('/editUser',  [\App\Http\Controllers\AuthUserController::class, 'editUser']);

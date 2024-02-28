@@ -42,7 +42,7 @@ class NovellaController extends Controller
                 $imageName = time() . '_' . $image->getClientOriginalName();
                 $data = "public/images/novellas"; // chemin de destination pour stocker les images
                 $image->move(public_path($data), $imageName);
-                $novella->img = $imageName;
+                $novella->img = url($data . '/' . $imageName); // Renvoyer l'URL complète de l'image
             }
             $novella->content = $request->content;
             $novella->progress = $request->progress;

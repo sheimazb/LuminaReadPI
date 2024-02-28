@@ -73,24 +73,20 @@ class AuthUserController extends Controller
         return response()->json($response, 201);
     }
 
-    public function getUser(int $id)
+    public function getUser()
     {
-        $authHeader = request()->header('Authorization');
-        if (!str_starts_with($authHeader, 'Bearer ')) {
-            return response()->json(['message' => 'Invalid token'], 401);
-        }
-    
         try {
-            $user = User::where('id', $id)->firstOrFail();
-        } catch (\Exception $e) {
-            // Handle exception when record not found (i.e., throw custom error or redirect)
-            abort(404);
+            $user = Auth::user();
+            return response()->json([
+                'success' => true,
+                'user' => $user
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
         }
-    
-        return response()->json([
-            'success' => true,
-            'user' => $user
-        ]);
     }
     public function editUser(Request $request)
     {
@@ -102,8 +98,9 @@ class AuthUserController extends Controller
             $imageName = time() . '_' . $image->getClientOriginalName();
             $data = "public/images/user"; // chemin de destination pour stocker les images
             $image->move(public_path($data), $imageName);
-            $user->img = $imageName;
+            $user->img = url($data . '/' . $imageName); // Renvoyer l'URL complète de l'image
         }
+
         if (!$user) {
             return response()->json(['success' => false, 'message' => 'User not authenticated'], 401);
         }

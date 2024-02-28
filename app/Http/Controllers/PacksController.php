@@ -45,7 +45,7 @@ class PacksController extends Controller
             $imageName = time() . '_' . $image->getClientOriginalName();
             $data = "public/images/packs"; // chemin de destination pour stocker les images
             $image->move(public_path($data), $imageName);
-            $pack->img = $imageName;
+            $pack->img = url($data . '/' . $imageName); // Renvoyer l'URL complète de l'image
         }
 
         $pack->langue = $request->langue;
@@ -108,7 +108,7 @@ class PacksController extends Controller
 
         $packs = Pack::where('user_id', $userId)->get();
 
-        return response()->json(['packs' => $packs], 200);
+        return response()->json(['packs' => $packs]);
     } catch (Exception $exception) {
         return response()->json(['message' => $exception->getMessage()], 500);
     }

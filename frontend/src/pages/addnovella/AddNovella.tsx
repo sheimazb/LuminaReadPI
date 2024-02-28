@@ -1,22 +1,18 @@
 import React, { useEffect } from "react";
-import {
-    Box,
-   
-    Button,
-   
-    Input,
-} from "@chakra-ui/react";
-import {  useState } from "react";
+import { Box, Button, Input,useToast } from "@chakra-ui/react";
+import { useState } from "react";
 import axios from "axios";
 
-const AddNovella:React.FC = () => {
-  const [token, setToken] = useState("");
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-        setToken(storedToken);
-    }
-}, []);
+const AddNovella: React.FC = () => {
+    const [token, setToken] = useState("");
+    const toast = useToast();
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem("token");
+        if (storedToken) {
+            setToken(storedToken);
+        }
+    }, []);
     const [formData, setFormData] = useState<{
         title: string;
         description: string;
@@ -59,16 +55,38 @@ const AddNovella:React.FC = () => {
                 `http://127.0.0.1:8000/api/add-novella/${packId}`, // Inject pack ID into the URL
                 formDataToSend,
                 {
-                  headers:{
-                    Authorization:`Bearer ${token}`,
-                    "Content-Type": "multipart/form-data",
-                  },
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
                 }
-                
             );
-
+            toast({
+                title: "Success",
+                description: "Added novella successfully!",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+            });
             console.log("Response:", response.data);
-        } catch (error) {
+        } catch (error:any) {
+            if (error.response && error.response.data.message) {
+                toast({
+                    title: "Error",
+                    description: error.response.data.message,
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
+            } else {
+                toast({
+                    title: "Error",
+                    description: "Failed add novella. Please try again.",
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
             console.error("Error:", error);
         }
     };
@@ -96,7 +114,7 @@ const AddNovella:React.FC = () => {
             display="flex"
         >
             <form onSubmit={handleSubmit}>
-            <Input
+                <Input
                     placeholder="Title"
                     onChange={handleChange}
                     name="title"
@@ -120,16 +138,9 @@ const AddNovella:React.FC = () => {
                     name="progress"
                     value={formData.progress}
                 />
-                <Input
-                    type="file"
-                    name="image"
-                    onChange={handleImageChange}
-
-                />
+                <Input type="file" name="image" onChange={handleImageChange} />
                 <Button type="submit">Add</Button>
-
             </form>
-
         </Box>
     );
 };

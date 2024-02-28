@@ -107,7 +107,6 @@ const Marketplace = () => {
                         Filter
                     </Flex>
 
-                    {/*hfhfhhfhhfh */}
                     <Wrap w={"calc(100vw - 300px)"} p={2}>
                         {packs &&
                             packs.map((pack: any, index: number) => (
@@ -120,7 +119,7 @@ const Marketplace = () => {
                                 >
                                     <CardBody>
                                         <Image
-                                            src="https://i.gyazo.com/2de8a8974f6ba0aa6d9dedd317e11873.png"
+                                            src={pack.img}
                                             alt="Green double couch with wooden legs"
                                             borderRadius="lg"
                                             w={"100%"}
