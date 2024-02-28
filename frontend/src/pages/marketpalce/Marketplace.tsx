@@ -14,6 +14,7 @@ import {
     CardBody,
     Heading,
     Card,
+    useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -21,16 +22,47 @@ import { FaFilter, FaList, FaSearch, FaStar } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 
 const Marketplace = () => {
+    const toast = useToast();
     const [packs, setPacks] = useState([]);
+    const [cart, setCart] = useState(() => {
+        const storedCart = localStorage.getItem("cart");
+        return storedCart ? JSON.parse(storedCart) : [];
+    });
+
     useEffect(() => {
-        (async () => await Load())();
+        (async () => await loadPacks())();
     }, []);
 
-    async function Load() {
-        const result = await axios.get("http://127.0.0.1:8000/api/AllPack");
-        setPacks(result.data.pack);
-        console.log(result.data.pack);
+    async function loadPacks() {
+        try {
+            const result = await axios.get("http://127.0.0.1:8000/api/AllPack");
+            setPacks(result.data.pack);
+        } catch (error) {
+            console.error("Error loading packs:", error);
+        }
     }
+
+    const addToCart = (pack: any) => {
+        const packageExists = cart.some((item: any) => item.id === pack.id);
+
+        if (packageExists) {
+            console.log("Package already exists in the cart.");
+            toast({
+                title: "Package already exists in the cart",
+                status: "warning",
+                duration: 3000,
+                isClosable: true,
+            });
+
+            return;
+        }
+
+        // If the package doesn't exist in the cart, add it
+        const updatedCart = [...cart, pack];
+        setCart(updatedCart);
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+    };
+
     return (
         <Box>
             <Flex
@@ -185,7 +217,11 @@ const Marketplace = () => {
                                             <Text fontSize={"xs"}>DT</Text>
                                         </Text>
                                         <ButtonGroup spacing="2">
-                                            <Button variant="ghost" size={"sm"}>
+                                            <Button
+                                                variant="ghost"
+                                                size={"sm"}
+                                                onClick={() => addToCart(pack)}
+                                            >
                                                 Add to cart
                                             </Button>
                                             <Button

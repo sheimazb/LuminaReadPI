@@ -1,5 +1,4 @@
-
-import { Flex, Button, Input ,useToast} from "@chakra-ui/react";
+import { Flex, Button, Input, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -46,8 +45,6 @@ const AddPackage: React.FC = () => {
             });
         }
     };
-    
-    
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -81,7 +78,7 @@ const AddPackage: React.FC = () => {
                 isClosable: true,
             });
             console.log("Response:", response.data);
-        } catch (error:any) {
+        } catch (error: any) {
             console.error("Error:", error);
             if (error.response && error.response.data.message) {
                 toast({
@@ -101,11 +98,9 @@ const AddPackage: React.FC = () => {
                 });
             }
         }
-
     };
 
     return (
-
         <Flex>
             <form onSubmit={handleSubmit}>
                 <Input
@@ -138,11 +133,7 @@ const AddPackage: React.FC = () => {
                     name="price"
                     value={formData.price}
                 />
-                <Input
-                    type="file"
-                    name="image"
-                    onChange={handleImageChange}
-                />
+                <Input type="file" name="image" onChange={handleImageChange} />
                 <Button type="submit">Add</Button>
             </form>
         </Flex>

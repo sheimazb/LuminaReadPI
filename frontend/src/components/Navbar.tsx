@@ -314,7 +314,7 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                     <DrawerCloseButton />
                     <DrawerHeader>Cart</DrawerHeader>
                     <DrawerBody>
-                        <CartContent items={cartItems} />
+                        <CartContent />
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>

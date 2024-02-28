@@ -1,15 +1,46 @@
+import { useEffect, useState } from "react";
 import { Box, Flex, Text, Divider, Button, Image } from "@chakra-ui/react";
 import { MdDelete } from "react-icons/md";
 
 interface Item {
     id: number;
-    name: string;
-    author: string;
+    title: string;
+    category: string;
     price: number;
 }
 
-const CartContent: React.FC<{ items: Item[] }> = ({ items }) => {
-    const totalPrice = items.reduce((acc, item) => acc + item.price, 0);
+const CartContent: React.FC = () => {
+    const [items, setItems] = useState<Item[]>([]);
+
+    useEffect(() => {
+        const storedItems = localStorage.getItem("cart");
+        if (storedItems) {
+            const parsedItems: Item[] = JSON.parse(storedItems);
+            const itemsWithParsedPrice = parsedItems.map((item) => ({
+                ...item,
+                price: parseFloat(item.price.toString()), // Parse the price to a number
+            }));
+            setItems(itemsWithParsedPrice);
+        }
+    }, []);
+
+    const totalPrice = items.reduce((acc, item) => {
+        const price =
+            typeof item.price === "number"
+                ? item.price
+                : parseFloat(item.price as string);
+        if (!isNaN(price)) {
+            // Use Number() to ensure price is treated as a number
+            return acc + Number(price);
+        }
+        return acc;
+    }, 0);
+
+    const removeFromCart = (id: number) => {
+        const updatedItems = items.filter((item) => item.id !== id);
+        setItems(updatedItems);
+        localStorage.setItem("cart", JSON.stringify(updatedItems));
+    };
 
     return (
         <Flex
@@ -18,7 +49,7 @@ const CartContent: React.FC<{ items: Item[] }> = ({ items }) => {
             flexDirection={"column"}
         >
             <Box>
-                {items.map((item, index) => (
+                {items.map((item) => (
                     <Box
                         key={item.id}
                         p={3}
@@ -38,12 +69,9 @@ const CartContent: React.FC<{ items: Item[] }> = ({ items }) => {
                                     rounded={5}
                                 />
                                 <Box>
-                                    <Text fontSize="md">{item.name}</Text>
+                                    <Text fontSize="md">{item.title}</Text>
                                     <Text fontSize="sm" color="gray.500">
-                                        {item.author}
-                                    </Text>
-                                    <Text fontSize="sm" color="gray.500">
-                                        {item.author}
+                                        {item.category}
                                     </Text>
                                 </Box>
                             </Flex>
@@ -65,6 +93,7 @@ const CartContent: React.FC<{ items: Item[] }> = ({ items }) => {
                                     color="red.400"
                                     mt={3}
                                     w={30}
+                                    onClick={() => removeFromCart(item.id)}
                                 >
                                     <MdDelete />
                                 </Button>
