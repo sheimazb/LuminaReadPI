@@ -27,7 +27,7 @@ class AuthUserController extends Controller
         } catch (JWTException $e) {
             return response()->json([
                 'response' => 'error',
-                'message' => 'Token creation failed $e',
+                'message' => "Token creation failed $e", 
             ]);
         }
 

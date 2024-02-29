@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     Image,
     Button,
@@ -31,20 +31,11 @@ interface NavbarProps {
     colorMode: any;
 }
 const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
-    const [cartItems, setCartItems] = useState([
-        { id: 1, name: "Book 1", author: "Author 1", price: 10 },
-        { id: 2, name: "Book 2", author: "Author 2", price: 15 },
-        { id: 3, name: "Book 3", author: "Author 3", price: 20 },
-    ]);
+    const [cartItems, setCartItems] = useState([]);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    const [token, setToken] = useState("");
-    useEffect(() => {
-        const storedToken = localStorage.getItem("token");
-        if (storedToken) {
-            setToken(storedToken);
-        }
-    }, []);
-    console.log(token);
+
+    const isLoggedIn = localStorage.getItem("token") == null;
+
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
     };
@@ -148,90 +139,8 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                     </NavLink>
                 </Flex>
             </Flex>
+
             <Flex alignItems={"center"} gap={3}>
-                <NavLink to="/Auth/login">
-                    <Button size={"sm"}>Login</Button>
-                </NavLink>
-                <NavLink to="/Auth/signup">
-                    <Button size={"sm"}>Sign up</Button>
-                </NavLink>
-
-                <Menu>
-                    <MenuButton as={Button} size={"sm"} position="relative">
-                        <IoNotifications />
-                        {notifications.some(
-                            (notification) => !notification.seen
-                        ) && (
-                            <Badge
-                                position="absolute"
-                                top="-5px"
-                                right="-5px"
-                                colorScheme="red"
-                                borderRadius="full"
-                                px="2"
-                            >
-                                {
-                                    notifications.filter(
-                                        (notification) => !notification.seen
-                                    ).length
-                                }
-                            </Badge>
-                        )}
-                    </MenuButton>
-                    <MenuList
-                        style={{
-                            minWidth: "unset",
-                            maxWidth: "350px",
-                        }}
-                        zIndex={100}
-                    >
-                        {notifications.map((notification) => (
-                            <MenuItem
-                                key={notification.id}
-                                _hover={{
-                                    bg: "gray.800",
-                                }}
-                                _focus={{
-                                    bg: "gray.800",
-                                }}
-                                onClick={() =>
-                                    markNotificationAsSeen(notification.id)
-                                }
-                            >
-                                <Flex align="center" justify="space-between">
-                                    <Flex align="center">
-                                        {!notification.seen && (
-                                            <Tooltip
-                                                label="Unseen"
-                                                hasArrow
-                                                placement="top"
-                                            >
-                                                <Box
-                                                    w="4px"
-                                                    h="4px"
-                                                    bg="red.400"
-                                                    rounded="full"
-                                                    mr={2}
-                                                />
-                                            </Tooltip>
-                                        )}
-
-                                        <Text>
-                                            {notification.message}
-                                            <Text
-                                                fontSize="xs"
-                                                color="gray.500"
-                                            >
-                                                {notification.date}
-                                            </Text>
-                                        </Text>
-                                    </Flex>
-                                </Flex>
-                            </MenuItem>
-                        ))}
-                    </MenuList>
-                </Menu>
-
                 <Menu>
                     <MenuButton
                         as={Button}
@@ -260,43 +169,142 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                     onClick={toggleColorMode}
                     aria-label="Toggle Dark Mode"
                 />
-                <NavLink to="/profile">
-                    <Button size={"sm"}>Profile</Button>
-                </NavLink>
-                <Flex
-                    w={"40px"}
-                    h={"40px"}
-                    rounded={10}
-                    border={"solid 1px"}
-                    borderColor={"cyan.400"}
-                    alignItems={"center"}
-                    justifyContent={"center"}
-                    position={"relative"}
-                >
-                    <Image
-                        src="https://i.gyazo.com/df168e15d60588f5f47e2faa9e9cae6c.png"
-                        w={"100%"}
-                        h={"100%"}
-                        rounded={10}
-                    />
-                    <Flex
-                        position={"absolute"}
-                        bottom={-2}
-                        bg={
-                            "linear-gradient(90deg, rgba(107,29,253,1) 0%, rgba(23,151,208,1) 71%, rgba(29,71,253,1) 100%)"
-                        }
-                        color={"white"}
-                        p={"0 3px"}
-                        border={"var(--bordercolor) solid 1px"}
-                        fontSize={"xs"}
-                        alignItems={"center"}
-                        rounded={"15px"}
-                        overflow={"hidden"}
-                    >
-                        <Text>150</Text>
-                        <TiStar />
+                {isLoggedIn ? (
+                    <Flex gap={3}>
+                        <NavLink to="/Auth/login">
+                            <Button size={"sm"}>Login</Button>
+                        </NavLink>
+                        <NavLink to="/Auth/signup">
+                            <Button size={"sm"}>Sign up</Button>
+                        </NavLink>
                     </Flex>
-                </Flex>
+                ) : (
+                    <Flex gap={3} alignItems={"center"}>
+                        <Menu>
+                            <MenuButton
+                                as={Button}
+                                size={"sm"}
+                                position="relative"
+                            >
+                                <IoNotifications />
+                                {notifications.some(
+                                    (notification) => !notification.seen
+                                ) && (
+                                    <Badge
+                                        position="absolute"
+                                        top="-5px"
+                                        right="-5px"
+                                        colorScheme="red"
+                                        borderRadius="full"
+                                        px="2"
+                                    >
+                                        {
+                                            notifications.filter(
+                                                (notification) =>
+                                                    !notification.seen
+                                            ).length
+                                        }
+                                    </Badge>
+                                )}
+                            </MenuButton>
+                            <MenuList
+                                style={{
+                                    minWidth: "unset",
+                                    maxWidth: "350px",
+                                }}
+                                zIndex={100}
+                            >
+                                {notifications.map((notification) => (
+                                    <MenuItem
+                                        key={notification.id}
+                                        _hover={{
+                                            bg: "gray.800",
+                                        }}
+                                        _focus={{
+                                            bg: "gray.800",
+                                        }}
+                                        onClick={() =>
+                                            markNotificationAsSeen(
+                                                notification.id
+                                            )
+                                        }
+                                    >
+                                        <Flex
+                                            align="center"
+                                            justify="space-between"
+                                        >
+                                            <Flex align="center">
+                                                {!notification.seen && (
+                                                    <Tooltip
+                                                        label="Unseen"
+                                                        hasArrow
+                                                        placement="top"
+                                                    >
+                                                        <Box
+                                                            w="4px"
+                                                            h="4px"
+                                                            bg="red.400"
+                                                            rounded="full"
+                                                            mr={2}
+                                                        />
+                                                    </Tooltip>
+                                                )}
+
+                                                <Text>
+                                                    {notification.message}
+                                                    <Text
+                                                        fontSize="xs"
+                                                        color="gray.500"
+                                                    >
+                                                        {notification.date}
+                                                    </Text>
+                                                </Text>
+                                            </Flex>
+                                        </Flex>
+                                    </MenuItem>
+                                ))}
+                            </MenuList>
+                        </Menu>
+
+                        <NavLink to="/profile">
+                            <Button size={"sm"}>Profile</Button>
+                        </NavLink>
+                        <Flex
+                            w={"40px"}
+                            h={"40px"}
+                            rounded={10}
+                            border={"solid 1px"}
+                            borderColor={"cyan.400"}
+                            alignItems={"center"}
+                            justifyContent={"center"}
+                            position={"relative"}
+                        >
+                            <Image
+                                src="https://i.gyazo.com/df168e15d60588f5f47e2faa9e9cae6c.png"
+                                w={"100%"}
+                                h={"100%"}
+                                rounded={10}
+                            />
+                            <Flex
+                                position={"absolute"}
+                                bottom={-2}
+                                bg={
+                                    "linear-gradient(90deg, rgba(107,29,253,1) 0%, rgba(23,151,208,1) 71%, rgba(29,71,253,1) 100%)"
+                                }
+                                color={"white"}
+                                p={"0 3px"}
+                                border={"var(--bordercolor) solid 1px"}
+                                fontSize={"xs"}
+                                alignItems={"center"}
+                                rounded={"15px"}
+                                overflow={"hidden"}
+                            >
+                                <Text>150</Text>
+                                <TiStar />
+                            </Flex>
+                        </Flex>
+                    </Flex>
+                )}
             </Flex>
 
             <Drawer

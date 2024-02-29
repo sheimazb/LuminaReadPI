@@ -9,7 +9,7 @@ const AddPackage: React.FC = () => {
         title: string;
         description: string;
         category: string;
-        img: File | null; // Spécifiez que img peut être de type File ou null
+        img: File | null;
         langue: string;
         price: string;
     }>({

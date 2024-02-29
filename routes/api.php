@@ -39,7 +39,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['middleware' => ['jwt.auth','api-header']], function () {
     Route::get('users/list', function(){
     
         $users = App\Models\User::all();
@@ -52,7 +51,6 @@ Route::group(['middleware' => ['jwt.auth','api-header']], function () {
     Route::post('/editUser',  [\App\Http\Controllers\AuthUserController::class, 'editUser']);
     Route::get('/packk', [\App\Http\Controllers\PacksController::class, 'getPacksByUserId']);
 
-});
     
 Route::group(['middleware' => 'api-header'], function () {
     
