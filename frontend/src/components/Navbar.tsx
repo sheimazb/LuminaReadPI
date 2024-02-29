@@ -169,16 +169,7 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                     onClick={toggleColorMode}
                     aria-label="Toggle Dark Mode"
                 />
-                {isLoggedIn ? (
-                    <Flex gap={3}>
-                        <NavLink to="/Auth/login">
-                            <Button size={"sm"}>Login</Button>
-                        </NavLink>
-                        <NavLink to="/Auth/signup">
-                            <Button size={"sm"}>Sign up</Button>
-                        </NavLink>
-                    </Flex>
-                ) : (
+                {isLoggedIn ?  (
                     <Flex gap={3} alignItems={"center"}>
                         <Menu>
                             <MenuButton
@@ -304,7 +295,16 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                             </Flex>
                         </Flex>
                     </Flex>
-                )}
+                ):(
+                    <Flex gap={3}>
+                        <NavLink to="/Auth/login">
+                            <Button size={"sm"}>Login</Button>
+                        </NavLink>
+                        <NavLink to="/Auth/signup">
+                            <Button size={"sm"}>Sign up</Button>
+                        </NavLink>
+                    </Flex>
+                ) }
             </Flex>
 
             <Drawer
