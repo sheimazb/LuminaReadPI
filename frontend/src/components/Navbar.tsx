@@ -101,7 +101,7 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                     </Text>
                 </NavLink>
                 <Flex gap="5px" alignItems={"end"}>
-                    <NavLink to="/TextReader">
+                    <NavLink to="/TextReader/65e09a3ae44eb">
                         <Button
                             size={"sm"}
                             color={"gray.400"}

@@ -10,14 +10,19 @@ import {
     Tag,
     TagLabel,
     TagRightIcon,
+    Spinner,
+    useToast,
 } from "@chakra-ui/react";
 import { FaCopy, FaPause, FaStepForward, FaStop } from "react-icons/fa";
 import { IoQrCodeOutline } from "react-icons/io5";
 import { MdTableRows } from "react-icons/md";
 import { TfiLayoutColumn3Alt } from "react-icons/tfi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { useParams } from "react-router-dom";
 
 const TextReader = () => {
+    const { id } = useParams();
+    const [isLoading, setIsLoading] = useState(false);
     const [textToSpeak, setTextToSpeak] = useState("");
     const [originalText, setOriginalText] = useState("");
     const [isUpdating, setIsUpdating] = useState(false);
@@ -44,30 +49,36 @@ const TextReader = () => {
     const changeViewtoRow = () => {
         setView(false);
     };
+    const toast = useToast();
+    const [error, setError] = useState<string>("");
 
     useEffect(() => {
+        const fetchTextFromDatabase = async () => {
+            try {
+                setIsLoading(true);
+                const response = await axios.get(
+                    `http://localhost:8000/api/text/${id}`
+                );
+
+                setTextToSpeak(response.data.text_content);
+                setOriginalText(response.data.text_content);
+            } catch (error) {
+                setError("Failed to fetch text. Please try again later.");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
         fetchTextFromDatabase();
-    }, []);
+    }, [id]);
 
-    const fetchTextFromDatabase = async () => {
-        try {
-            const response = await axios.get(
-                "http://localhost:8000/api/text/65d6730d5d46b                                                                                                          "
-            );
-
-            setTextToSpeak(response.data.text_content);
-            setOriginalText(response.data.text_content);
-        } catch (error) {
-            console.error("Error fetching text:", error);
-        }
-    };
     const updateTextToDatabase = async () => {
         setIsUpdating(true);
         try {
             let dataToSend = { text_content: textToSpeak };
 
             await axios.put(
-                `http://localhost:8000/api/updateText/65d6730d5d46b `,
+                `http://localhost:8000/api/updateText/${id}`,
                 dataToSend
             );
             setOriginalText(textToSpeak);
@@ -170,14 +181,57 @@ const TextReader = () => {
         setConsecutiveTrueCount(0);
     };
 
-    const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const handleTextChange = (e: any) => {
         setTextToSpeak(e.target.value);
     };
 
     const isTextChanged = textToSpeak !== originalText;
 
+    const copyLinkToClipboard = () => {
+        const link = `${window.location.origin}/TextReader/${id}`;
+        navigator.clipboard
+            .writeText(link)
+            .then(() => {
+                toast({
+                    title: "Link copied!",
+                    status: "info",
+                    duration: 800,
+                    position: "top-right",
+                });
+            })
+            .catch((error) => console.error("Error copying link:", error));
+    };
+
+    if (error) {
+        return (
+            <Flex
+                w={"100%"}
+                h={"500px"}
+                alignItems={"center"}
+                justifyContent={"center"}
+            >
+                <Text fontSize={"xl"}>Error: {error}</Text>
+            </Flex>
+        );
+    }
+
     return (
         <Box h={"calc(100vh - 180px)"}>
+            {isLoading && (
+                <Flex
+                    alignItems="center"
+                    justifyContent="center"
+                    position="fixed"
+                    top={0}
+                    left={0}
+                    width="100%"
+                    height="100%"
+                    bg="rgba(0, 0, 0, 0.5)"
+                    zIndex={9999}
+                >
+                    <Spinner size="xl" color="cyan.500" />
+                </Flex>
+            )}
             <Flex maxW={"1400px"} flexDirection="column" p={3} m={"auto"}>
                 <Flex
                     w={"100%"}
@@ -232,6 +286,7 @@ const TextReader = () => {
                             variant="solid"
                             ml={3}
                             cursor={"pointer "}
+                            onClick={copyLinkToClipboard}
                         >
                             <TagLabel>Copy Link</TagLabel>
                             <TagRightIcon boxSize="12px" as={FaCopy} />
