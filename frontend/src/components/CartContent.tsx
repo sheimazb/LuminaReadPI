@@ -3,6 +3,7 @@ import { Box, Flex, Text, Divider, Button, Image } from "@chakra-ui/react";
 import { MdDelete } from "react-icons/md";
 
 interface Item {
+    img: string | undefined;
     id: number;
     title: string;
     category: string;
@@ -63,7 +64,7 @@ const CartContent: React.FC = () => {
                         >
                             <Flex alignItems="center" gap={2}>
                                 <Image
-                                    src="https://i.gyazo.com/ee281c082b926babe14d8ee30a9184a3.png"
+                                    src={item.img}
                                     w={70}
                                     h={70}
                                     rounded={5}

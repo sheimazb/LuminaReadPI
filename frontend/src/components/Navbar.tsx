@@ -26,15 +26,19 @@ import { IoNotifications } from "react-icons/io5";
 import { IoMdCart } from "react-icons/io";
 import { FaBookReader, FaSun, FaMoon } from "react-icons/fa";
 import CartContent from "./CartContent";
+import { useUserStore } from "../stores/user";
+
 interface NavbarProps {
     toggleColorMode: () => void;
     colorMode: any;
 }
+
 const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
     const [cartItems, setCartItems] = useState([]);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const { logout } = useUserStore();
 
-    const isLoggedIn = localStorage.getItem("token") == null;
+    const isLoggedIn = localStorage.getItem("token") !== null;
 
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
@@ -69,7 +73,9 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
         });
         setNotifications(updatedNotifications);
     };
-
+    const handleLogout = () => {
+        logout();
+    };
     return (
         <Flex
             align="center"
@@ -95,7 +101,7 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                     </Text>
                 </NavLink>
                 <Flex gap="5px" alignItems={"end"}>
-                    <NavLink to="/TextReader">
+                    <NavLink to="/TextReader/65e09a3ae44eb">
                         <Button
                             size={"sm"}
                             color={"gray.400"}
@@ -169,7 +175,7 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                     onClick={toggleColorMode}
                     aria-label="Toggle Dark Mode"
                 />
-                {isLoggedIn ?  (
+                {isLoggedIn ? (
                     <Flex gap={3} alignItems={"center"}>
                         <Menu>
                             <MenuButton
@@ -260,42 +266,76 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                         <NavLink to="/profile">
                             <Button size={"sm"}>Profile</Button>
                         </NavLink>
-                        <Flex
-                            w={"40px"}
-                            h={"40px"}
-                            rounded={10}
-                            border={"solid 1px"}
-                            borderColor={"cyan.400"}
-                            alignItems={"center"}
-                            justifyContent={"center"}
-                            position={"relative"}
-                        >
-                            <Image
-                                src="https://i.gyazo.com/df168e15d60588f5f47e2faa9e9cae6c.png"
-                                w={"100%"}
-                                h={"100%"}
-                                rounded={10}
-                            />
-                            <Flex
-                                position={"absolute"}
-                                bottom={-2}
-                                bg={
-                                    "linear-gradient(90deg, rgba(107,29,253,1) 0%, rgba(23,151,208,1) 71%, rgba(29,71,253,1) 100%)"
-                                }
-                                color={"white"}
-                                p={"0 3px"}
-                                border={"var(--bordercolor) solid 1px"}
-                                fontSize={"xs"}
-                                alignItems={"center"}
-                                rounded={"15px"}
-                                overflow={"hidden"}
+
+                        <Menu>
+                            <MenuButton position="relative">
+                                <Flex
+                                    w={"40px"}
+                                    h={"40px"}
+                                    rounded={10}
+                                    border={"solid 1px"}
+                                    borderColor={"cyan.400"}
+                                    alignItems={"center"}
+                                    justifyContent={"center"}
+                                    position={"relative"}
+                                >
+                                    <Image
+                                        src="https://i.gyazo.com/df168e15d60588f5f47e2faa9e9cae6c.png"
+                                        w={"100%"}
+                                        h={"100%"}
+                                        rounded={10}
+                                    />
+                                    <Flex
+                                        position={"absolute"}
+                                        bottom={-2}
+                                        bg={
+                                            "linear-gradient(90deg, rgba(107,29,253,1) 0%, rgba(23,151,208,1) 71%, rgba(29,71,253,1) 100%)"
+                                        }
+                                        color={"white"}
+                                        p={"0 3px"}
+                                        border={"var(--bordercolor) solid 1px"}
+                                        fontSize={"xs"}
+                                        alignItems={"center"}
+                                        rounded={"15px"}
+                                        overflow={"hidden"}
+                                    >
+                                        <Text>150</Text>
+                                        <TiStar />
+                                    </Flex>
+                                </Flex>
+                            </MenuButton>
+                            <MenuList
+                                style={{
+                                    minWidth: "150px",
+                                    maxWidth: "350px",
+                                }}
+                                zIndex={100}
                             >
-                                <Text>150</Text>
-                                <TiStar />
-                            </Flex>
-                        </Flex>
+                                <MenuItem
+                                    _hover={{
+                                        bg: "gray.800",
+                                    }}
+                                    _focus={{
+                                        bg: "gray.800",
+                                    }}
+                                >
+                                    <Text>Settings</Text>
+                                </MenuItem>
+                                <MenuItem
+                                    _hover={{
+                                        bg: "gray.800",
+                                    }}
+                                    _focus={{
+                                        bg: "gray.800",
+                                    }}
+                                    onClick={handleLogout}
+                                >
+                                    <Text>Logout</Text>
+                                </MenuItem>
+                            </MenuList>
+                        </Menu>
                     </Flex>
-                ):(
+                ) : (
                     <Flex gap={3}>
                         <NavLink to="/Auth/login">
                             <Button size={"sm"}>Login</Button>
@@ -304,7 +344,7 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                             <Button size={"sm"}>Sign up</Button>
                         </NavLink>
                     </Flex>
-                ) }
+                )}
             </Flex>
 
             <Drawer

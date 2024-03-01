@@ -20,7 +20,7 @@ function App() {
             <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/package" element={<Package />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/TextReader" element={<TextReader />} />
+            <Route path="/TextReader/:id" element={<TextReader />} />
             <Route path="/AddNovella/:pack_id" element={<AddNovella />} />
             <Route path="/AddPackage" element={<AddPackage />} />
             <Route path="/novella/:id/*" element={<Novella />}>
