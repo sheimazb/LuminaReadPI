@@ -10,11 +10,28 @@ import {
   useToast,
   Select
 } from "@chakra-ui/react";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from '@chakra-ui/react'
+import { useDisclosure } from "@chakra-ui/react";
+
 import axios from "axios";
 
 const AddPackage: React.FC = () => {
-    const toast = useToast();
-    const [token, setToken] = useState("");
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const initialRef = React.useRef(null)
+  const finalRef = React.useRef(null)
+
+
+  const toast = useToast();
+  const [token, setToken] = useState("");
 
   const inputRef = useRef(null);
   const [image, setImage] = useState("");
@@ -105,13 +122,28 @@ const AddPackage: React.FC = () => {
     }
   };
 
+
   return (
-    <Flex marginTop="4rem" justifyContent="space-evenly">
-      <Box
+    <>
+<Button onClick={onOpen}>Add Package</Button>
+      
+
+      <Modal
+        initialFocusRef={initialRef}
+        finalFocusRef={finalRef}
+        isOpen={isOpen}
+        onClose={onClose}
+        size="2xl"
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+           
+          <Box
         className="container"
         w="600px"
         h="520px"
-        bgImage="url('https://assets-global.website-files.com/63f38a8c92397a024fcb9ae8/648851a9881c2a703afc9b15_bg-card-postBorderBig_tablet.webp')"
         bgPosition="0 0"
         bgRepeat="no-repeat"
         bgSize="100% 100%"
@@ -223,38 +255,26 @@ const AddPackage: React.FC = () => {
                 <option value="option2">IT</option>
                 <option value="option3">Developpement</option>
               </Select>
-              <Button  type="submit" marginRight="-4rem" w={"220px"} colorScheme="cyan" >
-                Add Now
-              </Button>
+            
             </Flex>
           </Flex>
         </form>
       </Box>
-      <Box
-        className="container"
-        w="500px"
-        h="450px"
-        bgImage="url('https://assets-global.website-files.com/63f38a8c92397a024fcb9ae8/6488858e9c6ab83eafdbd7a7_bg-card-postBig2_tablet.webp')"
-        bgPosition="0 0"
-        bgRepeat="no-repeat"
-        bgSize="100% 100%"
-        flexDirection="column"
-        justifyContent="flex-end"
-        padding="3rem"
-        display="flex"
-      >
-        <Flex className="containerr" flexDirection="column">
-          <FormLabel marginTop="-20rem" size="xs">
-            Description of a package :
-          </FormLabel>
-          <p>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Alias voluptates dolorem esse
-            velit praesentium id fuga necessitatibus adipisci earum? Dignissimos harum praesentium
-            nisi totam! Itaque at libero esse recusandae possimus.
-          </p>
-        </Flex>
-      </Box>
-    </Flex>
+
+          </ModalBody>
+
+          <ModalFooter>
+          <Button  type="submit" w={"200px"} colorScheme="cyan"  mr="3rem" mt="-5rem">
+                Add Now
+              </Button>
+            
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+</>
+     
+    
   );
 };
 

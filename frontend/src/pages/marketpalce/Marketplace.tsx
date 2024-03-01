@@ -20,6 +20,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaFilter, FaList, FaSearch, FaStar } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import AddPackage from "../addpackage/AddPackage";
 
 const Marketplace = () => {
     const toast = useToast();
@@ -78,7 +79,7 @@ const Marketplace = () => {
                     src="https://i.gyazo.com/706a645ba061f1a126897be47f21667c.png"
                     w={"100%"}
                 />
-                <Box
+                <Box 
                     position={"absolute"}
                     top={0}
                     bottom={0}
@@ -86,21 +87,24 @@ const Marketplace = () => {
                     right={0}
                     bgGradient="linear(to-t,  #1b202d , transparent)"
                 />
-                <Box position={"absolute"} textAlign={"center"}>
-                    <Text fontSize={"3xl"} zIndex={1}>
+                <Box position={"absolute"} textAlign={"center"}
+                 mt={8}>
+               
+                    <Text fontSize={"3xl"} zIndex={1 }  mb={3}>
                         Packages Market Place
                     </Text>
-                    <Text fontSize={"md"} zIndex={1} color={"gray.300"}>
+                    <Text fontSize={"md"} zIndex={1} color={"gray.300"}  mb={3}>
                         Lorem ipsum dolor sit amet consectetur, adipisicing
                         elit.
                     </Text>
                     <NavLink to="/TextReader">
-                        <Button mt={5} mr={3} colorScheme="cyan" size={"sm"}>
+                        <Button mr={3} colorScheme="cyan" size={"sm"}>
                             Text Reader
                         </Button>
                     </NavLink>
+                    <AddPackage/>
                     <NavLink to="/Auth/signup">
-                        <Button mt={5} size={"sm"}>
+                        <Button  ml={3} size={"sm"}>
                             Sign up
                         </Button>
                     </NavLink>
