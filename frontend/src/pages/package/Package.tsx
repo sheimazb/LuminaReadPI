@@ -14,6 +14,8 @@ import {
     Card,
 } from "@chakra-ui/react";
 import { FaSearch, FaStar } from "react-icons/fa";
+import AddNovella from "../addnovella/AddNovella";
+
 
 const Package = () => {
     const range = (n: number) => [...Array(n).keys()];
@@ -68,13 +70,12 @@ const Package = () => {
                             <FaStar />
                         </Flex>
                     </Box>
-                    <Box position={"absolute"} bottom={4} right={2}>
-                        <Button mt={5} mr={3} size={"sm"}>
-                            Add Book
-                        </Button>
-                        <Button mt={5} mr={3} colorScheme="cyan" size={"sm"}>
+                    <Box position={"absolute"}   mt={5} bottom={4} right={2}>
+                        <AddNovella />
+                        <Button ml={3} colorScheme="cyan" size={"sm"}>
                             Buy This Pack
                         </Button>
+
                     </Box>
                 </Flex>
                 <Flex flexDirection={"column"} gap={3} mx={3}>
