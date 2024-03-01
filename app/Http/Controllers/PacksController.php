@@ -14,10 +14,25 @@ class PacksController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function AllPack()
+    public function AllPack(Request $request)
     {
-        $pack = Pack::all();
-        return response()->json(['pack' => $pack]);
+        $query = Pack::query();
+    
+        // Filtrage par catégorie
+        if ($request->has('category')) {
+            $category = $request->input('category');
+            $query->where('category', $category);
+        }
+    
+        // Recherche par titre
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('title', 'like', "%$search%");
+        }
+    
+        $packs = $query->get();
+    
+        return response()->json(['packs' => $packs]);
     }
 
     /**
