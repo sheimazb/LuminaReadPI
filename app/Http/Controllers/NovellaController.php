@@ -6,6 +6,7 @@ use App\Models\Novella;
 use App\Models\Pack;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use Exception;
 
@@ -57,15 +58,23 @@ class NovellaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
         try {
-            $novella = Novella::findOrFail($id);
-            return response()->json(['novella' => $novella]);
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 404);
+            // Find the Pack by ID
+            $pack = Pack::findOrFail($id);
+            
+            // Query Novellas by Pack ID
+            $novellas = Novella::where('pack_id', $pack->id)->get();
+            
+            // Return the Novellas as JSON response
+            return response()->json(['novellas' => $novellas]);
+        } catch (ModelNotFoundException $e) {
+            // Handle the case where the Pack is not found and return a JSON response with error message
+            return response()->json(['message' => 'Pack not found'], 404);
         }
     }
+    
 
     /**
      * Update the specified resource in storage.

@@ -68,7 +68,6 @@ const Profile: React.FC = () => {
         description: "",
     });
     //useEffectively
-
     //fetch connected user
     useEffect(() => {
         (async () => await fetchUser())();
@@ -154,15 +153,13 @@ const Profile: React.FC = () => {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
-            const url = URL.createObjectURL(file);
-            setImageURL(url);
             setFormData({
                 ...formData,
                 img: file,
             });
         }
     };
-
+console.log(formData.img)
     return (
         <Box maxW={"1230px"} m={"30px auto"}>
             <Flex flexDirection={"column"} gap={1} alignItems={"left"}>
@@ -210,6 +207,7 @@ const Profile: React.FC = () => {
                                                 display={"flex"}
                                                 justifyContent={"center"}
                                             >
+                                                
                                                 {imageURL ? (
                                                     <img
                                                         src={imageURL}
@@ -255,15 +253,13 @@ const Profile: React.FC = () => {
                                                         </label>
                                                     </label>
                                                 )}
-                                                <input
-                                                    id="profile-image-input"
-                                                    type="file"
-                                                    accept="image/*"
-                                                    style={{ display: "none" }}
-                                                    onChange={handleImageChange}
-                                                />
+                                               <input
+        type="file"
+        name="image"
+        onChange={handleImageChange}
+    />
                                             </Box>
-                                            <label>Edit name</label>
+                                            <Text>Edit name</Text>
                                             <Input
                                                 placeholder=" name"
                                                 onChange={handleChange}

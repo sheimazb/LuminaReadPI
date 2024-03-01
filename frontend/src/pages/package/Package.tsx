@@ -13,9 +13,31 @@ import {
     Heading,
     Card,
 } from "@chakra-ui/react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { FaSearch, FaStar } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 
 const Package = () => {
+    const [novellas, setNovellas] = useState([]);
+    const { id } = useParams(); // Get the 'id' parameter from the URL
+    
+    useEffect(() => {
+        (async () => {
+            await loadNovellas(id); // Pass the 'id' to the loadNovellas function
+        })();
+    }, [id]); // Include 'id' as a dependency in the useEffect to trigger the effect when 'id' changes
+    
+    async function loadNovellas(id:any) {
+        try {
+            const result = await axios.get(`http://127.0.0.1:8000/api/pack/${id}/novellas`); // Use template literals to include 'id' in the URL
+            setNovellas(result.data.novellas);
+        } catch (error) {
+            console.error("Error loading novellas:", error);
+        }
+    }
+
+    console.log(novellas);
     const range = (n: number) => [...Array(n).keys()];
 
     return (
@@ -105,7 +127,7 @@ const Package = () => {
                     </Flex>
                 </Flex>
                 <Wrap w={"100%"} p={2}>
-                    {range(10).map((index) => (
+                    {novellas.map((novella:any ,index:number) => (
                         <Card
                             maxW="270px"
                             key={index}
@@ -115,7 +137,7 @@ const Package = () => {
                         >
                             <CardBody>
                                 <Image
-                                    src="https://i.gyazo.com/e1a2c7bf83cf944a115f0355cbe649ec.png"
+                                    src={novella.img}
                                     alt="Green double couch with wooden legs"
                                     borderRadius="lg"
                                     w={"100%"}
@@ -123,11 +145,11 @@ const Package = () => {
                                 />
                                 <Stack mt="3" spacing="1">
                                     <Heading size="md">
-                                        Best Stories For kids
+                                        {novella.title}
                                     </Heading>
                                     <Text color={"gray.300"} fontSize={"sm"}>
-                                        Lorem, ipsum dolor sit amet consectetur.
-                                    </Text>
+                                      {novella.description} 
+                                        </Text>
                                     <Button mt={2} size={"sm"}>
                                         Check novella
                                     </Button>

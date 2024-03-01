@@ -98,7 +98,8 @@ class AuthUserController extends Controller
             $imageName = time() . '_' . $image->getClientOriginalName();
             $data = "public/images/user"; // chemin de destination pour stocker les images
             $image->move(public_path($data), $imageName);
-            $user->img = url($data . '/' . $imageName); // Renvoyer l'URL complète de l'image
+            $user->img = url($data . '/' . $imageName); // Générer l'URL complète de l'image
+ // Renvoyer l'URL complète de l'image
         }
 
         if (!$user) {
