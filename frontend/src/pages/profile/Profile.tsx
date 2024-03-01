@@ -23,7 +23,7 @@ import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 import { FaSearch, FaStar } from "react-icons/fa"; // Import FaPlus for the add button
-import defaultPic from "../../assets/default-profile.jpg";
+
 interface User {
     id: number;
     name: string;
@@ -53,7 +53,7 @@ const Profile: React.FC = () => {
         name: string;
         description: string;
         email: string;
-        img: File | null;
+        img: File | null; // Spécifiez que img peut être de type File ou null
     }>({
         name: "",
         description: "",
@@ -79,9 +79,8 @@ const Profile: React.FC = () => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        console.log("fazfzaf" + response);
-
         setUser(response.data.user);
+        console.log(response.data.user);
     }
 
     //Load the packed data according to connected usager
@@ -152,26 +151,23 @@ const Profile: React.FC = () => {
         }
     };
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            const file = e.target.files[0];
+        const file = e.target.files?.[0];
+        if (file) {
+            const url = URL.createObjectURL(file);
+            setImageURL(url);
             setFormData({
                 ...formData,
                 img: file,
             });
         }
     };
-console.log(formData.img)
     return (
         <Box maxW={"1230px"} m={"30px auto"}>
             <Flex flexDirection={"column"} gap={1} alignItems={"left"}>
                 <Flex flexDirection={"column"} gap={1} alignItems={"center"}>
-                    <Box
-                        position="relative"
-                        display="inline-block"
-                        overflow={"hidden"}
-                    >
+                    <Box position="relative" display="inline-block">
                         <Image
-                            src={user.img ? user.img : defaultPic}
+                            src={user.img}
                             w={16}
                             h={16}
                             rounded={20}
@@ -212,7 +208,6 @@ console.log(formData.img)
                                                 display={"flex"}
                                                 justifyContent={"center"}
                                             >
-                                                
                                                 {imageURL ? (
                                                     <img
                                                         src={imageURL}
@@ -259,8 +254,10 @@ console.log(formData.img)
                                                     </label>
                                                 )}
                                                <input
+        id="profile-image-input"
         type="file"
         name="image"
+        style={{ display: "none" }}
         onChange={handleImageChange}
     />
                                             </Box>
@@ -328,18 +325,21 @@ console.log(formData.img)
                         p={2}
                     >
                         <Image
-                            src={pack.img}
-                            maxH={120}
+                           src={pack.img}
+                           maxH={120}
                             w={"100%"}
                             objectFit={"cover"}
                             rounded={5}
                         />
 
                         <Text as={"b"} mt={2}>
-                            {pack.title}
+                        {pack.title}
                         </Text>
 
-                        <Text color={"gray.400"}>{pack.description}</Text>
+                        <Text color={"gray.400"}>
+                        {pack.description}
+
+                        </Text>
 
                         <Flex
                             alignItems={"center"}
