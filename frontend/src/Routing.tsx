@@ -4,7 +4,7 @@ import Marketplace from "./pages/marketpalce/Marketplace";
 import Package from "./pages/package/Package";
 import Novella from "./pages/novella/Novella";
 import TTS from "./pages/novella/TTS-page";
-import Auth from "./authentication/Auth";
+import {Auth} from "./authentication/Auth";
 import Login from "./authentication/Login";
 import Signup from "./authentication/Signup";
 import Forum from "./pages/novella/Forum";

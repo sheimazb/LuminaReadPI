@@ -1,7 +1,7 @@
 import { Image, Flex, Box } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import image from "../assets/408abbd0-45d0-417e-8998-4baa364b166a.jpg";
-function Auth() {
+export function Auth() {
     return (
         <Flex
             h={"calc(100vh - 60px)"}
@@ -31,4 +31,3 @@ function Auth() {
     );
 }
 
-export default Auth;
