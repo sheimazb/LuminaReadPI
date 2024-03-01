@@ -18,7 +18,7 @@ function App() {
         <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/marketplace" element={<Marketplace />} />
-            <Route path="/package" element={<Package />} />
+            <Route path="/package/:id" element={<Package />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/TextReader/:id" element={<TextReader />} />
             <Route path="/AddNovella/:pack_id" element={<AddNovella />} />

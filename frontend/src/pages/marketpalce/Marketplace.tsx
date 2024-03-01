@@ -19,16 +19,20 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaFilter, FaList, FaSearch, FaStar } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+import { NavLink,useNavigate } from "react-router-dom";
 
 const Marketplace = () => {
     const toast = useToast();
+    const navigate = useNavigate();
+
     const [packs, setPacks] = useState([]);
     const [cart, setCart] = useState(() => {
         const storedCart = localStorage.getItem("cart");
         return storedCart ? JSON.parse(storedCart) : [];
     });
-
+    const handleClickShow = (pack: any): void => {
+        navigate(`/package/${pack.id}`);
+    };
     useEffect(() => {
         (async () => await loadPacks())();
     }, []);
@@ -222,13 +226,20 @@ const Marketplace = () => {
                                                 size={"sm"}
                                                 onClick={() => addToCart(pack)}
                                             >
-                                                Add to cart
+                                                Add 
                                             </Button>
                                             <Button
                                                 size={"sm"}
                                                 colorScheme="cyan"
                                             >
                                                 Buy now
+                                            </Button>
+                                            <Button
+                                                size={"s"}
+                                                colorScheme="cyan"
+                                                onClick={() => handleClickShow(pack)}
+                                            >
+                                                Show
                                             </Button>
                                         </ButtonGroup>
                                     </CardFooter>
