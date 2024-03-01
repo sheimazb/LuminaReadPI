@@ -25,9 +25,20 @@ class PacksController extends Controller
         }
     
         // Recherche par titre
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->where('title', 'like', "%$search%");
+        if ($request->has('searchByTitle')) {
+            $search = $request->input('searchByTitle');
+            $query->where('title', 'like', "$search%");
+        }
+          // Recherche par titre
+          if ($request->has('searchdescription')) {
+            $search = $request->input('searchByDescription');
+            $query->where('description', 'like', "$search%");
+        }
+
+         // Filtrage par prix
+         if ($request->has('price')) {
+            $price = $request->input('price');
+            $query->where('price', $price);
         }
     
         $packs = $query->get();
