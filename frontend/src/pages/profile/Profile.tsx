@@ -44,6 +44,8 @@ interface Pack {
     // Ajoutez d'autres propriétés selon vos besoins
 }
 const Profile: React.FC = () => {
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
     //Models
     const { isOpen, onOpen, onClose } = useDisclosure();
     //useStatement
@@ -161,6 +163,29 @@ const Profile: React.FC = () => {
             });
         }
     };
+
+    const handleSearch = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await axios.get(
+                `http://127.0.0.1:8000/api/packk?search=${searchQuery}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            setSearchResults(response.data.packs);
+        } catch (error) {
+            console.error("Error fetching search results:", error);
+        }
+    };
+
+    const handleChangeSearch = (e: any) => {
+        setSearchQuery(e.target.value);
+    };
+
     return (
         <Box maxW={"1230px"} m={"30px auto"}>
             <Flex flexDirection={"column"} gap={1} alignItems={"left"}>
@@ -253,13 +278,13 @@ const Profile: React.FC = () => {
                                                         </label>
                                                     </label>
                                                 )}
-                                               <input
-        id="profile-image-input"
-        type="file"
-        name="image"
-        style={{ display: "none" }}
-        onChange={handleImageChange}
-    />
+                                                <input
+                                                    id="profile-image-input"
+                                                    type="file"
+                                                    name="image"
+                                                    style={{ display: "none" }}
+                                                    onChange={handleImageChange}
+                                                />
                                             </Box>
                                             <Text>Edit name</Text>
                                             <Input
@@ -304,67 +329,70 @@ const Profile: React.FC = () => {
                     <Input
                         borderColor={"gray.700"}
                         placeholder="Search section"
+                        value={searchQuery}
+                        name="search"
+                        onChange={handleChangeSearch}
                     />
                     <InputRightElement>
-                        <Button size="xs" mr={1} color={"white"}>
+                        <Button
+                            size="xs"
+                            mr={1}
+                            color={"white"}
+                            onClick={handleSearch}
+                        >
                             <FaSearch />
                         </Button>
                     </InputRightElement>
                 </InputGroup>
             </Flex>
             <Wrap minH={500} mt={3}>
-                {packs.map((pack: Pack, index: number) => (
-                    <Box
-                        key={index}
-                        h={280}
-                        w={300}
-                        rounded={10}
-                        border={" solid 1px "}
-                        borderColor={"gray.600"}
-                        overflow={"hidden"}
-                        p={2}
-                    >
-                        <Image
-                           src={pack.img}
-                           maxH={120}
-                            w={"100%"}
-                            objectFit={"cover"}
-                            rounded={5}
-                        />
+    {searchResults.map((pack: Pack, index: number) => (
+        <Box
+            key={index}
+            h={280}
+            w={300}
+            rounded={10}
+            border={" solid 1px "}
+            borderColor={"gray.600"}
+            overflow={"hidden"}
+            p={2}
+        >
+            <Image
+                src={pack.img}
+                maxH={120}
+                w={"100%"}
+                objectFit={"cover"}
+                rounded={5}
+            />
 
-                        <Text as={"b"} mt={2}>
-                        {pack.title}
-                        </Text>
+            <Text as={"b"} mt={2}>
+                {pack.title}
+            </Text>
 
-                        <Text color={"gray.400"}>
-                        {pack.description}
+            <Text color={"gray.400"}>{pack.description}</Text>
 
-                        </Text>
+            <Flex
+                alignItems={"center"}
+                gap={"5px"}
+                color={"yellow.300"}
+                fontSize={"xs"}
+                mt={3}
+            >
+                <FaStar />
+                <FaStar />
+                <FaStar />
+                <FaStar />
+                <FaStar />
+            </Flex>
 
-                        <Flex
-                            alignItems={"center"}
-                            gap={"5px"}
-                            color={"yellow.300"}
-                            fontSize={"xs"}
-                            mt={3}
-                        >
-                            <FaStar />
+            <Button mt={3} w={"100%"}>
+                Check
+            </Button>
+        </Box>
+    ))}
+</Wrap>
 
-                            <FaStar />
 
-                            <FaStar />
-
-                            <FaStar />
-
-                            <FaStar />
-                        </Flex>
-
-                        <Button mt={3} w={"100%"}>
-                            Check
-                        </Button>
-                    </Box>
-                ))}
-            </Wrap>
         </Box>
     );
 };

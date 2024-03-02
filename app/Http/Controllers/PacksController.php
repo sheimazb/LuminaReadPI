@@ -125,18 +125,26 @@ class PacksController extends Controller
             return response()->json(['error' => 'Veuillez spécifier au moins une catégorie.'], 400);
         }
     }
-    public function getPacksByUserId()
-{
-    try {
-        $userId = Auth::id();
-
-        $packs = Pack::where('user_id', $userId)->get();
-
-        return response()->json(['packs' => $packs]);
-    } catch (Exception $exception) {
-        return response()->json(['message' => $exception->getMessage()], 500);
+    public function getPacksByUserId(Request $request)
+    {
+        try {
+            $userId = Auth::id();
+            $query = Pack::where('user_id', $userId);
+    
+            // Check if search query is provided
+            if ($request->has('search')) {
+                $search = $request->input('search');
+                $query->where('title', 'like', "$search%");
+            }
+    
+            $packs = $query->get();
+    
+            return response()->json(['packs' => $packs]);
+        } catch (Exception $exception) {
+            return response()->json(['message' => $exception->getMessage()], 500);
+        }
     }
-}
+    
 
     /**
      * Update the specified resource in storage.
