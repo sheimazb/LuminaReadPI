@@ -20,19 +20,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaFilter, FaList, FaSearch, FaStar } from "react-icons/fa";
 import { NavLink,useNavigate } from "react-router-dom";
-interface Pack {
-    id: number;
-    title: string;
-    description: string;
-    category: string;
-    img: string;
-    langue: string;
-    price: number;
-    user: {
-        name: string; // Supposons que le nom d'utilisateur est une chaîne
-        // Ajoutez d'autres propriétés utilisateur si nécessaire
-    };
-}
+
+
+import AddPackage from "../addpackage/AddPackage";
+
 const Marketplace = () => {
     const toast = useToast();
     const navigate = useNavigate();
@@ -73,7 +64,6 @@ const Marketplace = () => {
             return;
         }
 
-        // If the package doesn't exist in the cart, add it
         const updatedCart = [...cart, pack];
         setCart(updatedCart);
         localStorage.setItem("cart", JSON.stringify(updatedCart));
@@ -102,21 +92,19 @@ const Marketplace = () => {
                     right={0}
                     bgGradient="linear(to-t,  #1b202d , transparent)"
                 />
-                <Box position={"absolute"} textAlign={"center"}>
+
+                <Box position={"absolute"} textAlign={"center"} mb={5}>
                     <Text fontSize={"3xl"} zIndex={1}>
                         Packages Market Place
                     </Text>
-                    <Text fontSize={"md"} zIndex={1} color={"gray.300"}>
+                    <Text fontSize={"md"} zIndex={1} color={"gray.300"} mb={5}>
                         Lorem ipsum dolor sit amet consectetur, adipisicing
                         elit.
                     </Text>
-                    <NavLink to="/TextReader">
-                        <Button mt={5} mr={3} colorScheme="cyan" size={"sm"}>
-                            Text Reader
-                        </Button>
-                    </NavLink>
+
+                    <AddPackage />
                     <NavLink to="/Auth/signup">
-                        <Button mt={5} size={"sm"}>
+                        <Button size={"sm"} ml={3}>
                             Sign up
                         </Button>
                     </NavLink>
@@ -237,7 +225,7 @@ const Marketplace = () => {
                                                 size={"sm"}
                                                 onClick={() => addToCart(pack)}
                                             >
-                                                Add 
+                                                Add
                                             </Button>
                                             <Button
                                                 size={"sm"}
@@ -248,7 +236,9 @@ const Marketplace = () => {
                                             <Button
                                                 size={"s"}
                                                 colorScheme="cyan"
-                                                onClick={() => handleClickShow(pack)}
+                                                onClick={() =>
+                                                    handleClickShow(pack)
+                                                }
                                             >
                                                 Show
                                             </Button>

@@ -142,7 +142,7 @@ const AddNovella: React.FC = () => {
   return (
     <>
       <Button onClick={onOpen}>Add Book</Button>
-      <Modal isOpen={isOpen} onClose={onClose} initialFocusRef={initialRef}>
+      <Modal isOpen={isOpen} onClose={onClose} initialFocusRef={initialRef} >
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />

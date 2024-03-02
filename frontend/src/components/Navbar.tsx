@@ -132,17 +132,17 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                             Novella
                         </Button>
                     </NavLink>
-                    <NavLink to="/addNovella/2">
+                    {/**<NavLink to="/addNovella/2">
                         <Button size={"sm"} color={"gray.400"} variant="ghost">
                             AddNovella
                         </Button>
-                    </NavLink>
+                        </NavLink>**/}
                     {/** NavLink to={`/addPackage/${token}`}*/}
-                    <NavLink to="/addPackage">
+                    {/*} <NavLink to="/addPackage">
                         <Button size={"sm"} color={"gray.400"} variant="ghost">
                             AddPackage
                         </Button>
-                    </NavLink>
+                    </NavLink>*/}
                 </Flex>
             </Flex>
 
