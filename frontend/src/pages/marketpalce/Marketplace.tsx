@@ -20,7 +20,19 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaFilter, FaList, FaSearch, FaStar } from "react-icons/fa";
 import { NavLink,useNavigate } from "react-router-dom";
-
+interface Pack {
+    id: number;
+    title: string;
+    description: string;
+    category: string;
+    img: string;
+    langue: string;
+    price: number;
+    user: {
+        name: string; // Supposons que le nom d'utilisateur est une chaîne
+        // Ajoutez d'autres propriétés utilisateur si nécessaire
+    };
+}
 const Marketplace = () => {
     const toast = useToast();
     const navigate = useNavigate();
@@ -40,7 +52,7 @@ const Marketplace = () => {
     async function loadPacks() {
         try {
             const result = await axios.get("http://127.0.0.1:8000/api/AllPack");
-            setPacks(result.data.pack);
+            setPacks(result.data.packs);
         } catch (error) {
             console.error("Error loading packs:", error);
         }
@@ -66,7 +78,7 @@ const Marketplace = () => {
         setCart(updatedCart);
         localStorage.setItem("cart", JSON.stringify(updatedCart));
     };
-
+   
     return (
         <Box>
             <Flex
@@ -144,8 +156,7 @@ const Marketplace = () => {
                     </Flex>
 
                     <Wrap w={"calc(100vw - 300px)"} p={2}>
-                        {packs &&
-                            packs.map((pack: any, index: number) => (
+                        {packs.map((pack: any, index: number) => (
                                 <Card
                                     maxW="300px"
                                     key={index}
@@ -177,14 +188,14 @@ const Marketplace = () => {
                                                 mt={3}
                                             >
                                                 <Image
-                                                    src="https://i.gyazo.com/df168e15d60588f5f47e2faa9e9cae6c.png"
+                                                    src={pack.usser.img}
                                                     h={"40px"}
                                                     w={"40px"}
                                                     rounded={"50%"}
                                                 />
                                                 <Box>
                                                     <Text>
-                                                        Saif Eddine Jelassi
+                                                        {pack.usser.name}
                                                     </Text>
                                                     <Text
                                                         display={"flex"}

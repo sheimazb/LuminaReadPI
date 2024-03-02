@@ -16,27 +16,24 @@ class PacksController extends Controller
      */
     public function AllPack(Request $request)
     {
-        $query = Pack::query();
+        $query = Pack::query()->with('usser'); // Charger la relation utilisateur
     
-        // Filtrage par catégorie
         if ($request->has('category')) {
             $category = $request->input('category');
             $query->where('category', $category);
         }
     
-        // Recherche par titre
         if ($request->has('searchByTitle')) {
             $search = $request->input('searchByTitle');
             $query->where('title', 'like', "$search%");
         }
-          // Recherche par titre
-          if ($request->has('searchdescription')) {
+    
+        if ($request->has('searchByDescription')) { // Correction: changer 'searchByTitle' à 'searchByDescription'
             $search = $request->input('searchByDescription');
             $query->where('description', 'like', "$search%");
         }
-
-         // Filtrage par prix
-         if ($request->has('price')) {
+    
+        if ($request->has('price')) {
             $price = $request->input('price');
             $query->where('price', $price);
         }
@@ -45,7 +42,8 @@ class PacksController extends Controller
     
         return response()->json(['packs' => $packs]);
     }
-
+    
+    
     /**
      * Store a newly created resource in storage.
      */
