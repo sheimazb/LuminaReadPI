@@ -57,7 +57,7 @@ const TextReader = () => {
             try {
                 setIsLoading(true);
                 const response = await axios.get(
-                    `http://localhost:8000/api/text/${id}`
+                    `http://127.0.0.1:8000/api/text/${id}`
                 );
 
                 setTextToSpeak(response.data.text_content);

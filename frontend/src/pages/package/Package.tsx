@@ -22,7 +22,30 @@ import AddNovella from "../addnovella/AddNovella";
 
 const Package = () => {
     const [novellas, setNovellas] = useState([]);
+    const [rating, setRating] = useState(0);
     const { id } = useParams(); // Get the 'id' parameter from the URL
+    
+    const handleRatingChange = (event:any) => {
+        setRating(event.target.value);
+      };
+    
+      const handleSubmitRating = () => {
+        const token = localStorage.getItem("token"); // Récupérer le token JWT depuis le stockage local
+    
+        axios.post(`http://127.0.0.1:8000/api/pack/review/${id}`, { rating: rating }, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            }
+        })
+        .then(response => {
+            console.log(response.data); // Afficher la réponse du backend
+        })
+        .catch(error => {
+            console.error('Erreur lors de l\'envoi du rating:', error);
+        });
+    };
+    
     
     useEffect(() => {
         (async () => {
@@ -40,7 +63,6 @@ const Package = () => {
     }
 
     console.log(novellas);
-    const range = (n: number) => [...Array(n).keys()];
 
     return (
         <Box w={"90%"} m={"30px auto"}>
@@ -79,6 +101,10 @@ const Package = () => {
                             Lorem ipsum, dolor sit amet consectetur adipisicing
                             elit.
                         </Text>
+                        <Box>
+                        <Input type="number" value={rating} onChange={handleRatingChange} />
+      <button onClick={handleSubmitRating}>Envoyer Rating</button>
+                        </Box>
                         <Flex
                             alignItems={"center"}
                             gap={"5px"}

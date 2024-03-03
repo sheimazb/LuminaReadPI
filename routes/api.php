@@ -51,7 +51,7 @@ Route::group(['middleware' => ['jwt.auth','api-header']], function () {
     Route::post('/add-novella/{pack_id}', [\App\Http\Controllers\NovellaController::class, 'store']);
     Route::post('/editUser',  [\App\Http\Controllers\AuthUserController::class, 'editUser']);
     Route::get('/packk', [\App\Http\Controllers\PacksController::class, 'getPacksByUserId']);
-
+    Route::post('/pack/review/{id}',  [\App\Http\Controllers\ReviewController::class, 'reviewstore']);
 });
 
     
