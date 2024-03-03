@@ -23,6 +23,7 @@ import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 import { FaSearch, FaStar } from "react-icons/fa"; // Import FaPlus for the add button
+import defaultPic from "../../assets/default-profile.jpg";
 
 interface User {
     id: number;
@@ -192,7 +193,7 @@ const Profile: React.FC = () => {
                 <Flex flexDirection={"column"} gap={1} alignItems={"center"}>
                     <Box position="relative" display="inline-block">
                         <Image
-                            src={user.img}
+                            src={user.img ? user.img : defaultPic}
                             w={16}
                             h={16}
                             rounded={20}
@@ -346,101 +347,98 @@ const Profile: React.FC = () => {
                 </InputGroup>
             </Flex>
             <Wrap minH={500} mt={3}>
-    {searchQuery.length === 0 ? (
-        // If searchResults is empty, display all packs
-        packs.map((pack: Pack, index: number) => (
-            <Box
-                key={index}
-                h={280}
-                w={300}
-                rounded={10}
-                border={" solid 1px "}
-                borderColor={"gray.600"}
-                overflow={"hidden"}
-                p={2}
-            >
-                <Image
-                    src={pack.img}
-                    maxH={120}
-                    w={"100%"}
-                    objectFit={"cover"}
-                    rounded={5}
-                />
+                {searchQuery.length === 0
+                    ? // If searchResults is empty, display all packs
+                      packs.map((pack: Pack, index: number) => (
+                          <Box
+                              key={index}
+                              h={280}
+                              w={300}
+                              rounded={10}
+                              border={" solid 1px "}
+                              borderColor={"gray.600"}
+                              overflow={"hidden"}
+                              p={2}
+                          >
+                              <Image
+                                  src={pack.img}
+                                  maxH={120}
+                                  w={"100%"}
+                                  objectFit={"cover"}
+                                  rounded={5}
+                              />
 
-                <Text as={"b"} mt={2}>
-                    {pack.title}
-                </Text>
+                              <Text as={"b"} mt={2}>
+                                  {pack.title}
+                              </Text>
 
-                <Text color={"gray.400"}>{pack.description}</Text>
+                              <Text color={"gray.400"}>{pack.description}</Text>
 
-                <Flex
-                    alignItems={"center"}
-                    gap={"5px"}
-                    color={"yellow.300"}
-                    fontSize={"xs"}
-                    mt={3}
-                >
-                    <FaStar />
-                    <FaStar />
-                    <FaStar />
-                    <FaStar />
-                    <FaStar />
-                </Flex>
+                              <Flex
+                                  alignItems={"center"}
+                                  gap={"5px"}
+                                  color={"yellow.300"}
+                                  fontSize={"xs"}
+                                  mt={3}
+                              >
+                                  <FaStar />
+                                  <FaStar />
+                                  <FaStar />
+                                  <FaStar />
+                                  <FaStar />
+                              </Flex>
 
-                <Button mt={3} w={"100%"}>
-                    Check
-                </Button>
-            </Box>
-        ))
-    ) : (
-        // If searchResults is not empty, display search results
-        searchResults.map((pack: Pack, index: number) => (
-            <Box
-                key={index}
-                h={280}
-                w={300}
-                rounded={10}
-                border={" solid 1px "}
-                borderColor={"gray.600"}
-                overflow={"hidden"}
-                p={2}
-            >
-                <Image
-                    src={pack.img}
-                    maxH={120}
-                    w={"100%"}
-                    objectFit={"cover"}
-                    rounded={5}
-                />
+                              <Button mt={3} w={"100%"}>
+                                  Check
+                              </Button>
+                          </Box>
+                      ))
+                    : // If searchResults is not empty, display search results
+                      searchResults.map((pack: Pack, index: number) => (
+                          <Box
+                              key={index}
+                              h={280}
+                              w={300}
+                              rounded={10}
+                              border={" solid 1px "}
+                              borderColor={"gray.600"}
+                              overflow={"hidden"}
+                              p={2}
+                          >
+                              <Image
+                                  src={pack.img}
+                                  maxH={120}
+                                  w={"100%"}
+                                  objectFit={"cover"}
+                                  rounded={5}
+                              />
 
-                <Text as={"b"} mt={2}>
-                    {pack.title}
-                </Text>
+                              <Text as={"b"} mt={2}>
+                                  {pack.title}
+                              </Text>
 
-                <Text color={"gray.400"}>{pack.description}</Text>
+                              <Text color={"gray.400"}>{pack.description}</Text>
 
-                <Flex
-                    alignItems={"center"}
-                    gap={"5px"}
-                    color={"yellow.300"}
-                    fontSize={"xs"}
-                    mt={3}
-                >
-                    <FaStar />
-                    <FaStar />
-                    <FaStar />
-                    <FaStar />
-                    <FaStar />
-                </Flex>
+                              <Flex
+                                  alignItems={"center"}
+                                  gap={"5px"}
+                                  color={"yellow.300"}
+                                  fontSize={"xs"}
+                                  mt={3}
+                              >
+                                  <FaStar />
+                                  <FaStar />
+                                  <FaStar />
+                                  <FaStar />
+                                  <FaStar />
+                              </Flex>
 
-                <Button mt={3} w={"100%"}>
-                    Check
-                </Button>
-            </Box>
-        ))
-    )}
-</Wrap>
-
+                              <Button mt={3} w={"100%"}>
+                                  Check
+                              </Button>
+                          </Box>
+                      ))}
+            </Wrap>
         </Box>
     );
 };
