@@ -6,8 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Pack;
 use Exception;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-
+use App\Models\Order;
 
 class PacksController extends Controller
 {
@@ -160,5 +159,34 @@ class PacksController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    /**
+     * Send packs array 
+     */
+    public function order(Request $request)
+    {
+        $data = $request->validate([
+            'user_id' => 'required|integer',
+            'packs_ids' => 'required|array',
+            'packs_ids.*' => 'integer', 
+        ]);
+
+        $order = Order::create([
+            'user_id' => $data['user_id'],
+            'packs_ids' => $data['packs_ids'],
+        ]);
+
+        return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
+    }
+
+    public function getPackFromOrder($orderId)
+    {
+        $order = Order::findOrFail($orderId);
+        $packIds = $order->packs_ids;
+
+        $packNames = Pack::whereIn('id', $packIds)->pluck('title');
+
+        return response()->json(['pack_names' => $packNames]);
     }
 }

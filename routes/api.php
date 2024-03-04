@@ -62,6 +62,10 @@ Route::group(['middleware' => 'api-header'], function () {
 
 
 });
+Route::post('/orders', [\App\Http\Controllers\PacksController::class, 'order']);
+Route::get('/orders/{orderId}/packs/names', [\App\Http\Controllers\PacksController::class, 'getPackFromOrder']);
+
+
 Route::get('/pack/{id}/novellas', [\App\Http\Controllers\NovellaController::class, 'show']);
 
 //list Pack
