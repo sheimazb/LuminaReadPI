@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     Image,
     Button,
@@ -28,6 +28,13 @@ import { FaBookReader, FaSun, FaMoon } from "react-icons/fa";
 import CartContent from "./CartContent";
 import { useUserStore } from "../stores/user";
 
+interface Notification {
+    id: number;
+    content: string;
+    created_at: string;
+    seen: boolean;
+}
+
 interface NavbarProps {
     toggleColorMode: () => void;
     colorMode: any;
@@ -37,45 +44,57 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
     const [cartItems, setCartItems] = useState([]);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const { logout } = useUserStore();
+    const [notifications, setNotifications] = useState<Notification[]>([]);
 
     const isLoggedIn = localStorage.getItem("token") !== null;
 
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
     };
-    const [notifications, setNotifications] = useState([
-        {
-            id: 1,
-            message: "Open package X today to unlock exclusive content!",
-            date: "2024-02-17",
-            seen: false,
-        },
-        {
-            id: 2,
-            message: "New book 'The Lost World' is now available for purchase.",
-            date: "2024-02-16",
-            seen: true,
-        },
-        {
-            id: 3,
-            message: "Don't forget to check out our latest blog post!",
-            date: "2024-02-15",
-            seen: false,
-        },
-    ]);
 
-    const markNotificationAsSeen = (id: any) => {
-        const updatedNotifications = notifications.map((notification) => {
-            if (notification.id === id) {
-                return { ...notification, seen: true };
-            }
-            return notification;
-        });
-        setNotifications(updatedNotifications);
+    const fetchNotifications = async () => {
+        try {
+            const response = await fetch(
+                "http://127.0.0.1:8000/api/notifications/1"
+            );
+            const data = await response.json();
+            setNotifications(data);
+        } catch (error) {
+            console.error("Error fetching notifications:", error);
+        }
     };
+
+    useEffect(() => {
+        fetchNotifications();
+    }, []);
+
+    const markNotificationAsSeen = async (id: number) => {
+        try {
+            await fetch(
+                `http://127.0.0.1:8000/api/notifications/${id}/mark-as-seen`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ seen: true }),
+                }
+            );
+            const updatedNotifications = notifications.map((notification) =>
+                notification.id === id
+                    ? { ...notification, seen: true }
+                    : notification
+            );
+            setNotifications(updatedNotifications);
+        } catch (error) {
+            console.error("Error marking notification as seen:", error);
+        }
+    };
+
     const handleLogout = () => {
         logout();
     };
+
     return (
         <Flex
             align="center"
@@ -132,17 +151,6 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                             Novella
                         </Button>
                     </NavLink>
-                    {/**<NavLink to="/addNovella/2">
-                        <Button size={"sm"} color={"gray.400"} variant="ghost">
-                            AddNovella
-                        </Button>
-                        </NavLink>**/}
-                    {/** NavLink to={`/addPackage/${token}`}*/}
-                    {/*} <NavLink to="/addPackage">
-                        <Button size={"sm"} color={"gray.400"} variant="ghost">
-                            AddPackage
-                        </Button>
-                    </NavLink>*/}
                 </Flex>
             </Flex>
 
@@ -248,12 +256,14 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                                                 )}
 
                                                 <Text>
-                                                    {notification.message}
+                                                    {notification.content}
                                                     <Text
                                                         fontSize="xs"
                                                         color="gray.500"
                                                     >
-                                                        {notification.date}
+                                                        {
+                                                            notification.created_at
+                                                        }
                                                     </Text>
                                                 </Text>
                                             </Flex>

@@ -1,10 +1,16 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use App\Http\Controllers\AuthUserController;
+use App\Http\Controllers\BooksController;
+use App\Http\Controllers\BlogsController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PacksController;
+use App\Http\Controllers\NovellaController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\TextController;
+use App\Http\Controllers\NotificationController;
 
 
 /*
@@ -18,70 +24,60 @@ use App\Models\User;
 |
 */
 
-Route::get('/books', [\App\Http\Controllers\BooksController::class, 'index']);
-Route::get('/blog', [\App\Http\Controllers\BlogsController::class, 'index']);
-Route::post('/storeBlog', [\App\Http\Controllers\BlogsController::class]);
+// Public routes
+Route::post('/login', [AuthUserController::class, 'login']);
+Route::post('/register', [AuthUserController::class, 'register']);
 
-
-Route::post('/save', [\App\Http\Controllers\BooksController::class, 'store']);
-
-Route::put('/update/{id}', [\App\Http\Controllers\BooksController::class, 'update']);
-
-Route::delete('/delete/{id}', [\App\Http\Controllers\BooksController::class, 'destroy']);
-
-Route::post('/Addcomments', [\App\Http\Controllers\CommentController::class, 'Addcomments']);
-Route::put('/comments/{id}', [\App\Http\Controllers\CommentController::class, 'update']);
-Route::delete('/comments/{id}', [\App\Http\Controllers\CommentController::class, 'destroy']);
-Route::get('/novellas/{novella_id}/comments', [\App\Http\Controllers\CommentController::class, 'getCommentsByNovellaId']);
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    
-    return $request->user();
-});
-Route::group(['middleware' => ['jwt.auth','api-header']], function () {
-
-    Route::get('users/list', function(){
-    
+// Protected routes
+Route::middleware(['jwt.auth', 'api-header'])->group(function () {
+    Route::get('/users/list', function () {
         $users = App\Models\User::all();
-        $response = ['success'=>true, 'data'=>$users];
-        return response()->json($response, 201);
+        return response()->json(['success' => true, 'data' => $users], 201);
     });
-    Route::get('/users', [\App\Http\Controllers\AuthUserController::class, 'getUser']);
-    Route::post('/add-pack', [\App\Http\Controllers\PacksController::class, 'AddPack']);
-    Route::post('/add-novella/{pack_id}', [\App\Http\Controllers\NovellaController::class, 'store']);
-    Route::post('/editUser',  [\App\Http\Controllers\AuthUserController::class, 'editUser']);
-    Route::get('/packk', [\App\Http\Controllers\PacksController::class, 'getPacksByUserId']);
-    Route::post('/pack/review/{id}',  [\App\Http\Controllers\ReviewController::class, 'reviewstore']);
+
+    Route::get('/users', [AuthUserController::class, 'getUser']);
+    Route::post('/add-pack', [PacksController::class, 'AddPack']);
+    Route::post('/add-novella/{pack_id}', [NovellaController::class, 'store']);
+    Route::post('/editUser', [AuthUserController::class, 'editUser']);
+    Route::get('/packk', [PacksController::class, 'getPacksByUserId']);
+    Route::post('/pack/review/{id}', [ReviewController::class, 'reviewstore']);
 });
 
-    
-Route::group(['middleware' => 'api-header'], function () {
-    
-    Route::post('/login',  [\App\Http\Controllers\AuthUserController::class, 'login']);
-    Route::post('/register', [\App\Http\Controllers\AuthUserController::class, 'register']);
+Route::middleware('api-header')->group(function () {
+    Route::get('/books', [BooksController::class, 'index']);
+    Route::get('/blog', [BlogsController::class, 'index']);
+    Route::post('/storeBlog', [BlogsController::class, 'store']);
 
+    Route::post('/save', [BooksController::class, 'store']);
+    Route::put('/update/{id}', [BooksController::class, 'update']);
+    Route::delete('/delete/{id}', [BooksController::class, 'destroy']);
 
+    Route::post('/Addcomments', [CommentController::class, 'Addcomments']);
+    Route::put('/comments/{id}', [CommentController::class, 'update']);
+    Route::delete('/comments/{id}', [CommentController::class, 'destroy']);
+    Route::get('/novellas/{novella_id}/comments', [CommentController::class, 'getCommentsByNovellaId']);
+
+    Route::post('/orders', [PacksController::class, 'order']);
+    Route::get('/orders/{orderId}/packs/names', [PacksController::class, 'getPackFromOrder']);
+
+    Route::get('/pack/{id}/novellas', [NovellaController::class, 'show']);
+
+    Route::get('/AllPack', [PacksController::class, 'AllPack']);
+
+    Route::get('/list-novella', [NovellaController::class, 'index']);
+
+    Route::post('/AddText', [TextController::class, 'AddText']);
+    Route::get('/text/{code}', [TextController::class, 'getTextByCode']);
+    Route::put('/updateText/{code}', [TextController::class, 'updateText']);
+
+    Route::post('/add-notification/{userId}', [NotificationController::class, 'addNotification']);
+    Route::get('/notifications/{user_id}', [NotificationController::class, 'getUserNotifications']);
+    Route::put('/notifications/{notificationId}/mark-as-seen', [NotificationController::class, 'markNotificationAsSeen']);
+
+    Route::post('/upload', [PacksController::class, 'upload']);
 });
-Route::post('/orders', [\App\Http\Controllers\PacksController::class, 'order']);
-Route::get('/orders/{orderId}/packs/names', [\App\Http\Controllers\PacksController::class, 'getPackFromOrder']);
 
-
-Route::get('/pack/{id}/novellas', [\App\Http\Controllers\NovellaController::class, 'show']);
-
-//list Pack
-Route::get('/AllPack',  [\App\Http\Controllers\PacksController::class, 'AllPack']);
-//list Novella 
-    Route::get('/list-novella', [\App\Http\Controllers\NovellaController::class, 'index']);
-// Add Text
-Route::post('/AddText', [\App\Http\Controllers\TextController::class, 'AddText']);
-Route::get('/text/{code}', [\App\Http\Controllers\TextController::class, 'getTextByCode']); 
-Route::put('/updateText/{code}', [\App\Http\Controllers\TextController::class, 'updateText']);
-// test image
-Route::post('/upload ', [\App\Http\Controllers\PacksController::class,'upload']);
-
-
-
-
+// Protected route to retrieve authenticated user details
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
