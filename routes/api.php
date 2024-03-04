@@ -11,6 +11,7 @@ use App\Http\Controllers\NovellaController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\TextController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SseController;
 
 
 /*
@@ -73,6 +74,8 @@ Route::middleware('api-header')->group(function () {
     Route::post('/add-notification/{userId}', [NotificationController::class, 'addNotification']);
     Route::get('/notifications/{user_id}', [NotificationController::class, 'getUserNotifications']);
     Route::put('/notifications/{notificationId}/mark-as-seen', [NotificationController::class, 'markNotificationAsSeen']);
+    // Test for the SSE For Notification Feature
+    Route::get('/sse', [SseController::class, 'SEETEST']);
 
     Route::post('/upload', [PacksController::class, 'upload']);
 });
