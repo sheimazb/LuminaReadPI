@@ -90,13 +90,17 @@ function Login() {
                     <FormLabel color={"purple.100"}>Password</FormLabel>
 
                     <Input
-                        type='password'
+                        variant="filled"
                         id='password'
-                        name='password'
                         placeholder='Enter your password'
+                        type="password"
+                        mb={6}
+                        w={300}
+                        name="password"
                         value={formData.password}
                         onChange={handleChange}
                     />
+                 
                 </FormControl>
                 <Button
                     color={"var(--chakra-colors-chakra-body-text)"}

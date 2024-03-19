@@ -36,6 +36,7 @@ export const useUserStore = create<UserStore>((set) => ({
             throw error;
         }
     },
+    
     logout: () => {
         localStorage.removeItem("token");
         localStorage.removeItem("expiresIn");
