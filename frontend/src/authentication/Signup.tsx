@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Flex, Input, Button, Text, Divider,useToast } from "@chakra-ui/react";
+import { Flex, Input, Button, Text, Divider,useToast, FormLabel, FormControl } from "@chakra-ui/react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 function Signup() {
@@ -85,35 +85,41 @@ function Signup() {
 
             <form onSubmit={handleSubmit}>
                 <Flex flexDirection={"column"} mb={5}>
+                <FormControl mb='5' >
+                    <FormLabel color={"purple.100"}>Full Name</FormLabel>
                     <Input
                         variant="filled"
                         placeholder="Full Name"
-                        mb={3}
                         w={300}
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
                     />
+                    </FormControl>
+                    <FormControl mb='5' >
+                    <FormLabel color={"purple.100"}>Email</FormLabel>
                     <Input
                         variant="filled"
                         placeholder="Email"
                         type="email"
-                        mb={3}
                         w={300}
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
                     />
+                    </FormControl>
+                    <FormControl mb='5' >
+                    <FormLabel color={"purple.100"}>Password</FormLabel>
                     <Input
                         variant="filled"
                         placeholder="Password"
                         type="password"
-                        mb={6}
                         w={300}
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
                     />
+                    </FormControl>
                     <Button type="submit" colorScheme="blue" mb={3}>
                         Sign Up
                     </Button>
