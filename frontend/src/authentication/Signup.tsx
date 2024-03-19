@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Flex, Input, Button, Text, Divider } from "@chakra-ui/react";
+import { Flex, Input, Button, Text, Divider,useToast } from "@chakra-ui/react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 function Signup() {
+    const toast =useToast();
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -18,22 +19,58 @@ function Signup() {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-
+    
         try {
             const response = await axios.post(
                 "http://127.0.0.1:8000/api/register",
                 formData
             );
+          
             console.log("Response:", response.data);
-
+    
             if (response.status === 201) {
+                toast({
+                    title: "Account created.",
+                    description: "Successfully signed up!",
+                    status: "success",
+                    duration: 3000,
+                    isClosable: true,
+                });
                 navigate("/Auth/login");
             } else {
+                toast({
+                    title: "Error signing up!",
+                    description: "Failed to sign up!",
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
             }
-        } catch (error) {
-            console.error("Error:", error);
+        } catch (error:any) {
+            console.error("Error:", error.response);
+            if (error.response.status === 400) {
+                // Handle validation errors
+                const errorMessage = error.response.data.error;
+                toast({
+                    title: "Error signing up!",
+                    description: errorMessage,
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
+            } else {
+                // Handle other types of errors
+                toast({
+                    title: "Error signing up!",
+                    description: "An unexpected error occurred. Please try again later.",
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
         }
     };
+    
 
     return (
         <Flex
