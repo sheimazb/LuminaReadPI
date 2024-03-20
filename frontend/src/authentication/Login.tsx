@@ -1,6 +1,6 @@
 import { Flex, Input, Button, Text, Divider, FormControl, FormLabel, useToast } from "@chakra-ui/react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUserStore } from "../stores/user";
 
 function Login() {
@@ -21,13 +21,16 @@ function Login() {
         }));
     };
 
-    const handleSubmit = async (e: any) => {
-        e.preventDefault();
-        setLoading(true);
+    const [loginResponse, setLoginResponse] = useState<any>(null);
 
-        try {
-            await login(formData);
+const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setLoading(true);
 
+    try {
+        await login(formData);
+        setLoginResponse(201);
+        if (loginResponse === 201) {
             toast({
                 title: "Success",
                 description: "Logged in successfully!",
@@ -35,31 +38,43 @@ function Login() {
                 duration: 3000,
                 isClosable: true,
             });
-            // Utilise history.push pour rediriger l'utilisateur après la connexion réussie
             navigate("/marketplace");
-        } catch (error: any) {
-            console.error("Error logging in:", error);
-
-            if (error.response && error.response.data.message) {
-                toast({
-                    title: "Error",
-                    description: error.response.data.message,
-                    status: "error",
-                    duration: 3000,
-                    isClosable: true,
-                });
-            } else {
-                toast({
-                    title: "Error",
-                    description: "Failed to log in. Please try again.",
-                    status: "error",
-                    duration: 3000,
-                    isClosable: true,
-                });
-            }
+        }else{
+            toast({
+                title: "Error",
+                description: "Logged in failed! check your data! ",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
         }
+    } catch (error: any) {
+        console.error("Error logging in:", error);
+        setLoginResponse(null); // Réinitialiser la réponse en cas d'erreur
+        if (error.response && error.response.data.message) {
+            toast({
+                title: "Error",
+                description: error.response.data.message,
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        } else {
+            toast({
+                title: "Error",
+                description: "Failed to log in. Please try again.",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    } finally {
         setLoading(false);
-    };
+    }
+};
+
+
+
 
     return (
         <Flex

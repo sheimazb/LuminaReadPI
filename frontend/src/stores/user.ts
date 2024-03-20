@@ -21,7 +21,7 @@ interface LoginData {
 
 export const useUserStore = create<UserStore>((set) => ({
     user: null,
-    login: async (loginData: LoginData) => {
+    login: async (loginData: LoginData): Promise<void> => {
         try {
             const response = await axios.post(`${BASE_URL}/login`, loginData);
             console.log("Response data:", response.data);
@@ -36,6 +36,7 @@ export const useUserStore = create<UserStore>((set) => ({
             throw error;
         }
     },
+    
     
     logout: () => {
         localStorage.removeItem("token");

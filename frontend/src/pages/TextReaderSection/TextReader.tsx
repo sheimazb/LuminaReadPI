@@ -78,7 +78,7 @@ const TextReader = () => {
             let dataToSend = { text_content: textToSpeak };
 
             await axios.put(
-                `http://localhost:8000/api/updateText/${id}`,
+                `http://127.0.0.1:8000/api/updateText/${id}`,
                 dataToSend
             );
             setOriginalText(textToSpeak);
