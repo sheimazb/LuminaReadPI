@@ -104,14 +104,23 @@ const AddPackage: React.FC = () => {
                     },
                 }
             );
-            toast({
-                title: "Success",
-                description: "Added pack successfully!",
-                status: "success",
-                duration: 3000,
-                isClosable: true,
-            });
-
+            if (response) {
+                toast({
+                    title: "Success",
+                    description: "Added pack successfully!",
+                    status: "success",
+                    duration: 3000,
+                    isClosable: true,
+                });
+            } else {
+                toast({
+                    title: "Failed",
+                    description: "Failed add package please try again!",
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
             console.log("Response:", response.data);
         } catch (error) {
             console.error("Error:", error);
@@ -134,20 +143,20 @@ const AddPackage: React.FC = () => {
                 <ModalOverlay />
                 <ModalContent>
                     <ModalCloseButton />
-                    <ModalBody pb={6}>
-                        <Box
-                            className="container"
-                            w="600px"
-                            h="520px"
-                            bgPosition="0 0"
-                            bgRepeat="no-repeat"
-                            bgSize="100% 100%"
-                            flexDirection="column"
-                            justifyContent="flex-end"
-                            padding="3rem"
-                            display="flex"
-                        >
-                            <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit}>
+                        <ModalBody pb={6}>
+                            <Box
+                                className="container"
+                                w="600px"
+                                h="520px"
+                                bgPosition="0 0"
+                                bgRepeat="no-repeat"
+                                bgSize="100% 100%"
+                                flexDirection="column"
+                                justifyContent="flex-end"
+                                padding="3rem"
+                                display="flex"
+                            >
                                 <Flex
                                     className="containerr"
                                     flexDirection="column"
@@ -275,21 +284,21 @@ const AddPackage: React.FC = () => {
                                         </Select>
                                     </Flex>
                                 </Flex>
-                            </form>
-                        </Box>
-                    </ModalBody>
+                            </Box>
+                        </ModalBody>
 
-                    <ModalFooter>
-                        <Button
-                            type="submit"
-                            w={"200px"}
-                            colorScheme="cyan"
-                            mr="3rem"
-                            mt="-5rem"
-                        >
-                            Add Now
-                        </Button>
-                    </ModalFooter>
+                        <ModalFooter>
+                            <Button
+                                type="submit"
+                                w={"200px"}
+                                colorScheme="cyan"
+                                mr="3rem"
+                                mt="-5rem"
+                            >
+                                Add Now
+                            </Button>
+                        </ModalFooter>
+                    </form>
                 </ModalContent>
             </Modal>
         </>
