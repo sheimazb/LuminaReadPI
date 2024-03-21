@@ -24,6 +24,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { FaSearch, FaStar } from "react-icons/fa"; // Import FaPlus for the add button
 import defaultPic from "../../assets/default-profile.jpg";
+import AddPackage from "../addpackage/AddPackage";
 
 interface User {
     id: number;
@@ -188,7 +189,8 @@ const Profile: React.FC = () => {
     };
 
     return (
-        <Box maxW={"1230px"} m={"30px auto"}>
+
+        <Box maxW={"1230px"} pt={20} ml={'auto'}mr={'auto'}>
             <Flex flexDirection={"column"} gap={1} alignItems={"left"}>
                 <Flex flexDirection={"column"} gap={1} alignItems={"center"}>
                     <Box position="relative" display="inline-block">
@@ -219,7 +221,12 @@ const Profile: React.FC = () => {
                             <TagLabel>High Tech</TagLabel>
                         </Tag>
                     </Flex>
-                    <Button onClick={onOpen}>Edit</Button>
+                    <Flex gap={3} alignItems={"center"}>
+                        <Button onClick={onOpen} size={"sm"} bg="gray">
+                            Edit
+                        </Button>
+                        <AddPackage />
+                    </Flex>
 
                     <Modal isOpen={isOpen} onClose={onClose}>
                         <ModalOverlay />
