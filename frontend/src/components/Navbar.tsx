@@ -102,6 +102,7 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
             display="flex"
             h="60px"
             px="15px"
+            bg={'#37484951'}
         >
             <Flex gap={5}>
                 <NavLink to="/">

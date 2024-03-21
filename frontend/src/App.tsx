@@ -1,4 +1,4 @@
-import { ChakraProvider, extendTheme, useColorMode } from "@chakra-ui/react";
+import { Box, ChakraProvider, extendTheme, useColorMode } from "@chakra-ui/react";
 import Routing from "./Routing";
 import { BrowserRouter } from "react-router-dom";
 import Navbar from "./components/Navbar";
@@ -29,7 +29,12 @@ function AppContent() {
 
     return (
         <>
-            <Navbar toggleColorMode={toggleColorMode} colorMode={colorMode} />
+            <Box position="fixed" w="100%" zIndex="99">
+                <Navbar
+                    toggleColorMode={toggleColorMode}
+                    colorMode={colorMode}
+                />
+            </Box>
             <Routing />
         </>
     );
