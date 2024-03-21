@@ -2,7 +2,7 @@ import { Box, Flex, Text, Image, Button } from "@chakra-ui/react";
 import { NavLink, Outlet } from "react-router-dom";
 const Novella = () => {
     return (
-        <Flex w={"1200px"} m={"30px auto"} gap={3} flexDirection={"column"}>
+        <Flex w={"1200px"}  pt={20} ml={'auto'}mr={'auto'} gap={3} flexDirection={"column"}>
             <Flex
                 h={260}
                 w={"100%"}
