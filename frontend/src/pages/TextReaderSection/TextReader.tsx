@@ -216,7 +216,7 @@ const TextReader = () => {
     }
 
     return (
-        <Box h={"calc(100vh - 180px)"}>
+        <Box  pt={20} mx={"auto"}>
             {isLoading && (
                 <Flex
                     alignItems="center"
