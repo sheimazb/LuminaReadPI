@@ -16,56 +16,62 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaSearch, FaStar } from "react-icons/fa";
-import { useParams } from "react-router-dom";
-import AddNovella from "../addnovella/AddNovella";
-
+import { useParams, useNavigate } from "react-router-dom";
 
 const Package = () => {
     const [novellas, setNovellas] = useState([]);
+    const navigate = useNavigate();
     const [rating, setRating] = useState(0);
-    const { id } = useParams(); // Get the 'id' parameter from the URL
-    
+    const { id } = useParams(); // Obtenir le paramètre 'id' depuis l'URL
+
+    const handleNavigate = () => {
+        navigate(`/addnovella/${id}`); // Naviguer vers AddNovella avec l'ID du pack
+    };
+
     const handleRatingChange = (event:any) => {
         setRating(event.target.value);
-      };
-    
-      const handleSubmitRating = () => {
-        const token = localStorage.getItem("token"); // Récupérer le token JWT depuis le stockage local
-    
-        axios.post(`http://127.0.0.1:8000/api/pack/review/${id}`, { rating: rating }, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            }
-        })
-        .then(response => {
-            console.log(response.data); // Afficher la réponse du backend
-        })
-        .catch(error => {
-            console.error('Erreur lors de l\'envoi du rating:', error);
-        });
     };
-    
-    
-    useEffect(() => {
-        (async () => {
-            await loadNovellas(id); // Pass the 'id' to the loadNovellas function
-        })();
-    }, [id]); // Include 'id' as a dependency in the useEffect to trigger the effect when 'id' changes
-    
-    async function loadNovellas(id:any) {
-        try {
-            const result = await axios.get(`http://127.0.0.1:8000/api/pack/${id}/novellas`); // Use template literals to include 'id' in the URL
-            setNovellas(result.data.novellas);
-        } catch (error) {
-            console.error("Error loading novellas:", error);
-        }
-    }
 
-    console.log(novellas);
+    const handleSubmitRating = () => {
+        const token = localStorage.getItem("token"); // Récupérer le token JWT depuis le stockage local
+
+        axios
+            .post(
+                `http://127.0.0.1:8000/api/pack/review/${id}`,
+                { rating: rating },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            )
+            .then((response) => {
+                console.log(response.data); // Afficher la réponse du backend
+            })
+            .catch((error) => {
+                console.error("Erreur lors de l'envoi du rating:", error);
+            });
+    };
+
+    useEffect(() => {
+        const loadNovellas = async () => {
+            try {
+                const result = await axios.get(
+                    `http://127.0.0.1:8000/api/pack/${id}/novellas`
+                ); // Utiliser les littéraux de gabarits pour inclure 'id' dans l'URL
+                setNovellas(result.data.novellas);
+            } catch (error) {
+                console.error("Erreur lors du chargement des novellas:", error);
+            }
+        };
+
+        loadNovellas();
+    }, [id]); // Inclure 'id' en tant que dépendance dans useEffect pour déclencher l'effet lorsque 'id' change
+
 
     return (
-        <Box w={"90%"} m={"30px auto"}>
+        <Box w={"90%"} pt={20} mx={"auto"}>
             <Flex flexDirection={"column"} gap={2}>
                 <Flex
                     h={300}
@@ -102,9 +108,13 @@ const Package = () => {
                             elit.
                         </Text>
                         <Box>
-                        <Input type="number" value={rating} onChange={handleRatingChange} />
-      <button onClick={handleSubmitRating}>Envoyer Rating</button>
-                        </Box>
+                    <Input
+                        type="number"
+                        value={rating}
+                        onChange={handleRatingChange}
+                    />
+                    <Button onClick={handleSubmitRating}>Envoyer Rating</Button>
+                </Box>
                         <Flex
                             alignItems={"center"}
                             gap={"5px"}
@@ -118,13 +128,15 @@ const Package = () => {
                             <FaStar />
                         </Flex>
                     </Box>
-                    <Box position={"absolute"}   mt={5} bottom={4} right={2}>
-                        <AddNovella />
-                        <Button ml={3} colorScheme="cyan" size={"sm"}>
-                            Buy This Pack
-                        </Button>
+                    <Box position={"absolute"} mt={5} bottom={4} right={2}>
+    <Button onClick={handleNavigate}>
+        Add Novella
+    </Button>
 
-                    </Box>
+    <Button ml={3} colorScheme="cyan" size={"sm"}>
+        Buy This Pack
+    </Button>
+</Box>
                 </Flex>
                 <Flex flexDirection={"column"} gap={3} mx={3}>
                     <InputGroup size="md">
@@ -154,7 +166,7 @@ const Package = () => {
                     </Flex>
                 </Flex>
                 <Wrap w={"100%"} p={2}>
-                    {novellas.map((novella:any ,index:number) => (
+                    {novellas.map((novella: any, index: number) => (
                         <Card
                             maxW="270px"
                             key={index}
@@ -171,12 +183,10 @@ const Package = () => {
                                     h={160}
                                 />
                                 <Stack mt="3" spacing="1">
-                                    <Heading size="md">
-                                        {novella.title}
-                                    </Heading>
+                                    <Heading size="md">{novella.title}</Heading>
                                     <Text color={"gray.300"} fontSize={"sm"}>
-                                      {novella.description} 
-                                        </Text>
+                                        {novella.description}
+                                    </Text>
                                     <Button mt={2} size={"sm"}>
                                         Check novella
                                     </Button>
