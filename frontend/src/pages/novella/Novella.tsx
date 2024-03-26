@@ -1,8 +1,19 @@
+import React from "react";
 import { Box, Flex, Text, Image, Button } from "@chakra-ui/react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useParams } from "react-router-dom";
+
 const Novella = () => {
+    const { id } = useParams();
+
     return (
-        <Flex w={"1200px"}  pt={20} ml={'auto'}mr={'auto'} gap={3} flexDirection={"column"}>
+        <Flex
+            w={"1200px"}
+            pt={20}
+            ml={"auto"}
+            mr={"auto"}
+            gap={3}
+            flexDirection={"column"}
+        >
             <Flex
                 h={260}
                 w={"100%"}
@@ -39,12 +50,12 @@ const Novella = () => {
                     </Flex>
                 </Box>
                 <Box position={"absolute"} bottom={4} left={5}>
-                    <NavLink to="/novella/TTS">
+                    <NavLink to={`/novella/${id}/read`}>
                         <Button mt={5} mr={3} colorScheme="cyan" size={"sm"}>
                             Read
                         </Button>
                     </NavLink>
-                    <NavLink to="/novella/Forum">
+                    <NavLink to={`/novella/${id}/forum`}>
                         <Button mt={5} mr={3} size={"sm"}>
                             Forum
                         </Button>
@@ -58,4 +69,5 @@ const Novella = () => {
         </Flex>
     );
 };
+
 export default Novella;

@@ -4,8 +4,6 @@ import {
     Button,
     Input,
     Textarea,
-    Wrap,
-    FormControl,
     Image,
     Text,
     useToast,

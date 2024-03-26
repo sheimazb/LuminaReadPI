@@ -8,7 +8,6 @@ import {
     FormControl,
     FormLabel,
     useToast,
-    Select,
 } from "@chakra-ui/react";
 import {
     Modal,
@@ -262,27 +261,7 @@ const AddPackage: React.FC = () => {
                                             />
                                         </FormControl>
                                     </Flex>
-                                    <Flex
-                                        justifyContent={"space-between"}
-                                        alignItems={"center"}
-                                        w={"450px"}
-                                        p={1}
-                                        rounded={10}
-                                        marginTop="1rem"
-                                    >
-                                        <Select
-                                            placeholder="Select"
-                                            w={"180px"}
-                                        >
-                                            <option value="option1">
-                                                Kids
-                                            </option>
-                                            <option value="option2">IT</option>
-                                            <option value="option3">
-                                                Developpement
-                                            </option>
-                                        </Select>
-                                    </Flex>
+                                    
                                 </Flex>
                             </Box>
                         </ModalBody>

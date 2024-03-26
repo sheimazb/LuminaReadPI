@@ -66,6 +66,7 @@ Route::middleware('api-header')->group(function () {
     Route::get('/AllPack', [PacksController::class, 'AllPack']);
 
     Route::get('/list-novella', [NovellaController::class, 'index']);
+    Route::get('/novellas/{id}', [NovellaController::class, 'FindNovellaByID']);
 
     Route::post('/AddText', [TextController::class, 'AddText']);
     Route::get('/text/{code}', [TextController::class, 'getTextByCode']);

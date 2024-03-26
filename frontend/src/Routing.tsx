@@ -12,6 +12,7 @@ import Profile from "./pages/profile/Profile";
 import TextReader from "./pages/TextReaderSection/TextReader";
 import AddPackage from "./pages/addpackage/AddPackage";
 import AddNovella from "./pages/addnovella/AddNovella";
+import NovellaContent from "./pages/novella/NovellaContent";
 
 function App() {
     return (
@@ -25,7 +26,7 @@ function App() {
             <Route path="/AddPackage" element={<AddPackage />} />
             <Route path="/novella/:id/*" element={<Novella />}>
                 <Route path="" element={<Navigate to="forum" />} />
-                <Route path="TTS" element={<TTS />} />
+                <Route path="read" element={<NovellaContent />} />
                 <Route path="forum" element={<Forum />} />
             </Route>
             <Route path="/Auth/*" element={<Auth />}>
@@ -33,6 +34,7 @@ function App() {
                 <Route path="signup" element={<Signup />} />
                 <Route path="login" element={<Login />} />
             </Route>
+    
         </Routes>
     );
 }

@@ -69,6 +69,9 @@ const Package = () => {
         loadNovellas();
     }, [id]); // Inclure 'id' en tant que dépendance dans useEffect pour déclencher l'effet lorsque 'id' change
 
+    const handleCheckNovella = (novella:any):void => {
+        navigate(`/novella/${novella.id}`);
+    };
 
     return (
         <Box w={"90%"} pt={20} mx={"auto"}>
@@ -187,7 +190,9 @@ const Package = () => {
                                     <Text color={"gray.300"} fontSize={"sm"}>
                                         {novella.description}
                                     </Text>
-                                    <Button mt={2} size={"sm"}>
+                                    <Button mt={2} size={"sm"}
+                                    onClick={() => handleCheckNovella(novella)}
+                                    >
                                         Check novella
                                     </Button>
                                 </Stack>

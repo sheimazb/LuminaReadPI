@@ -75,20 +75,16 @@ class NovellaController extends Controller
         }
     }
     
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+    public function FindNovellaByID($id){
+        try {
+            $novella = Novella::find($id);
+            if ($novella) {
+                return response()->json($novella, 200);
+            } else {
+                return response()->json(['message' => 'Novella not found'], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 }
