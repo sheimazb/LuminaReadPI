@@ -6,26 +6,33 @@ use Illuminate\Http\Request;
 use App\Models\Comment;
 use App\Models\Novella;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Exception;
+
 
 class CommentController extends Controller
 {
-    public function Addcomments(Request $request)
+
+
+ 
+    public function addComment(Request $request)
     {
-        $request->validate([
-            'novella_id' => 'required|exists:novellas,id',
-            'user_id' => 'required|exists:users,id', 
-            'content' => 'required|string',
-        ]);
+        // Vérifier si l'utilisateur est authentifié
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+
 
         $comment = new Comment();
         $comment->novella_id = $request->novella_id;
-        $comment->user_id = $request->user_id;
+        $comment->user_id = $user->id; // Remplir l'identifiant de l'utilisateur
         $comment->content = $request->content;
         $comment->save();
 
         return response()->json(['message' => 'Comment created successfully'], 201);
     }
-    
+
     public function getCommentsByNovellaId($novella_id)
     {
         // Check if the novella exists
@@ -33,15 +40,15 @@ class CommentController extends Controller
         if (!$novella) {
             return response()->json(['message' => 'Novella not found'], 404);
         }
-    
+
         $comments = Comment::with('user:id,name')
-                        ->where('novella_id', $novella_id)
-                        ->orderBy('created_at', 'desc')
-                        ->get();
-    
+            ->where('novella_id', $novella_id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return response()->json(['comments' => $comments], 200);
     }
-    
+
 
     public function update(Request $request, $id)
     {
