@@ -26,8 +26,11 @@ const Forum = () => {
 
     const fetchData = async () => {
         try {
+            const urlParts = window.location.pathname.split("/");
+            const lastId = urlParts[urlParts.length - 2]; // Assuming the ID is the second last part of the URL
+
             const response = await fetch(
-                "http://127.0.0.1:8000/api/novellas/1/comments"
+                `http://127.0.0.1:8000/api/novellas/${lastId}/comments`
             );
             const data = await response.json();
             setComments(data.comments);
@@ -51,33 +54,39 @@ const Forum = () => {
             day: "numeric",
         });
     };
-
     const handleAddComment = async () => {
         try {
             setAddingComment(true);
+            const urlParts = window.location.pathname.split("/");
+            const lastId = urlParts[urlParts.length - 2]; // Assuming the ID is the second last part of the URL
+            const token = localStorage.getItem("token"); // Récupérer le token JWT depuis le stockage local
+            // Assurez-vous que novella_id est un nombre entier
+            const novellaId = parseInt(lastId);
+            if (isNaN(novellaId)) {
+                throw new Error("Invalid novella ID");
+            }
+
+            const commentData = {
+                novella_id: novellaId,
+                content: newComment,
+            };
+
+            // Utilisez la méthode post d'axios pour envoyer la requête POST
             const response = await axios.post(
-                "http://127.0.0.1:8000/api/Addcomments",
-                {
-                    novella_id: 1,
-                    user_id: 3,
-                    content: newComment,
-                },
+                `http://127.0.0.1:8000/api/Addcomments`,
+                commentData,
                 {
                     headers: {
+                        Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",
                     },
                 }
             );
-            if (response.status === 201) {
-                fetchData();
-                setNewComment("");
-            } else {
-                console.error("Failed to add comment");
-            }
+            console.log(response.data); // Afficher la réponse du backend
         } catch (error) {
-            console.error("Error adding comment:", error);
+            console.error("Erreur lors de l'ajout de commentaire:", error);
         } finally {
-            setAddingComment(false);
+            setAddingComment(false); // Assurez-vous de désactiver l'indicateur d'ajout de commentaire en cas d'erreur ou de réussite
         }
     };
 
