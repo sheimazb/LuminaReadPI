@@ -24,6 +24,10 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return $this->hasMany(Pack::class);
     }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 
     /**
      * Get the notifications associated with the user.

@@ -15,7 +15,7 @@ const NovellaContent: React.FC = () => {
     useEffect(() => {
         const loadNovellas = async () => {
             try {
-                // Extracting the last ID from the URL
+                
                 const urlParts = window.location.pathname.split('/');
                 const lastId = urlParts[urlParts.length - 2]; // Assuming the ID is the second last part of the URL
                 const response = await axios.get(

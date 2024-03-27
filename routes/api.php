@@ -53,7 +53,7 @@ Route::middleware('api-header')->group(function () {
     Route::put('/update/{id}', [BooksController::class, 'update']);
     Route::delete('/delete/{id}', [BooksController::class, 'destroy']);
 
-    Route::post('/Addcomments', [CommentController::class, 'Addcomments']);
+    Route::post('/Addcomments', [CommentController::class, 'addComment']);
     Route::put('/comments/{id}', [CommentController::class, 'update']);
     Route::delete('/comments/{id}', [CommentController::class, 'destroy']);
     Route::get('/novellas/{novella_id}/comments', [CommentController::class, 'getCommentsByNovellaId']);
