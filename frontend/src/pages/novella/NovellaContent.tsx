@@ -34,9 +34,8 @@ console.log('jj',novellas);
         <Box>
             {novellas.map((novella: Novella, index: number) => (
                 <Flex direction={'column'} key={index}>
-                    <Text>Title: {novella.title}</Text>
-                    <Text>Description: {novella.description}</Text>
-                    <Text>Content: {novella.content}</Text>
+                     <Text fontSize={'2xl'} as={'b'}>Content</Text>
+                    <Text>{novella.content}</Text>
                 </Flex>
             ))}
         </Box>

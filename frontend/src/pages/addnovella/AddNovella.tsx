@@ -211,9 +211,7 @@ const AddNovella: React.FC = () => {
                                     w="sm"
                                     mt="2"
                                     placeholder="Langue"
-                                    onChange={handleChange}
-                                    name="content"
-                                    value={formData.content}
+                                  
                                 />
                                 <label>Price :</label>
 
@@ -249,6 +247,9 @@ const AddNovella: React.FC = () => {
                                 mt={2}
                                 height={100}
                                 resize={"horizontal"}
+                                onChange={handleChange}
+                                name="content"
+                                value={formData.content}
                             />
                         </Flex>
                     </form>
