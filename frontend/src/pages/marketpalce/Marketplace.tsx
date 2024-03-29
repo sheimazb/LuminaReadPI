@@ -15,18 +15,68 @@ import {
     Heading,
     Card,
     useToast,
+    Select,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaFilter, FaList, FaSearch, FaStar } from "react-icons/fa";
-import { NavLink,useNavigate } from "react-router-dom";
-
+import { NavLink, useNavigate } from "react-router-dom";
 
 import AddPackage from "../addpackage/AddPackage";
 
 const Marketplace = () => {
     const toast = useToast();
     const navigate = useNavigate();
+
+    /**
+     * Search
+     */
+
+    const [searchQuery, setSearchQuery] = useState("");
+    const [categoryQuery, setCategoryQuery] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
+    const [categoryFilterResults, setCategoryFilterResults] = useState([]);
+
+    
+    const handleSearch = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            let url = "http://127.0.0.1:8000/api/AllPack?";
+            if (searchQuery) {
+                url += `search=${searchQuery}`;
+            }
+
+            if (categoryQuery) {
+                if (searchQuery) {
+                    url += `&category=${categoryQuery}`;
+                } else {
+                    url += `category=${categoryQuery}`;
+                }
+            }
+
+            const response = await axios.get(url, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+            setSearchResults(response.data.packs); // Mettre à jour les résultats de la recherche
+            setCategoryFilterResults(response.data.packs); // Mettre à jour les résultats du filtre par catégorie
+        } catch (error) {
+            console.error("Error fetching search results:", error);
+        }
+    };
+    const handleChangeSearch = (e: any) => {
+        setSearchQuery(e.target.value);
+    };
+    
+
+    const handleChangeCategory = (e: any) => {
+        setCategoryQuery(e.target.value);
+    };
+    const handleFilterClick = () => {
+        handleSearch(); // Lancer la recherche lorsque le bouton de filtre est cliqué
+    };
 
     const [packs, setPacks] = useState([]);
     const [cart, setCart] = useState(() => {
@@ -68,7 +118,7 @@ const Marketplace = () => {
         setCart(updatedCart);
         localStorage.setItem("cart", JSON.stringify(updatedCart));
     };
-   
+
     return (
         <Box>
             <Flex
@@ -116,17 +166,42 @@ const Marketplace = () => {
                         <Input
                             borderColor={"gray.700"}
                             placeholder="Search section"
+                            name="search"
+                            onChange={handleChangeSearch}
                         />
                         <InputRightElement>
-                            <Button size="xs" mr={1} color={"white"}>
+                            <Button
+                                onClick={handleSearch}
+                                size="xs"
+                                mr={1}
+                                color={"white"}
+                                type="button"
+                            >
                                 <FaSearch />
                             </Button>
                         </InputRightElement>
                     </InputGroup>
-                    <Button size={"sm"} gap={2}>
-                        Category
-                    </Button>
-                    <Button size={"sm"}>
+                    <Select
+                        size="sm"
+                        borderColor={"gray.700"}
+                        name="category"
+                        onChange={handleChangeCategory} // Mise à jour de la catégorie sur changement
+                        placeholder="Category" // Texte de placeholder
+                    >
+                        <option value="">All</option>
+                        {[...new Set(packs.map((pack) => pack.category))].map(
+                            (category, index) => (
+                                <option key={index} value={category}>
+                                    {category}
+                                </option>
+                            )
+                        )}
+                    </Select>
+                    <Button
+                        size={"sm"}
+                        type="button" // Ajoutez type="button" pour éviter le comportement par défaut du formulaire
+                        onClick={handleFilterClick} // Utilisez handleFilterClick pour gérer le clic
+                    >
                         <FaFilter />
                     </Button>
                     <Button size={"sm"}>
@@ -144,108 +219,215 @@ const Marketplace = () => {
                     </Flex>
 
                     <Wrap w={"calc(100vw - 300px)"} p={2}>
-                        {packs.map((pack: any, index: number) => (
-                                <Card
-                                    maxW="300px"
-                                    key={index}
-                                    bg={"var(--lvl1-darkcolor)"}
-                                    border={"var(--bordercolor) solid 1px "}
-                                    p={0}
-                                >
-                                    <CardBody>
-                                        <Image
-                                            src={pack.img}
-                                            alt="Green double couch with wooden legs"
-                                            borderRadius="lg"
-                                            w={"100%"}
-                                            h={160}
-                                        />
-                                        <Stack mt="3" spacing="1">
-                                            <Heading size="md">
-                                                {pack.title}
-                                            </Heading>
-                                            <Text
-                                                color={"gray.300"}
-                                                fontSize={"sm"}
-                                            >
-                                                {pack.description}
-                                            </Text>
-                                            <Flex
-                                                alignItems={"center"}
-                                                gap={3}
-                                                mt={3}
-                                            >
-                                                <Image
-                                                    src={pack.usser.img}
-                                                    h={"40px"}
-                                                    w={"40px"}
-                                                    rounded={"50%"}
-                                                />
-                                                <Box>
-                                                    <Text>
-                                                        {pack.usser.name}
-                                                    </Text>
-                                                    <Text
-                                                        display={"flex"}
-                                                        alignItems={"center"}
-                                                        fontSize={"sm"}
-                                                        color={"yellow.400"}
-                                                        gap={1}
-                                                    >
-                                                        <FaStar />
-                                                        <FaStar />
-                                                        <FaStar />
-                                                        <FaStar />
-                                                        <FaStar />
-                                                    </Text>
-                                                </Box>
-                                            </Flex>
-                                        </Stack>
-                                    </CardBody>
-                                    <CardFooter
-                                        bg={"var(--lvl2-darkcolor)"}
-                                        justifyContent={"space-between"}
-                                        alignItems={"center"}
-                                        m={"-10px 10px 10px 10px"}
-                                        rounded={10}
-                                    >
-                                        <Text
-                                            color="cyan.200"
-                                            fontSize="2xl"
-                                            display={"flex"}
-                                            alignItems={"center"}
-                                            gap={1}
-                                        >
-                                            {pack.price}{" "}
-                                            <Text fontSize={"xs"}>DT</Text>
-                                        </Text>
-                                        <ButtonGroup spacing="2">
-                                            <Button
-                                                variant="ghost"
-                                                size={"sm"}
-                                                onClick={() => addToCart(pack)}
-                                            >
-                                                Add
-                                            </Button>
-                                            <Button
-                                                size={"sm"}
-                                                colorScheme="cyan"
-                                            >
-                                                Buy now
-                                            </Button>
-                                            <Button
-                                                size={"s"}
-                                                colorScheme="cyan"
-                                                onClick={() =>
-                                                    handleClickShow(pack)
-                                                }
-                                            >
-                                                Show
-                                            </Button>
-                                        </ButtonGroup>
-                                    </CardFooter>
-                                </Card>
-                            ))}
+                        {searchQuery.length === 0 && categoryQuery.length === 0
+                            ? packs.map((pack: any, index: number) => (
+                                  <Card
+                                      maxW="300px"
+                                      key={index}
+                                      bg={"var(--lvl1-darkcolor)"}
+                                      border={"var(--bordercolor) solid 1px "}
+                                      p={0}
+                                  >
+                                      <CardBody>
+                                          <Image
+                                              src={pack.img}
+                                              alt="Green double couch with wooden legs"
+                                              borderRadius="lg"
+                                              w={"100%"}
+                                              h={160}
+                                          />
+                                          <Stack mt="3" spacing="1">
+                                              <Heading size="md">
+                                                  {pack.title}
+                                              </Heading>
+                                              <Text
+                                                  color={"gray.300"}
+                                                  fontSize={"sm"}
+                                              >
+                                                  {pack.description}
+                                              </Text>
+                                              <Flex
+                                                  alignItems={"center"}
+                                                  gap={3}
+                                                  mt={3}
+                                              >
+                                                  <Image
+                                                      src={pack.usser.img}
+                                                      h={"40px"}
+                                                      w={"40px"}
+                                                      rounded={"50%"}
+                                                  />
+                                                  <Box>
+                                                      <Text>
+                                                          {pack.usser.name}
+                                                      </Text>
+                                                      <Text
+                                                          display={"flex"}
+                                                          alignItems={"center"}
+                                                          fontSize={"sm"}
+                                                          color={"yellow.400"}
+                                                          gap={1}
+                                                      >
+                                                          <FaStar />
+                                                          <FaStar />
+                                                          <FaStar />
+                                                          <FaStar />
+                                                          <FaStar />
+                                                      </Text>
+                                                  </Box>
+                                              </Flex>
+                                          </Stack>
+                                      </CardBody>
+                                      <CardFooter
+                                          bg={"var(--lvl2-darkcolor)"}
+                                          justifyContent={"space-between"}
+                                          alignItems={"center"}
+                                          m={"-10px 10px 10px 10px"}
+                                          rounded={10}
+                                      >
+                                          <Text
+                                              color="cyan.200"
+                                              fontSize="2xl"
+                                              display={"flex"}
+                                              alignItems={"center"}
+                                              gap={1}
+                                          >
+                                              {pack.price}{" "}
+                                              <Text fontSize={"xs"}>DT</Text>
+                                          </Text>
+                                          <ButtonGroup spacing="2">
+                                              <Button
+                                                  variant="ghost"
+                                                  size={"sm"}
+                                                  onClick={() =>
+                                                      addToCart(pack)
+                                                  }
+                                              >
+                                                  Add
+                                              </Button>
+                                              <Button
+                                                  size={"sm"}
+                                                  colorScheme="cyan"
+                                              >
+                                                  Buy now
+                                              </Button>
+                                              <Button
+                                                  size={"s"}
+                                                  colorScheme="cyan"
+                                                  onClick={() =>
+                                                      handleClickShow(pack)
+                                                  }
+                                              >
+                                                  Show
+                                              </Button>
+                                          </ButtonGroup>
+                                      </CardFooter>
+                                  </Card>
+                              ))
+                            : searchResults.map((pack: any, index: number) => (
+                                  <Card
+                                      maxW="300px"
+                                      key={index}
+                                      bg={"var(--lvl1-darkcolor)"}
+                                      border={"var(--bordercolor) solid 1px "}
+                                      p={0}
+                                  >
+                                      <CardBody>
+                                          <Image
+                                              src={pack.img}
+                                              alt="Green double couch with wooden legs"
+                                              borderRadius="lg"
+                                              w={"100%"}
+                                              h={160}
+                                          />
+                                          <Stack mt="3" spacing="1">
+                                              <Heading size="md">
+                                                  {pack.title}
+                                              </Heading>
+                                              <Text
+                                                  color={"gray.300"}
+                                                  fontSize={"sm"}
+                                              >
+                                                  {pack.description}
+                                              </Text>
+                                              <Flex
+                                                  alignItems={"center"}
+                                                  gap={3}
+                                                  mt={3}
+                                              >
+                                                  <Image
+                                                      src={pack.usser.img}
+                                                      h={"40px"}
+                                                      w={"40px"}
+                                                      rounded={"50%"}
+                                                  />
+                                                  <Box>
+                                                      <Text>
+                                                          {pack.usser.name}
+                                                      </Text>
+                                                      <Text
+                                                          display={"flex"}
+                                                          alignItems={"center"}
+                                                          fontSize={"sm"}
+                                                          color={"yellow.400"}
+                                                          gap={1}
+                                                      >
+                                                          <FaStar />
+                                                          <FaStar />
+                                                          <FaStar />
+                                                          <FaStar />
+                                                          <FaStar />
+                                                      </Text>
+                                                  </Box>
+                                              </Flex>
+                                          </Stack>
+                                      </CardBody>
+                                      <CardFooter
+                                          bg={"var(--lvl2-darkcolor)"}
+                                          justifyContent={"space-between"}
+                                          alignItems={"center"}
+                                          m={"-10px 10px 10px 10px"}
+                                          rounded={10}
+                                      >
+                                          <Text
+                                              color="cyan.200"
+                                              fontSize="2xl"
+                                              display={"flex"}
+                                              alignItems={"center"}
+                                              gap={1}
+                                          >
+                                              {pack.price}{" "}
+                                              <Text fontSize={"xs"}>DT</Text>
+                                          </Text>
+                                          <ButtonGroup spacing="2">
+                                              <Button
+                                                  variant="ghost"
+                                                  size={"sm"}
+                                                  onClick={() =>
+                                                      addToCart(pack)
+                                                  }
+                                              >
+                                                  Add
+                                              </Button>
+                                              <Button
+                                                  size={"sm"}
+                                                  colorScheme="cyan"
+                                              >
+                                                  Buy now
+                                              </Button>
+                                              <Button
+                                                  size={"s"}
+                                                  colorScheme="cyan"
+                                                  onClick={() =>
+                                                      handleClickShow(pack)
+                                                  }
+                                              >
+                                                  Show
+                                              </Button>
+                                          </ButtonGroup>
+                                      </CardFooter>
+                                  </Card>
+                              ))}
                     </Wrap>
                 </Flex>
             </Flex>
