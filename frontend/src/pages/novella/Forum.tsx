@@ -58,20 +58,16 @@ const Forum = () => {
         try {
             setAddingComment(true);
             const urlParts = window.location.pathname.split("/");
-            const lastId = urlParts[urlParts.length - 2]; // Assuming the ID is the second last part of the URL
+            const lastId = urlParts[urlParts.length - 2]; 
             const token = localStorage.getItem("token"); // Récupérer le token JWT depuis le stockage local
             // Assurez-vous que novella_id est un nombre entier
             const novellaId = parseInt(lastId);
-            if (isNaN(novellaId)) {
-                throw new Error("Invalid novella ID");
-            }
 
             const commentData = {
                 novella_id: novellaId,
                 content: newComment,
             };
 
-            // Utilisez la méthode post d'axios pour envoyer la requête POST
             const response = await axios.post(
                 `http://127.0.0.1:8000/api/Addcomments`,
                 commentData,

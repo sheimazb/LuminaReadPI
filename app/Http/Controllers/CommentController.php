@@ -17,21 +17,22 @@ class CommentController extends Controller
  
     public function addComment(Request $request)
     {
-        // Vérifier si l'utilisateur est authentifié
-        $user = Auth::user();
-        if (!$user) {
-            return response()->json(['message' => 'User not authenticated'], 401);
+      try{
+        if (!Auth::check()) {
+            return response()->json(['success' => false, 'message' => 'User not authenticated'], 401);
         }
-
-
+        $userID=Auth::id();
         $comment = new Comment();
+        $comment->user_id = $userID;
         $comment->novella_id = $request->novella_id;
-        $comment->user_id = $user->id; // Remplir l'identifiant de l'utilisateur
         $comment->content = $request->content;
         $comment->save();
 
         return response()->json(['message' => 'Comment created successfully'], 201);
+    }catch(Exception $e){
+    return response()->json(['message' =>$e->getMessage()],500);
     }
+}
 
     public function getCommentsByNovellaId($novella_id)
     {
