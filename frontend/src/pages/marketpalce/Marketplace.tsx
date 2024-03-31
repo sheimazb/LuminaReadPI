@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
     Box,
     Flex,
@@ -18,39 +19,38 @@ import {
     Select,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { FaFilter, FaList, FaSearch, FaStar } from "react-icons/fa";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import AddPackage from "../addpackage/AddPackage";
 
 const Marketplace = () => {
     const toast = useToast();
     const navigate = useNavigate();
-
-    /**
-     * Search
-     */
-
-    const [searchQuery, setSearchQuery] = useState("");
-    const [categoryQuery, setCategoryQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
-    const [categoryFilterResults, setCategoryFilterResults] = useState([]);
+    const [searchValue, setSearchValue] = useState("");
+    const [categoryValue, setCategoryValue] = useState("");
+    const { search, category } = useParams();
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    
+    useEffect(() => {
+        setSearchValue(search || "");
+        setCategoryValue(category || "");
+    }, [search, category]);
+
     const handleSearch = async () => {
         try {
             const token = localStorage.getItem("token");
             let url = "http://127.0.0.1:8000/api/AllPack?";
-            if (searchQuery) {
-                url += `search=${searchQuery}`;
+            if (searchValue) {
+                url += `search=${searchValue}`;
             }
 
-            if (categoryQuery) {
-                if (searchQuery) {
-                    url += `&category=${categoryQuery}`;
+            if (categoryValue) {
+                if (searchValue) {
+                    url += `&category=${categoryValue}`;
                 } else {
-                    url += `category=${categoryQuery}`;
+                    url += `category=${categoryValue}`;
                 }
             }
 
@@ -60,22 +60,22 @@ const Marketplace = () => {
                     "Content-Type": "application/json",
                 },
             });
-            setSearchResults(response.data.packs); // Mettre à jour les résultats de la recherche
-            setCategoryFilterResults(response.data.packs); // Mettre à jour les résultats du filtre par catégorie
+            setSearchResults(response.data.packs);
+            setSearchParams({ search: searchValue, category: categoryValue });
         } catch (error) {
             console.error("Error fetching search results:", error);
+            toast({
+                title: "Error",
+                description: "An error occurred while fetching search results.",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
         }
     };
-    const handleChangeSearch = (e: any) => {
-        setSearchQuery(e.target.value);
-    };
-    
-
-    const handleChangeCategory = (e: any) => {
-        setCategoryQuery(e.target.value);
-    };
-    const handleFilterClick = () => {
-        handleSearch(); // Lancer la recherche lorsque le bouton de filtre est cliqué
+    const handleSearchFormSubmit = (e:any) => {
+        e.preventDefault(); 
+        handleSearch();
     };
 
     const [packs, setPacks] = useState([]);
@@ -83,9 +83,10 @@ const Marketplace = () => {
         const storedCart = localStorage.getItem("cart");
         return storedCart ? JSON.parse(storedCart) : [];
     });
-    const handleClickShow = (pack: any): void => {
+    const handleClickShow = (pack:any) => {
         navigate(`/package/${pack.id}`);
     };
+
     useEffect(() => {
         (async () => await loadPacks())();
     }, []);
@@ -99,8 +100,8 @@ const Marketplace = () => {
         }
     }
 
-    const addToCart = (pack: any) => {
-        const packageExists = cart.some((item: any) => item.id === pack.id);
+    const addToCart = (pack:any) => {
+        const packageExists = cart.some((item:any) => item.id === pack.id);
 
         if (packageExists) {
             console.log("Package already exists in the cart.");
@@ -161,13 +162,15 @@ const Marketplace = () => {
                 </Box>
             </Flex>
             <Flex p={4} flexDirection={"column"} gap={3}>
+            <form onSubmit={handleSearchFormSubmit}>
                 <Flex alignItems={"center"} gap={3}>
                     <InputGroup size="md">
                         <Input
                             borderColor={"gray.700"}
                             placeholder="Search section"
                             name="search"
-                            onChange={handleChangeSearch}
+                            value={searchValue}
+                            onChange={(e) => setSearchValue(e.target.value)}
                         />
                         <InputRightElement>
                             <Button
@@ -185,8 +188,9 @@ const Marketplace = () => {
                         size="sm"
                         borderColor={"gray.700"}
                         name="category"
-                        onChange={handleChangeCategory} // Mise à jour de la catégorie sur changement
-                        placeholder="Category" // Texte de placeholder
+                        placeholder="Category"
+                        value={categoryValue}
+                        onChange={(e) => setCategoryValue(e.target.value)}
                     >
                         <option value="">All</option>
                         {[...new Set(packs.map((pack) => pack.category))].map(
@@ -199,8 +203,7 @@ const Marketplace = () => {
                     </Select>
                     <Button
                         size={"sm"}
-                        type="button" // Ajoutez type="button" pour éviter le comportement par défaut du formulaire
-                        onClick={handleFilterClick} // Utilisez handleFilterClick pour gérer le clic
+                        type="submit" // Ajoutez type="button" pour éviter le comportement par défaut du formulaire
                     >
                         <FaFilter />
                     </Button>
@@ -208,6 +211,8 @@ const Marketplace = () => {
                         <FaList />
                     </Button>
                 </Flex>
+                </form>
+
                 <Flex gap={3}>
                     <Flex
                         w={"270px"}
@@ -219,8 +224,8 @@ const Marketplace = () => {
                     </Flex>
 
                     <Wrap w={"calc(100vw - 300px)"} p={2}>
-                        {searchQuery.length === 0 && categoryQuery.length === 0
-                            ? packs.map((pack: any, index: number) => (
+                        {searchValue.length === 0 && categoryValue.length === 0
+                            ? packs.map((pack:any, index:any) => (
                                   <Card
                                       maxW="300px"
                                       key={index}
@@ -324,7 +329,7 @@ const Marketplace = () => {
                                       </CardFooter>
                                   </Card>
                               ))
-                            : searchResults.map((pack: any, index: number) => (
+                            : searchResults.map((pack:any, index:number) => (
                                   <Card
                                       maxW="300px"
                                       key={index}

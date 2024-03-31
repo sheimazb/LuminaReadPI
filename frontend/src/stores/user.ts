@@ -29,6 +29,7 @@ export const useUserStore = create<UserStore>((set) => ({
                 const { id, auth_token, name } = response.data.data;
                 console.log("Token:", auth_token);
                 localStorage.setItem("token", auth_token);
+                localStorage.setItem("id", id);
                 set({ user: { name, id } });
             }
         } catch (error) {

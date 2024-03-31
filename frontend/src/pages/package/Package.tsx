@@ -23,7 +23,8 @@ const Package = () => {
     const navigate = useNavigate();
     const [rating, setRating] = useState(0);
     const { id } = useParams(); // Obtenir le paramètre 'id' depuis l'URL
-
+    const userId = localStorage.getItem("id");
+    const [packUserId, setPackUserId] = useState(null);
     const handleNavigate = () => {
         navigate(`/addnovella/${id}`); // Naviguer vers AddNovella avec l'ID du pack
     };
