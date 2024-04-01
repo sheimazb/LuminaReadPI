@@ -26,7 +26,7 @@ const Package = () => {
     const userId = localStorage.getItem("id");
     const [packUserId, setPackUserId] = useState(null);
     const handleNavigate = () => {
-        navigate(`/addnovella/${id}`); // Naviguer vers AddNovella avec l'ID du pack
+        navigate(`/addnovella/${id}`);
     };
 
     const handleRatingChange = (event:any) => {
@@ -34,7 +34,7 @@ const Package = () => {
     };
 
     const handleSubmitRating = () => {
-        const token = localStorage.getItem("token"); // Récupérer le token JWT depuis le stockage local
+        const token = localStorage.getItem("token"); 
 
         axios
             .post(
@@ -48,7 +48,7 @@ const Package = () => {
                 }
             )
             .then((response) => {
-                console.log(response.data); // Afficher la réponse du backend
+                console.log(response.data);
             })
             .catch((error) => {
                 console.error("Erreur lors de l'envoi du rating:", error);
@@ -60,7 +60,7 @@ const Package = () => {
             try {
                 const result = await axios.get(
                     `http://127.0.0.1:8000/api/pack/${id}/novellas`
-                ); // Utiliser les littéraux de gabarits pour inclure 'id' dans l'URL
+                ); 
                 setNovellas(result.data.novellas);
             } catch (error) {
                 console.error("Erreur lors du chargement des novellas:", error);
@@ -69,6 +69,23 @@ const Package = () => {
 
         loadNovellas();
     }, [id]); // Inclure 'id' en tant que dépendance dans useEffect pour déclencher l'effet lorsque 'id' change
+ 
+    //get user id de pack d'aprés le pack id que se trouve dans l URL
+    useEffect(() => {
+        const loadUserID = async () => {
+            try {
+                const result = await axios.get(
+                    `http://127.0.0.1:8000/api/packsBy/${id}`
+                ); 
+                setPackUserId(result.data.pack.user_id);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        loadUserID();
+    }, [id])
+
 
     const handleCheckNovella = (novella:any):void => {
         navigate(`/novella/${novella.id}`);
@@ -133,10 +150,11 @@ const Package = () => {
                         </Flex>
                     </Box>
                     <Box position={"absolute"} mt={5} bottom={4} right={2}>
-    <Button onClick={handleNavigate}>
-        Add Novella
-    </Button>
-
+    {userId == packUserId && (
+        <Button onClick={handleNavigate}>
+            Add Novella
+        </Button>
+    )}
     <Button ml={3} colorScheme="cyan" size={"sm"}>
         Buy This Pack
     </Button>

@@ -27,7 +27,7 @@ class PacksController extends Controller
             $query->where('title', 'like', "$search%");
         }
 
-       /* if ($request->has('searchByDescription')) { // Correction: changer 'searchByTitle' à 'searchByDescription'
+        /* if ($request->has('searchByDescription')) { // Correction: changer 'searchByTitle' à 'searchByDescription'
             $search = $request->input('searchByDescription');
             $query->where('description', 'like', "$search%");
         }*/
@@ -167,5 +167,17 @@ class PacksController extends Controller
         $packNames = Pack::whereIn('id', $packIds)->pluck('title');
 
         return response()->json(['pack_names' => $packNames]);
+    }
+    /**
+     * find pack by ID 
+     */
+    public function findPackById($id)
+    {
+        try {
+            $pack = Pack::findOrFail($id);
+            return response()->json(['pack' => $pack]);
+        } catch (Exception $exception) {
+            return response()->json(['message' => $exception->getMessage()], 500);
+        }
     }
 }
