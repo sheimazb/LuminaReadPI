@@ -8,7 +8,7 @@ export interface Item {
     id: number;
     title: string;
     category: string;
-    price: number | undefined; // Change the type to handle possible null values
+    price: number | undefined; 
 }
 
 const CartContent: React.FC = () => {

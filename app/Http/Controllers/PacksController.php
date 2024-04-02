@@ -100,7 +100,9 @@ class PacksController extends Controller
         }
     }
     /*
+    
      * test filter pack
+     * 
      * 
      
     public function filterByCategory(Request $request)

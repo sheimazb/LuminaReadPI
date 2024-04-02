@@ -84,16 +84,6 @@ Route::get('/packsBy/{id}', [PacksController::class, 'findPackById']);
     Route::get('/sse', [SseController::class, 'SEETEST']);
 
     Route::post('/upload', [PacksController::class, 'upload']);
-    Route::post('/send-email', function (Request $request) {
-        // Retrieve user email from request
-        $email = $request->input('email');
-    
-        // Send email
-        Mail::to($email)->send(new OrderConfirmation());
-    
-        return response()->json(['message' => 'Email sent successfully']);
-    });
-
 });
 
 // Protected route to retrieve authenticated user details
