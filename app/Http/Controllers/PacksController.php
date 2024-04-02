@@ -32,7 +32,7 @@ class PacksController extends Controller
             $query->where('title', 'like', "$search%");
         }
 
-       /* if ($request->has('searchByDescription')) { // Correction: changer 'searchByTitle' à 'searchByDescription'
+        /* if ($request->has('searchByDescription')) { // Correction: changer 'searchByTitle' à 'searchByDescription'
             $search = $request->input('searchByDescription');
             $query->where('description', 'like', "$search%");
         }*/
@@ -147,7 +147,7 @@ class PacksController extends Controller
     }
 
     /**
-     * Send packs array 
+     *  packs order 
      */
     public function order(Request $request)
     {
@@ -156,14 +156,21 @@ class PacksController extends Controller
             'packs_ids' => 'required|array',
             'packs_ids.*' => 'integer',
         ]);
-
+    
         $order = Order::create([
             'user_id' => $data['user_id'],
             'packs_ids' => $data['packs_ids'],
         ]);
-
+    
+        // Mise à jour du statut des packs commandés
+        foreach ($data['packs_ids'] as $pack_id) {
+            Pack::where('id', $pack_id)->update(['packStatus' => 1]);
+        }
+    
+       
         return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
     }
+    
 
     public function getPackFromOrder($orderId)
     {
@@ -173,5 +180,17 @@ class PacksController extends Controller
         $packNames = Pack::whereIn('id', $packIds)->pluck('title');
 
         return response()->json(['pack_names' => $packNames]);
+    }
+    /**
+     * find pack by ID 
+     */
+    public function findPackById($id)
+    {
+        try {
+            $pack = Pack::findOrFail($id);
+            return response()->json(['pack' => $pack]);
+        } catch (Exception $exception) {
+            return response()->json(['message' => $exception->getMessage()], 500);
+        }
     }
 }

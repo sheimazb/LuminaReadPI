@@ -34,13 +34,9 @@ const Marketplace = () => {
     const [maxPrice, setMaxPrice] = useState("");
     const { search, category } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
-    const handleMinPriceChange = (event) => {
-        setMinPrice(event.target.value);
-    };
+  
+    const id = localStorage.getItem('id');
 
-    const handleMaxPriceChange = (event) => {
-        setMaxPrice(event.target.value);
-    };
     useEffect(() => {
         setSearchValue(search || "");
         setCategoryValue(category || "");
@@ -61,15 +57,6 @@ const Marketplace = () => {
                     url += `category=${categoryValue}`;
                 }
             }
-               if (minPrice !== "") {
-            url += `minPrice=${minPrice}&`;
-        }
-
-        // Include maximum price range parameter if provided
-        if (maxPrice !== "") {
-            url += `maxPrice=${maxPrice}&`;
-        }
-
             const response = await axios.get(url, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -243,7 +230,7 @@ const Marketplace = () => {
                         {searchValue.length === 0 && categoryValue.length === 0
                             ? packs.map((pack:any, index:any) => (
                                   <Card
-                                      maxW="300px"
+                                      minW="300px"
                                       key={index}
                                       bg={"var(--lvl1-darkcolor)"}
                                       border={"var(--bordercolor) solid 1px "}
@@ -317,21 +304,17 @@ const Marketplace = () => {
                                               <Text fontSize={"xs"}>DT</Text>
                                           </Text>
                                           <ButtonGroup spacing="2">
-                                              <Button
+                                          {pack.packStatus==0 &&(                                            <Button
                                                   variant="ghost"
+                                              
                                                   size={"sm"}
                                                   onClick={() =>
                                                       addToCart(pack)
                                                   }
                                               >
                                                   Add
-                                              </Button>
-                                              <Button
-                                                  size={"sm"}
-                                                  colorScheme="cyan"
-                                              >
-                                                  Buy now
-                                              </Button>
+                                              </Button>)}
+                                            
                                               <Button
                                                   size={"s"}
                                                   colorScheme="cyan"
