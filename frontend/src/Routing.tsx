@@ -13,6 +13,7 @@ import TextReader from "./pages/TextReaderSection/TextReader";
 import AddPackage from "./pages/addpackage/AddPackage";
 import AddNovella from "./pages/addnovella/AddNovella";
 import NovellaContent from "./pages/novella/NovellaContent";
+import ConfirmPurchase from "./pages/ConfirmPurchase/ConfirmPurchase";
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/TextReader/:id" element={<TextReader />} />
             <Route path="/AddNovella/:pack_id" element={<AddNovella />} />
             <Route path="/AddPackage" element={<AddPackage />} />
+            <Route path="/ConfirmPurchase" element={<ConfirmPurchase/>} />
             <Route path="/novella/:id/*" element={<Novella />}>
                 <Route path="" element={<Navigate to="forum" />} />
                 <Route path="read" element={<NovellaContent />} />

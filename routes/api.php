@@ -12,6 +12,9 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\TextController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SseController;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderConfirmation;
+
 
 
 /*
@@ -79,6 +82,16 @@ Route::middleware('api-header')->group(function () {
     Route::get('/sse', [SseController::class, 'SEETEST']);
 
     Route::post('/upload', [PacksController::class, 'upload']);
+    Route::post('/send-email', function (Request $request) {
+        // Retrieve user email from request
+        $email = $request->input('email');
+    
+        // Send email
+        Mail::to($email)->send(new OrderConfirmation());
+    
+        return response()->json(['message' => 'Email sent successfully']);
+    });
+
 });
 
 // Protected route to retrieve authenticated user details

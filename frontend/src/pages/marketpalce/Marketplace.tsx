@@ -30,9 +30,17 @@ const Marketplace = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [searchValue, setSearchValue] = useState("");
     const [categoryValue, setCategoryValue] = useState("");
+    const [minPrice, setMinPrice] = useState("");
+    const [maxPrice, setMaxPrice] = useState("");
     const { search, category } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
+    const handleMinPriceChange = (event) => {
+        setMinPrice(event.target.value);
+    };
 
+    const handleMaxPriceChange = (event) => {
+        setMaxPrice(event.target.value);
+    };
     useEffect(() => {
         setSearchValue(search || "");
         setCategoryValue(category || "");
@@ -53,6 +61,14 @@ const Marketplace = () => {
                     url += `category=${categoryValue}`;
                 }
             }
+               if (minPrice !== "") {
+            url += `minPrice=${minPrice}&`;
+        }
+
+        // Include maximum price range parameter if provided
+        if (maxPrice !== "") {
+            url += `maxPrice=${maxPrice}&`;
+        }
 
             const response = await axios.get(url, {
                 headers: {

@@ -1,46 +1,57 @@
-import { useEffect, useState } from "react";
-import { Box, Flex, Text, Divider, Button, Image } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { Box, Flex, Text, Divider, Button, Image , useToast} from "@chakra-ui/react";
 import { MdDelete } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
-interface Item {
+export interface Item {
     img: string | undefined;
     id: number;
     title: string;
     category: string;
-    price: number;
+    price: number | undefined; // Change the type to handle possible null values
 }
 
 const CartContent: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
+    const navigate = useNavigate();
 
+    const toast = useToast();
     useEffect(() => {
         const storedItems = localStorage.getItem("cart");
         if (storedItems) {
             const parsedItems: Item[] = JSON.parse(storedItems);
             const itemsWithParsedPrice = parsedItems.map((item) => ({
                 ...item,
-                price: parseFloat(item.price.toString()), // Parse the price to a number
+                price: typeof item.price === 'string' ? parseFloat(item.price) : item.price || 0, // Initialize price to 0 if null or undefined
             }));
             setItems(itemsWithParsedPrice);
         }
     }, []);
 
     const totalPrice = items.reduce((acc, item) => {
-        const price =
-            typeof item.price === "number"
-                ? item.price
-                : parseFloat(item.price as string);
-        if (!isNaN(price)) {
-            // Use Number() to ensure price is treated as a number
-            return acc + Number(price);
-        }
-        return acc;
+        const price = item.price || 0; // Initialize price to 0 if null or undefined
+        return acc + price;
     }, 0);
 
     const removeFromCart = (id: number) => {
         const updatedItems = items.filter((item) => item.id !== id);
         setItems(updatedItems);
         localStorage.setItem("cart", JSON.stringify(updatedItems));
+    };
+
+    const confirmPurchase = () => {
+        const isLoggedIn = localStorage.getItem("token");
+        if (isLoggedIn) {
+            navigate("/ConfirmPurchase");
+        } else {
+            toast({
+                title: "Please log in",
+                description: "You need to log in to confirm your purchase.",
+                status: "info",
+                duration: 3000, 
+                isClosable: true, 
+            });
+        }
     };
 
     return (
@@ -84,7 +95,7 @@ const CartContent: React.FC = () => {
                                     alignItems={"center"}
                                     gap={1}
                                 >
-                                    {item.price.toFixed(2)}{" "}
+                                    {item.price ? item.price.toFixed(2) : "0.00"}{" "}
                                     <Text fontSize={"xs"} color={"gray.400"}>
                                         DT
                                     </Text>
@@ -113,7 +124,7 @@ const CartContent: React.FC = () => {
                         ${totalPrice.toFixed(2)}
                     </Text>
                 </Flex>
-                <Button mt={4} colorScheme="blue" size="md" w={"100%"}>
+                <Button mt={4} colorScheme="blue" size="md" w={"100%"} onClick={confirmPurchase} >
                     Confirm Purchase
                 </Button>
             </Box>
