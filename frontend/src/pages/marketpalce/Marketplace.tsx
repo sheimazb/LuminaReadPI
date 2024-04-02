@@ -32,6 +32,7 @@ const Marketplace = () => {
     const [categoryValue, setCategoryValue] = useState("");
     const { search, category } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
+    const id = localStorage.getItem('id');
 
     useEffect(() => {
         setSearchValue(search || "");
@@ -227,7 +228,7 @@ const Marketplace = () => {
                         {searchValue.length === 0 && categoryValue.length === 0
                             ? packs.map((pack:any, index:any) => (
                                   <Card
-                                      maxW="300px"
+                                      minW="300px"
                                       key={index}
                                       bg={"var(--lvl1-darkcolor)"}
                                       border={"var(--bordercolor) solid 1px "}
@@ -301,21 +302,17 @@ const Marketplace = () => {
                                               <Text fontSize={"xs"}>DT</Text>
                                           </Text>
                                           <ButtonGroup spacing="2">
-                                              <Button
+                                          {pack.packStatus==0 &&(                                            <Button
                                                   variant="ghost"
+                                              
                                                   size={"sm"}
                                                   onClick={() =>
                                                       addToCart(pack)
                                                   }
                                               >
                                                   Add
-                                              </Button>
-                                              <Button
-                                                  size={"sm"}
-                                                  colorScheme="cyan"
-                                              >
-                                                  Buy now
-                                              </Button>
+                                              </Button>)}
+                                            
                                               <Button
                                                   size={"s"}
                                                   colorScheme="cyan"
