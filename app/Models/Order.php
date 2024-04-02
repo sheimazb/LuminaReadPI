@@ -15,7 +15,7 @@ class Order extends Model
       
     ];
     protected $casts = [
-        'packs_ids' => 'array', // Cast packs_ids attribute to array when retrieving from / storing to database
+        'packs_ids' => 'array', 
     ];
 
     public function user(){

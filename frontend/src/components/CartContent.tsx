@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Flex, Text, Divider, Button, Image } from "@chakra-ui/react";
+import { Box, Flex, Text, Divider, Button, Image, useToast } from "@chakra-ui/react";
 import { MdDelete } from "react-icons/md";
 
 interface Item {
@@ -12,6 +12,8 @@ interface Item {
 
 const CartContent: React.FC = () => {
     const [items, setItems] = useState<Item[]>([]);
+    const toast = useToast();
+    const id= localStorage.getItem('id');
 
     useEffect(() => {
         const storedItems = localStorage.getItem("cart");
@@ -23,6 +25,8 @@ const CartContent: React.FC = () => {
             }));
             setItems(itemsWithParsedPrice);
         }
+
+       
     }, []);
 
     const totalPrice = items.reduce((acc, item) => {
@@ -41,6 +45,46 @@ const CartContent: React.FC = () => {
         const updatedItems = items.filter((item) => item.id !== id);
         setItems(updatedItems);
         localStorage.setItem("cart", JSON.stringify(updatedItems));
+    };
+
+    const order = async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: id,
+                    packs_ids: items.map(item => item.id), // Envoyer tous les IDs des packs dans le panier
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to create order');
+            }
+
+            const orderData = await response.json();
+            console.log('Order created successfully:', orderData);
+            toast({
+                title: "Order created successfully",
+                status: "success",
+                duration: 3000,
+                isClosable: true,
+            });
+
+            // Effacer le panier après la commande
+            localStorage.removeItem("cart");
+            setItems([]);
+        } catch (error:any) {
+            console.error('Error creating order:', error);
+            toast({
+                title: "Error creating order",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
     };
 
     return (
@@ -113,7 +157,7 @@ const CartContent: React.FC = () => {
                         ${totalPrice.toFixed(2)}
                     </Text>
                 </Flex>
-                <Button mt={4} colorScheme="blue" size="md" w={"100%"}>
+                <Button mt={4} colorScheme="blue" size="md" w={"100%"} onClick={order}>
                     Confirm Purchase
                 </Button>
             </Box>

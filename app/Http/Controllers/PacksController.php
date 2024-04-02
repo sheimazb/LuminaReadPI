@@ -141,7 +141,7 @@ class PacksController extends Controller
     }
 
     /**
-     * Send packs array 
+     *  packs order 
      */
     public function order(Request $request)
     {
@@ -150,14 +150,21 @@ class PacksController extends Controller
             'packs_ids' => 'required|array',
             'packs_ids.*' => 'integer',
         ]);
-
+    
         $order = Order::create([
             'user_id' => $data['user_id'],
             'packs_ids' => $data['packs_ids'],
         ]);
-
+    
+        // Mise à jour du statut des packs commandés
+        foreach ($data['packs_ids'] as $pack_id) {
+            Pack::where('id', $pack_id)->update(['packStatus' => 1]);
+        }
+    
+       
         return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
     }
+    
 
     public function getPackFromOrder($orderId)
     {

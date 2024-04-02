@@ -17,6 +17,7 @@ class Pack extends Model
         'img',
         'langue',
         'price',
+        'packStatus',
     ];
     use HasFactory;
     public function usser(){

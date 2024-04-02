@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('img');
             $table->string('langue');
             $table->string('price');
+            $table->boolean('packStatus');
             $table->timestamps();
         });
     }
