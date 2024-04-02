@@ -45,8 +45,8 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const { logout } = useUserStore();
     const [notifications, setNotifications] = useState<Notification[]>([]);
-
     const isLoggedIn = localStorage.getItem("token") !== null;
+    const id =localStorage.getItem('id');
 
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
@@ -55,7 +55,7 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
     const fetchNotifications = async () => {
         try {
             const response = await fetch(
-                "http://127.0.0.1:8000/api/notifications/6"
+                "http://127.0.0.1:8000/api/notifications/"+id
             );
             const data = await response.json();
             setNotifications(data);
@@ -157,7 +157,12 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
 
             <Flex alignItems={"center"} gap={3}>
              
-               
+            <IconButton
+                    size={"sm"}
+                    icon={colorMode === "dark" ? <FaSun /> : <FaMoon />}
+                    onClick={toggleColorMode}
+                    aria-label="Toggle Dark Mode"
+                />
                 {isLoggedIn ? (
                     <Flex gap={3} alignItems={"center"}>
                         <Menu>
@@ -344,12 +349,6 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                     </Flex>
                 ) : (
                     <Flex gap={3}>
-                         <IconButton
-                    size={"sm"}
-                    icon={colorMode === "dark" ? <FaSun /> : <FaMoon />}
-                    onClick={toggleColorMode}
-                    aria-label="Toggle Dark Mode"
-                />
                         <NavLink to="/Auth/login">
                             <Button size={"sm"}>Login</Button>
                         </NavLink>

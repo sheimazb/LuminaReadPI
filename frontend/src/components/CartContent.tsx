@@ -72,10 +72,11 @@ const CartContent: React.FC = () => {
                 duration: 3000,
                 isClosable: true,
             });
-
             // Effacer le panier après la commande
             localStorage.removeItem("cart");
             setItems([]);
+            await addNotification();
+
         } catch (error:any) {
             console.error('Error creating order:', error);
             toast({
@@ -86,6 +87,37 @@ const CartContent: React.FC = () => {
             });
         }
     };
+
+    const addNotification = async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/add-notification/' + id, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    content: "Votre commande a été passée avec succès.",
+                    seen: false,
+                }),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to add notification');
+            }
+    
+            const responseData = await response.json();
+            console.log('Notification added successfully:', responseData);
+        } catch (error:any) {
+            console.error('Error adding notification:', error);
+            toast({
+                title: "Error adding notification",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    };
+
 
     return (
         <Flex
