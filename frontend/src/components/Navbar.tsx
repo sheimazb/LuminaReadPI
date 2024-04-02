@@ -55,7 +55,7 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
     const fetchNotifications = async () => {
         try {
             const response = await fetch(
-                "http://127.0.0.1:8000/api/notifications/1"
+                "http://127.0.0.1:8000/api/notifications/6"
             );
             const data = await response.json();
             setNotifications(data);
@@ -156,34 +156,8 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
             </Flex>
 
             <Flex alignItems={"center"} gap={3}>
-                <Menu>
-                    <MenuButton
-                        as={Button}
-                        size={"sm"}
-                        position="relative"
-                        onClick={toggleDrawer}
-                    >
-                        <IoMdCart />
-                        {cartItems.length > 0 && (
-                            <Badge
-                                position="absolute"
-                                top="-5px"
-                                right="-5px"
-                                colorScheme="red"
-                                borderRadius="full"
-                                px="2"
-                            >
-                                {cartItems.length}
-                            </Badge>
-                        )}
-                    </MenuButton>
-                </Menu>
-                <IconButton
-                    size={"sm"}
-                    icon={colorMode === "dark" ? <FaSun /> : <FaMoon />}
-                    onClick={toggleColorMode}
-                    aria-label="Toggle Dark Mode"
-                />
+             
+               
                 {isLoggedIn ? (
                     <Flex gap={3} alignItems={"center"}>
                         <Menu>
@@ -213,6 +187,28 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                                     </Badge>
                                 )}
                             </MenuButton>
+                            <Menu>
+                    <MenuButton
+                        as={Button}
+                        size={"sm"}
+                        position="relative"
+                        onClick={toggleDrawer}
+                    >
+                        <IoMdCart />
+                        {cartItems.length > 0 && (
+                            <Badge
+                                position="absolute"
+                                top="-5px"
+                                right="-5px"
+                                colorScheme="red"
+                                borderRadius="full"
+                                px="2"
+                            >
+                                {cartItems.length}
+                            </Badge>
+                        )}
+                    </MenuButton>
+                </Menu>
                             <MenuList
                                 style={{
                                     minWidth: "unset",
@@ -348,6 +344,12 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                     </Flex>
                 ) : (
                     <Flex gap={3}>
+                         <IconButton
+                    size={"sm"}
+                    icon={colorMode === "dark" ? <FaSun /> : <FaMoon />}
+                    onClick={toggleColorMode}
+                    aria-label="Toggle Dark Mode"
+                />
                         <NavLink to="/Auth/login">
                             <Button size={"sm"}>Login</Button>
                         </NavLink>
