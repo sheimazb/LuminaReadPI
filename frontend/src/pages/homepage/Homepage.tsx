@@ -1,14 +1,36 @@
 import { useState } from "react";
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import {
+    Box,
+    Button,
+    Center,
+    Flex,
+    HStack,
+    Link,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    PinInput,
+    PinInputField,
+    Text,
+    useDisclosure,
+} from "@chakra-ui/react";
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
+import { FaHandPeace } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
-
+import { IoIosArrowForward } from "react-icons/io";
 import axios from "axios";
 
 const Homepage = () => {
     const [code, setCode] = useState(null); // State to store the generated code
     const navigate = useNavigate();
-
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [showCreateFields, setShowCreateFields] = useState(false);
+    const onCreateOneClick = () => setShowCreateFields(true);
+    const EnterModeOnClick = () => setShowCreateFields(false);
     const handleAddText = async () => {
         try {
             const response = await axios.post(
@@ -55,15 +77,161 @@ const Homepage = () => {
                     </Text>
                     <Box textAlign={"center"}>
                         <Button
-                            onClick={handleAddText}
                             colorScheme="cyan"
                             variant="outline"
                             mt={10}
                             rounded={20}
                             mr={2}
+                            onClick={onOpen}
                         >
                             Text Reader
                         </Button>
+
+                        <Modal isOpen={isOpen} onClose={onClose}>
+                            <ModalOverlay />
+                            <ModalContent mt={"10%"} minW={'650px'}>
+                                <ModalHeader>
+                                    <Flex gap={3} alignItems={"center"}>
+                                        <Text
+                                        color={'blue.200'}
+                                        >Welcome my frined</Text>
+                                        <FaHandPeace
+                                            color="yellow"
+                                            fontSize={"20"}
+                                        />
+                                    </Flex>
+                                </ModalHeader>
+                                <ModalCloseButton />
+                                <ModalBody>
+                                    <Flex
+                                        flexDirection={"column"}
+                                        gap={3}
+                                        textAlign={"justify"}
+                                    >
+                                        <Text>
+                                            {" "}
+                                            We can assist you in uploading and
+                                            composing any text you desire, and
+                                            also provide support for reading it
+                                            aloud using intelligent voice
+                                            technology.
+                                        </Text>
+                                        <Text color={"gray.400"}>
+                                            To access, enter your PIN code. If
+                                            you don't have one, you can create
+                                            it
+                                        </Text>
+
+                                        {!showCreateFields ? (
+                                            <form>
+                                                <Flex
+                                                    direction={"column"}
+                                                    gap={3}
+                                                    mt={20}
+                                                >
+                                                    <HStack
+                                                        justifyContent={
+                                                            "center"
+                                                        }
+                                                    >
+                                                        <PinInput>
+                                                            <PinInputField type="password" />
+                                                            <PinInputField type="password" />
+                                                            <PinInputField type="password" />
+                                                            <PinInputField type="password" />
+                                                        </PinInput>
+                                                    </HStack>
+
+                                                    <Link
+                                                        textAlign={"center"}
+                                                        color={"cyan.300"}
+                                                        onClick={
+                                                            onCreateOneClick
+                                                        }
+                                                    >
+                                                        Create one ?
+                                                    </Link>
+                                                </Flex>
+                                            </form>
+                                        ) : (
+                                            <form>
+                                                <Flex
+                                                    direction={"column"}
+                                                    gap={3}
+                                                    mt={5}
+
+                                                >
+                                                    <Text>
+                                                        Create your personnel
+                                                        code
+                                                    </Text>
+                                                    <HStack
+                                                        justifyContent={
+                                                            "center"
+                                                        }
+                                                    >
+                                                        <PinInput>
+                                                            <PinInputField type="password" />
+                                                            <PinInputField type="password" />
+                                                            <PinInputField type="password" />
+                                                            <PinInputField type="password" />
+                                                        </PinInput>
+                                                    </HStack>
+                                                    <Text>
+                                                        Confirm your code
+                                                    </Text>
+                                                    <HStack
+                                                        justifyContent={
+                                                            "center"
+                                                        }
+                                                    >
+                                                        <PinInput>
+                                                            <PinInputField type="password" />
+                                                            <PinInputField type="password" />
+                                                            <PinInputField type="password" />
+                                                            <PinInputField type="password" />
+                                                        </PinInput>
+                                                    </HStack>
+                                                    <Link
+                                                        textAlign={"center"}
+                                                        color={"cyan.300"}
+                                                        onClick={
+                                                            EnterModeOnClick
+                                                        }
+                                                    >
+                                                        You already have one. ?
+                                                    </Link>
+                                                </Flex>
+                                            </form>
+                                        )}
+                                    </Flex>
+                                </ModalBody>
+
+                                <ModalFooter>
+                                {!showCreateFields ? (
+                                    <Button
+                                        variant="outline"
+                                        colorScheme="pink"
+                                        rounded={20}
+                                        rightIcon={<IoIosArrowForward />}
+                                        onClick={handleAddText}
+                                    >
+                                        Done
+                                    </Button>
+                                ):(
+                                    <Button
+                                    variant="outline"
+                                    colorScheme="pink"
+                                    rounded={20}
+                                    rightIcon={<IoIosArrowForward />}
+                                    onClick={handleAddText}
+                                >
+                                    Save
+                                </Button>
+                                )}
+                                </ModalFooter>
+                            </ModalContent>
+                        </Modal>
                         <Button
                             colorScheme="gray"
                             rightIcon={<FaRegArrowAltCircleRight />}

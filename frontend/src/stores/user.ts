@@ -19,6 +19,8 @@ interface LoginData {
     password: string;
 }
 
+
+
 export const useUserStore = create<UserStore>((set) => ({
     user: null,
     login: async (loginData: LoginData): Promise<void> => {
