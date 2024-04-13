@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->text('text_content');
             $table->string('code')->unique();
+            $table->string('pin');
             $table->timestamps();
         });
     }
