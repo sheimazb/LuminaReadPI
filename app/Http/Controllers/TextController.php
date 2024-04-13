@@ -17,11 +17,13 @@ class TextController extends Controller
     {
         $request->validate([
             'text_content' => 'required|string',
+            'pin'=>'required|string',
         ]);
 
         $text = Text::create([
             'text_content' => $request->text_content,
             'code' => $this->generateUniqueCode(),
+            'pin' => $request->pin,
         ]);
 
         return response()->json($text, 201);
@@ -92,4 +94,22 @@ class TextController extends Controller
         // For example:
         return uniqid();
     }
+
+    public function getTextByPin(Request $request)
+    {
+        $request->validate([
+            'pin' => 'required|string',
+        ]);
+
+        $pin = $request->pin;
+
+        $text = Text::where('pin', $pin)->first();
+
+        if (!$text) {
+            return response()->json(['error' => 'Text not found'], 404);
+        }
+
+        return response()->json($text);
+    }
+
 }

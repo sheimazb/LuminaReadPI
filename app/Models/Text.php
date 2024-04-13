@@ -24,5 +24,6 @@ class Text extends Model
     protected $fillable = [
         'text_content',
         'code',
+        'pin',
     ];
 }
