@@ -70,7 +70,9 @@ Route::get('/packsBy/{id}', [PacksController::class, 'findPackById']);
     Route::get('/list-novella', [NovellaController::class, 'index']);
     Route::get('/novellas/{id}', [NovellaController::class, 'FindNovellaByID']);
 
-    Route::post('/AddText', [TextController::class, 'AddText']);
+    Route::post('/AddText',    [TextController::class, 'AddText']);
+    Route::post('/LogCode',    [TextController::class, 'getTextByPin']);
+   
     Route::get('/text/{code}', [TextController::class, 'getTextByCode']);
     Route::put('/updateText/{code}', [TextController::class, 'updateText']);
 

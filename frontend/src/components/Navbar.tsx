@@ -121,17 +121,7 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                     </Text>
                 </NavLink>
                 <Flex gap="5px" alignItems={"end"}>
-                    <NavLink to="/TextReader/65e09a3ae44eb">
-                        <Button
-                            size={"sm"}
-                            color={"gray.400"}
-                            variant="ghost"
-                            gap={1}
-                        >
-                            Text Reader
-                            <BsStars color="cyan" />
-                        </Button>
-                    </NavLink>
+                
                     <NavLink to="/marketplace">
                         <Button
                             size={"sm"}
@@ -140,6 +130,7 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                             gap={1}
                         >
                             Market Place
+                            <BsStars color="cyan" />
                         </Button>
                     </NavLink>
                     <NavLink to="/package">
