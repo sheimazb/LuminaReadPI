@@ -22,6 +22,11 @@ class PacksController extends Controller
             $query->where('category', $category);
         }
 
+        if ($request->has('langue')) {
+            $langue = $request->input('langue');
+            $query->where('langue', $langue);
+        }
+        
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where('title', 'like', "$search%");
@@ -94,10 +99,12 @@ class PacksController extends Controller
             return response()->json(['error' => 'Aucune image n\'a été envoyée.'], 400);
         }
     }
-    /**
+    /*
+    
      * test filter pack
      * 
-     */
+     * 
+     
     public function filterByCategory(Request $request)
     {
         // Vérifier si des catégories sont spécifiées dans la requête
@@ -116,6 +123,7 @@ class PacksController extends Controller
             return response()->json(['error' => 'Veuillez spécifier au moins une catégorie.'], 400);
         }
     }
+    */
     /**
      *  get pack information by user id 
      * 

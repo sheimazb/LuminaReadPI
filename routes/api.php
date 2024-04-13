@@ -12,6 +12,9 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\TextController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SseController;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderConfirmation;
+
 
 
 /*

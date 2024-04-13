@@ -18,6 +18,9 @@ import {
     useToast,
     Select,
     Link,
+    TagLabel,
+    TagCloseButton,
+    Tag,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { FaFilter, FaList, FaSearch, FaStar } from "react-icons/fa";
@@ -30,9 +33,21 @@ import {
 } from "react-router-dom";
 import { CiCalendarDate } from "react-icons/ci";
 import AddPackage from "../addpackage/AddPackage";
-import { BsArrowRight } from "react-icons/bs";
+import { BsArrowRight, BsFilter } from "react-icons/bs";
 import { CiShoppingCart } from "react-icons/ci";
 
+const pastelColors = [
+    "teal.200",
+    "purple.200",
+    "pink.200",
+    "red.200",
+    "cyan.200",
+    "orange.200",
+    "blue.200",
+
+    "yellow.200",
+    "green.200",
+];
 const Marketplace = () => {
     const toast = useToast();
     const navigate = useNavigate();
@@ -174,12 +189,14 @@ const Marketplace = () => {
             <Flex p={4} flexDirection={"column"} gap={3}>
                 <form onSubmit={handleSearchFormSubmit}>
                     <Flex alignItems={"center"} gap={3}>
-                        <InputGroup size="md">
+                        <InputGroup size="md" ml={500} mr={500}>
                             <Input
                                 borderColor={"gray.700"}
                                 placeholder="Search section"
                                 name="search"
+                                borderRadius={"20px"}
                                 value={searchValue}
+                                bg={"gray.600"}
                                 onChange={(e) => setSearchValue(e.target.value)}
                             />
                             <InputRightElement>
@@ -189,243 +206,295 @@ const Marketplace = () => {
                                     mr={1}
                                     color={"white"}
                                     type="button"
+                                    borderRadius={"35"}
+                                    bg={"cyan.300"}
                                 >
-                                    <FaSearch />
+                                    <FaSearch color="gray" />
                                 </Button>
                             </InputRightElement>
                         </InputGroup>
-                        <Select
-                            size="sm"
-                            borderColor={"gray.700"}
-                            name="category"
-                            placeholder="Category"
-                            value={categoryValue}
-                            onChange={(e) => setCategoryValue(e.target.value)}
-                        >
-                            <option value="">All</option>
-                            {[
-                                ...new Set(packs.map((pack) => pack.category)),
-                            ].map((category, index) => (
-                                <option key={index} value={category}>
-                                    {category}
-                                </option>
-                            ))}
-                        </Select>
-                        <Button
-                            size={"sm"}
-                            type="submit" // Ajoutez type="button" pour éviter le comportement par défaut du formulaire
-                        >
-                            <FaFilter />
-                        </Button>
-                        <Button size={"sm"}>
-                            <FaList />
-                        </Button>
                     </Flex>
                 </form>
 
                 <Flex gap={3}>
                     <Flex
-                        w={"270px"}
+                        w={"400px"}
                         h={900}
-                        border={"var(--bordercolor) solid 1px"}
                         rounded={10}
+                        direction={"column"}
+                        p={2}
                     >
-                        Filter
+                        <Flex
+                            justifyContent={"space-between"}
+                            alignItems={"center"}
+                        >
+                            <Text as={"b"} fontSize={"3xl"}>
+                                Categories
+                            </Text>
+
+                            <Button
+                                onClick={handleSearch}
+                                size="xs"
+                                mr={1}
+                                color={"gary"}
+                                type="button"
+                                borderRadius={"35"}
+                                bg={"gray"}
+                            >
+                                <FaFilter color="white" />
+                            </Button>
+                        </Flex>
+
+                        <Flex gap={2} p={2}>
+                            {[
+                                ...new Set(packs.map((pack) => pack.category)),
+                            ].map((category, index) => (
+                                <Tag
+                                    key={index}
+                                    size="md"
+                                    h={"max-content"}
+                                    variant="solid"
+                                    color={"gray"}
+                                    backgroundColor={
+                                        pastelColors[
+                                            index % pastelColors.length
+                                        ]
+                                    }
+                                    borderRadius="full"
+                                    cursor="pointer"
+                                    onClick={() => setCategoryValue(category)}
+                                >
+                                    <TagLabel>{category}</TagLabel>
+                                    <TagCloseButton />
+                                </Tag>
+                            ))}
+                        </Flex>
                     </Flex>
 
                     <Wrap w={"calc(100vw - 300px)"} p={2}>
                         {searchValue.length === 0 && categoryValue.length === 0
                             ? packs.map((pack: any, index: any) => (
                                   <Card
-                                      minW="300px"
+                                      w="300px"
                                       key={index}
-                                      bg={"var(--lvl1-darkcolor)"}
-                                      border={"var(--bordercolor) solid 1px "}
-                                      p={0}
+                                      m={3}
+                                      h={"380px"}
+                                      borderRadius={"10px"}
+                                      border={"1px solid "}
+                                      borderColor={"gray.700"}
+                                      bg={"transparent"}
+                                      p={3}
                                   >
-                                      <CardBody>
+                                      <Flex direction={"column"} gap={1}>
                                           <Image
+                                              borderRadius={"30px"}
+                                              w={"300px"}
+                                              h={"200px"}
+                                              objectFit="cover"
                                               src={pack.img}
-                                              alt="Green double couch with wooden legs"
-                                              borderRadius="lg"
-                                              w={"100%"}
-                                              h={160}
+                                              alt="Dan Abramov"
                                           />
-                                          <Stack mt="3" spacing="1">
-                                              <Heading size="md">
-                                                  {pack.title}
-                                              </Heading>
-                                              <Text
-                                                  color={"gray.300"}
-                                                  fontSize={"sm"}
-                                              >
-                                                  {pack.description}
-                                              </Text>
+                                          <Flex alignItems={"center"} gap={6}>
                                               <Flex
                                                   alignItems={"center"}
-                                                  gap={3}
-                                                  mt={3}
+                                                  gap={1}
                                               >
-                                                  <Image
-                                                      src={pack.usser.img}
-                                                      h={"40px"}
-                                                      w={"40px"}
-                                                      rounded={"50%"}
-                                                  />
-                                                  <Box>
-                                                      <Text>
-                                                          {pack.usser.name}
-                                                      </Text>
-                                                      <Text
-                                                          display={"flex"}
-                                                          alignItems={"center"}
-                                                          fontSize={"sm"}
-                                                          color={"yellow.400"}
-                                                          gap={1}
-                                                      >
-                                                          <FaStar />
-                                                          <FaStar />
-                                                          <FaStar />
-                                                          <FaStar />
-                                                          <FaStar />
-                                                      </Text>
-                                                  </Box>
+                                                  <CiUser color={"cyan"} />{" "}
+                                                  <Text color={"gray.400"}>
+                                                      {pack.usser.name}
+                                                  </Text>
                                               </Flex>
-                                          </Stack>
-                                      </CardBody>
-                                      <CardFooter
-                                          bg={"var(--lvl2-darkcolor)"}
-                                          justifyContent={"space-between"}
-                                          alignItems={"center"}
-                                          m={"-10px 10px 10px 10px"}
-                                          rounded={10}
-                                      >
+                                              <Text color={"gray"}>|</Text>
+                                              <Flex
+                                                  alignItems={"center"}
+                                                  gap={1}
+                                              >
+                                                  <CiCalendarDate
+                                                      color={"cyan"}
+                                                  />{" "}
+                                                  <Text color={"gray.400"}>
+                                                      12/05/2012
+                                                  </Text>
+                                              </Flex>
+                                          </Flex>
+                                          <Text as={"b"} fontSize={"xl"}>
+                                              {pack.title}
+                                          </Text>
+                                          <Text color={"gray"}>
+                                              {pack.description
+                                                  .split(" ")
+                                                  .slice(0, 10)
+                                                  .join(" ")}
+                                          </Text>
                                           <Text
-                                              color="cyan.200"
-                                              fontSize="2xl"
                                               display={"flex"}
                                               alignItems={"center"}
+                                              fontSize={"sm"}
+                                              color={"yellow.400"}
                                               gap={1}
                                           >
-                                              {pack.price}{" "}
-                                              <Text fontSize={"xs"}>DT</Text>
+                                              <FaStar />
+                                              <FaStar />
+                                              <FaStar />
+                                              <FaStar />
+                                              <FaStar />
                                           </Text>
-                                          <ButtonGroup spacing="2">
-                                              {pack.packStatus == 0 && (
+                                          <Flex
+                                              alignItems={"center"}
+                                              gap={1}
+                                              justifyContent={"space-between"}
+                                          >
+                                              <Flex
+                                                  alignItems={"center"}
+                                                  gap={1}
+                                              >
+                                                  <Link
+                                                      color={"cyan"}
+                                                      onClick={() =>
+                                                          handleClickShow(pack)
+                                                      }
+                                                  >
+                                                      Show{" "}
+                                                  </Link>
+                                                  <BsArrowRight color="cyan" />
+                                              </Flex>
+                                              <Flex alignItems={"center"}>
+                                                  <Text fontSize={"2xl"}>
+                                                      {pack.price}{" "}
+                                                  </Text>
+                                                  <Text ml={1} fontSize={"xs"}>
+                                                      €
+                                                  </Text>
+
                                                   <Button
-                                                      variant="ghost"
+                                                      bg={"transparent"}
+                                                      _hover={{
+                                                          bg: "tarnsparent",
+                                                          borderColor:
+                                                              "transparent",
+                                                      }}
+                                                      onClick={() =>
+                                                        addToCart(pack)
+                                                    }
+                                                  >
+                                                      <CiShoppingCart
+                                                          color="cyan"
+                                                          fontSize={25}
+                                                      />
+                                                  </Button>
+                                              </Flex>
+                                          </Flex>
+                                      </Flex>
+                                  </Card>
+                              ))
+                            : searchResults.map((pack: any, index: number) => (
+                                  <Card
+                                      w="300px"
+                                      key={index}
+                                      h={"380px"}
+                                      bg={"transparent"}
+                                      p={2}
+                                  >
+                                      <Flex direction={"column"} gap={2}>
+                                          <Image
+                                              borderRadius={"30px"}
+                                              w={"300px"}
+                                              h={"200px"}
+                                              objectFit="cover"
+                                              src={pack.img}
+                                              alt="Dan Abramov"
+                                          />
+                                          <Flex alignItems={"center"} gap={6}>
+                                              <Flex
+                                                  alignItems={"center"}
+                                                  gap={1}
+                                              >
+                                                  <CiUser color={"cyan"} />{" "}
+                                                  <Text color={"gray.400"}>
+                                                      {pack.usser.name}
+                                                  </Text>
+                                              </Flex>
+                                              <Text color={"gray"}>|</Text>
+                                              <Flex
+                                                  alignItems={"center"}
+                                                  gap={1}
+                                              >
+                                                  <CiCalendarDate
+                                                      color={"cyan"}
+                                                  />{" "}
+                                                  <Text color={"gray.400"}>
+                                                      12/05/2012
+                                                  </Text>
+                                              </Flex>
+                                          </Flex>
+                                          <Text as={"b"} fontSize={"xl"}>
+                                              {pack.title}
+                                          </Text>
+                                          <Text color={"gray"}>
+                                              {pack.description}
+                                          </Text>
+                                          <Text
+                                              display={"flex"}
+                                              alignItems={"center"}
+                                              fontSize={"sm"}
+                                              color={"yellow.400"}
+                                              gap={1}
+                                          >
+                                              <FaStar />
+                                              <FaStar />
+                                              <FaStar />
+                                              <FaStar />
+                                              <FaStar />
+                                          </Text>
+                                          <Flex
+                                              alignItems={"center"}
+                                              gap={1}
+                                              justifyContent={"space-between"}
+                                          >
+                                              <Flex
+                                                  alignItems={"center"}
+                                                  gap={1}
+                                              >
+                                                  <Link
+                                                      color={"cyan"}
+                                                      onClick={() =>
+                                                          handleClickShow(pack)
+                                                      }
+                                                  >
+                                                      Show{" "}
+                                                  </Link>
+                                                  <BsArrowRight color="cyan" />
+                                              </Flex>
+                                              <Flex alignItems={"center"}>
+                                                  <Text fontSize={"2xl"}>
+                                                      {pack.price}{" "}
+                                                  </Text>
+                                                  <Text ml={1} fontSize={"xs"}>
+                                                      €
+                                                  </Text>
+
+                                                  <Button
+                                                      bg={"transparent"}
                                                       size={"sm"}
                                                       onClick={() =>
                                                           addToCart(pack)
                                                       }
+                                                      _hover={{
+                                                        bg: "tarnsparent",
+                                                        borderColor:
+                                                            "transparent",
+                                                    }}
                                                   >
-                                                      Add
+                                                      <CiShoppingCart
+                                                          color="cyan"
+                                                          fontSize={25}
+                                                      />
                                                   </Button>
-                                              )}
-
-                                              <Button
-                                                  size={"s"}
-                                                  colorScheme="cyan"
-                                                  onClick={() =>
-                                                      handleClickShow(pack)
-                                                  }
-                                              >
-                                                  Show
-                                              </Button>
-                                          </ButtonGroup>
-                                      </CardFooter>
+                                              </Flex>
+                                          </Flex>
+                                      </Flex>
                                   </Card>
-                              ))
-                            : searchResults.map((pack: any, index: number) => (
-
-
-                                <Card minW="300px" 
-                                key={index}
-                                
-                                h={"300px"} bg={"transparent"} p={0}>
-                                <Flex direction={"column"} gap={2}>
-                                    <Image
-                                        borderRadius={"30px"}
-                                        w={"300px"}
-                                        h={"200px"}
-                                        objectFit="cover"
-                                        src={pack.img}
-
-                                        alt="Dan Abramov"
-                                    />
-                                    <Flex alignItems={"center"} gap={6}>
-                                        <Flex alignItems={"center"} gap={1}>
-                                            <CiUser color={"cyan"} />{" "}
-                                            <Text color={"gray.400"}>{pack.usser.name}</Text>
-                                        </Flex>
-                                        <Text color={"gray"}>|</Text>
-                                        <Flex alignItems={"center"} gap={1}>
-                                            <CiCalendarDate color={"cyan"} />{" "}
-                                            <Text color={"gray.400"}>
-                                                12/05/2012
-                                            </Text>
-                                        </Flex>
-                                    </Flex>
-                                    <Text as={"b"} fontSize={"xl"}>
-                                    {pack.title}
-
-                                    </Text>
-                                    <Text color={"gray"}>
-                                    {pack.description}
-
-                                    </Text>
-                                    <Text
-                                        display={"flex"}
-                                        alignItems={"center"}
-                                        fontSize={"sm"}
-                                        color={"yellow.400"}
-                                        gap={1}
-                                    >
-                                        <FaStar />
-                                        <FaStar />
-                                        <FaStar />
-                                        <FaStar />
-                                        <FaStar />
-                                    </Text>
-                                    <Flex
-                                        alignItems={"center"}
-                                        gap={1}
-                                        justifyContent={"space-between"}
-                                    >
-                                        <Flex alignItems={"center"} gap={1}>
-                                            <Link color={"cyan"}  onClick={() =>
-                                                      handleClickShow(pack)
-                                                  }>Show </Link>
-                                            <BsArrowRight color="cyan" />
-                                        </Flex>
-                                        <Flex alignItems={"center"}>
-                                            <Text fontSize={'2xl'}>{pack.price}{" "}</Text>
-                                            <Text ml={1} fontSize={"xs"}>
-                                                €
-                                            </Text>
-    
-                                            <Button bg={"transparent"}
-                                                  size={"sm"}
-                                              onClick={() =>
-                                                addToCart(pack)
-                                            }
-                                            >
-                                                <CiShoppingCart
-                                                    color="cyan"
-                                                    fontSize={25}
-                                                />
-                                            </Button>
-                                        </Flex>
-                                    </Flex>
-                                </Flex>
-                            </Card>
-
-
-
-
-                                 
                               ))}
-                       
                     </Wrap>
                 </Flex>
             </Flex>
