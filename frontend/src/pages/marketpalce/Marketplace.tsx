@@ -17,12 +17,21 @@ import {
     Card,
     useToast,
     Select,
+    Link,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { FaFilter, FaList, FaSearch, FaStar } from "react-icons/fa";
-import { NavLink, useNavigate, useParams, useSearchParams } from "react-router-dom";
-
+import { CiUser } from "react-icons/ci";
+import {
+    NavLink,
+    useNavigate,
+    useParams,
+    useSearchParams,
+} from "react-router-dom";
+import { CiCalendarDate } from "react-icons/ci";
 import AddPackage from "../addpackage/AddPackage";
+import { BsArrowRight } from "react-icons/bs";
+import { CiShoppingCart } from "react-icons/ci";
 
 const Marketplace = () => {
     const toast = useToast();
@@ -32,7 +41,7 @@ const Marketplace = () => {
     const [categoryValue, setCategoryValue] = useState("");
     const { search, category } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
-    const id = localStorage.getItem('id');
+    const id = localStorage.getItem("id");
 
     useEffect(() => {
         setSearchValue(search || "");
@@ -74,8 +83,8 @@ const Marketplace = () => {
             });
         }
     };
-    const handleSearchFormSubmit = (e:any) => {
-        e.preventDefault(); 
+    const handleSearchFormSubmit = (e: any) => {
+        e.preventDefault();
         handleSearch();
     };
 
@@ -84,7 +93,7 @@ const Marketplace = () => {
         const storedCart = localStorage.getItem("cart");
         return storedCart ? JSON.parse(storedCart) : [];
     });
-    const handleClickShow = (pack:any) => {
+    const handleClickShow = (pack: any) => {
         navigate(`/package/${pack.id}`);
     };
 
@@ -101,8 +110,8 @@ const Marketplace = () => {
         }
     }
 
-    const addToCart = (pack:any) => {
-        const packageExists = cart.some((item:any) => item.id === pack.id);
+    const addToCart = (pack: any) => {
+        const packageExists = cart.some((item: any) => item.id === pack.id);
 
         if (packageExists) {
             console.log("Package already exists in the cart.");
@@ -163,55 +172,55 @@ const Marketplace = () => {
                 </Box>
             </Flex>
             <Flex p={4} flexDirection={"column"} gap={3}>
-            <form onSubmit={handleSearchFormSubmit}>
-                <Flex alignItems={"center"} gap={3}>
-                    <InputGroup size="md">
-                        <Input
+                <form onSubmit={handleSearchFormSubmit}>
+                    <Flex alignItems={"center"} gap={3}>
+                        <InputGroup size="md">
+                            <Input
+                                borderColor={"gray.700"}
+                                placeholder="Search section"
+                                name="search"
+                                value={searchValue}
+                                onChange={(e) => setSearchValue(e.target.value)}
+                            />
+                            <InputRightElement>
+                                <Button
+                                    onClick={handleSearch}
+                                    size="xs"
+                                    mr={1}
+                                    color={"white"}
+                                    type="button"
+                                >
+                                    <FaSearch />
+                                </Button>
+                            </InputRightElement>
+                        </InputGroup>
+                        <Select
+                            size="sm"
                             borderColor={"gray.700"}
-                            placeholder="Search section"
-                            name="search"
-                            value={searchValue}
-                            onChange={(e) => setSearchValue(e.target.value)}
-                        />
-                        <InputRightElement>
-                            <Button
-                                onClick={handleSearch}
-                                size="xs"
-                                mr={1}
-                                color={"white"}
-                                type="button"
-                            >
-                                <FaSearch />
-                            </Button>
-                        </InputRightElement>
-                    </InputGroup>
-                    <Select
-                        size="sm"
-                        borderColor={"gray.700"}
-                        name="category"
-                        placeholder="Category"
-                        value={categoryValue}
-                        onChange={(e) => setCategoryValue(e.target.value)}
-                    >
-                        <option value="">All</option>
-                        {[...new Set(packs.map((pack) => pack.category))].map(
-                            (category, index) => (
+                            name="category"
+                            placeholder="Category"
+                            value={categoryValue}
+                            onChange={(e) => setCategoryValue(e.target.value)}
+                        >
+                            <option value="">All</option>
+                            {[
+                                ...new Set(packs.map((pack) => pack.category)),
+                            ].map((category, index) => (
                                 <option key={index} value={category}>
                                     {category}
                                 </option>
-                            )
-                        )}
-                    </Select>
-                    <Button
-                        size={"sm"}
-                        type="submit" // Ajoutez type="button" pour éviter le comportement par défaut du formulaire
-                    >
-                        <FaFilter />
-                    </Button>
-                    <Button size={"sm"}>
-                        <FaList />
-                    </Button>
-                </Flex>
+                            ))}
+                        </Select>
+                        <Button
+                            size={"sm"}
+                            type="submit" // Ajoutez type="button" pour éviter le comportement par défaut du formulaire
+                        >
+                            <FaFilter />
+                        </Button>
+                        <Button size={"sm"}>
+                            <FaList />
+                        </Button>
+                    </Flex>
                 </form>
 
                 <Flex gap={3}>
@@ -226,7 +235,7 @@ const Marketplace = () => {
 
                     <Wrap w={"calc(100vw - 300px)"} p={2}>
                         {searchValue.length === 0 && categoryValue.length === 0
-                            ? packs.map((pack:any, index:any) => (
+                            ? packs.map((pack: any, index: any) => (
                                   <Card
                                       minW="300px"
                                       key={index}
@@ -302,17 +311,18 @@ const Marketplace = () => {
                                               <Text fontSize={"xs"}>DT</Text>
                                           </Text>
                                           <ButtonGroup spacing="2">
-                                          {pack.packStatus==0 &&(                                            <Button
-                                                  variant="ghost"
-                                              
-                                                  size={"sm"}
-                                                  onClick={() =>
-                                                      addToCart(pack)
-                                                  }
-                                              >
-                                                  Add
-                                              </Button>)}
-                                            
+                                              {pack.packStatus == 0 && (
+                                                  <Button
+                                                      variant="ghost"
+                                                      size={"sm"}
+                                                      onClick={() =>
+                                                          addToCart(pack)
+                                                      }
+                                                  >
+                                                      Add
+                                                  </Button>
+                                              )}
+
                                               <Button
                                                   size={"s"}
                                                   colorScheme="cyan"
@@ -326,110 +336,96 @@ const Marketplace = () => {
                                       </CardFooter>
                                   </Card>
                               ))
-                            : searchResults.map((pack:any, index:number) => (
-                                  <Card
-                                      maxW="300px"
-                                      key={index}
-                                      bg={"var(--lvl1-darkcolor)"}
-                                      border={"var(--bordercolor) solid 1px "}
-                                      p={0}
-                                  >
-                                      <CardBody>
-                                          <Image
-                                              src={pack.img}
-                                              alt="Green double couch with wooden legs"
-                                              borderRadius="lg"
-                                              w={"100%"}
-                                              h={160}
-                                          />
-                                          <Stack mt="3" spacing="1">
-                                              <Heading size="md">
-                                                  {pack.title}
-                                              </Heading>
-                                              <Text
-                                                  color={"gray.300"}
-                                                  fontSize={"sm"}
-                                              >
-                                                  {pack.description}
-                                              </Text>
-                                              <Flex
-                                                  alignItems={"center"}
-                                                  gap={3}
-                                                  mt={3}
-                                              >
-                                                  <Image
-                                                      src={pack.usser.img}
-                                                      h={"40px"}
-                                                      w={"40px"}
-                                                      rounded={"50%"}
-                                                  />
-                                                  <Box>
-                                                      <Text>
-                                                          {pack.usser.name}
-                                                      </Text>
-                                                      <Text
-                                                          display={"flex"}
-                                                          alignItems={"center"}
-                                                          fontSize={"sm"}
-                                                          color={"yellow.400"}
-                                                          gap={1}
-                                                      >
-                                                          <FaStar />
-                                                          <FaStar />
-                                                          <FaStar />
-                                                          <FaStar />
-                                                          <FaStar />
-                                                      </Text>
-                                                  </Box>
-                                              </Flex>
-                                          </Stack>
-                                      </CardBody>
-                                      <CardFooter
-                                          bg={"var(--lvl2-darkcolor)"}
-                                          justifyContent={"space-between"}
-                                          alignItems={"center"}
-                                          m={"-10px 10px 10px 10px"}
-                                          rounded={10}
-                                      >
-                                          <Text
-                                              color="cyan.200"
-                                              fontSize="2xl"
-                                              display={"flex"}
-                                              alignItems={"center"}
-                                              gap={1}
-                                          >
-                                              {pack.price}{" "}
-                                              <Text fontSize={"xs"}>DT</Text>
-                                          </Text>
-                                          <ButtonGroup spacing="2">
-                                              <Button
-                                                  variant="ghost"
-                                                  size={"sm"}
-                                                  onClick={() =>
-                                                      addToCart(pack)
-                                                  }
-                                              >
-                                                  Add
-                                              </Button>
-                                              <Button
-                                                  size={"sm"}
-                                                  colorScheme="cyan"
-                                              >
-                                                  Buy now
-                                              </Button>
-                                              <Button
-                                                  size={"s"}
-                                                  colorScheme="cyan"
-                                                  onClick={() =>
+                            : searchResults.map((pack: any, index: number) => (
+
+
+                                <Card minW="300px" 
+                                key={index}
+                                
+                                h={"300px"} bg={"transparent"} p={0}>
+                                <Flex direction={"column"} gap={2}>
+                                    <Image
+                                        borderRadius={"30px"}
+                                        w={"300px"}
+                                        h={"200px"}
+                                        objectFit="cover"
+                                        src={pack.img}
+
+                                        alt="Dan Abramov"
+                                    />
+                                    <Flex alignItems={"center"} gap={6}>
+                                        <Flex alignItems={"center"} gap={1}>
+                                            <CiUser color={"cyan"} />{" "}
+                                            <Text color={"gray.400"}>{pack.usser.name}</Text>
+                                        </Flex>
+                                        <Text color={"gray"}>|</Text>
+                                        <Flex alignItems={"center"} gap={1}>
+                                            <CiCalendarDate color={"cyan"} />{" "}
+                                            <Text color={"gray.400"}>
+                                                12/05/2012
+                                            </Text>
+                                        </Flex>
+                                    </Flex>
+                                    <Text as={"b"} fontSize={"xl"}>
+                                    {pack.title}
+
+                                    </Text>
+                                    <Text color={"gray"}>
+                                    {pack.description}
+
+                                    </Text>
+                                    <Text
+                                        display={"flex"}
+                                        alignItems={"center"}
+                                        fontSize={"sm"}
+                                        color={"yellow.400"}
+                                        gap={1}
+                                    >
+                                        <FaStar />
+                                        <FaStar />
+                                        <FaStar />
+                                        <FaStar />
+                                        <FaStar />
+                                    </Text>
+                                    <Flex
+                                        alignItems={"center"}
+                                        gap={1}
+                                        justifyContent={"space-between"}
+                                    >
+                                        <Flex alignItems={"center"} gap={1}>
+                                            <Link color={"cyan"}  onClick={() =>
                                                       handleClickShow(pack)
-                                                  }
-                                              >
-                                                  Show
-                                              </Button>
-                                          </ButtonGroup>
-                                      </CardFooter>
-                                  </Card>
+                                                  }>Show </Link>
+                                            <BsArrowRight color="cyan" />
+                                        </Flex>
+                                        <Flex alignItems={"center"}>
+                                            <Text fontSize={'2xl'}>{pack.price}{" "}</Text>
+                                            <Text ml={1} fontSize={"xs"}>
+                                                €
+                                            </Text>
+    
+                                            <Button bg={"transparent"}
+                                                  size={"sm"}
+                                              onClick={() =>
+                                                addToCart(pack)
+                                            }
+                                            >
+                                                <CiShoppingCart
+                                                    color="cyan"
+                                                    fontSize={25}
+                                                />
+                                            </Button>
+                                        </Flex>
+                                    </Flex>
+                                </Flex>
+                            </Card>
+
+
+
+
+                                 
                               ))}
+                       
                     </Wrap>
                 </Flex>
             </Flex>
