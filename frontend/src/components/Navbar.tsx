@@ -27,6 +27,7 @@ import { IoMdCart } from "react-icons/io";
 import { FaBookReader, FaSun, FaMoon } from "react-icons/fa";
 import CartContent from "./CartContent";
 import { useUserStore } from "../stores/user";
+import axios from "axios";
 
 interface Notification {
     id: number;
@@ -51,6 +52,23 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
     };
+    const [user, setUser] = useState({
+        img: "",
+    });
+    useEffect(() => {
+        (async () => await fetchUser())();
+    }, []);
+    async function fetchUser() {
+        const token = localStorage.getItem("token"); // Récupérer le token JWT depuis le stockage local
+        const response = await axios.get("http://127.0.0.1:8000/api/users", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        setUser(response.data.user);
+        console.log(response.data.user);
+    }
+
 
     const fetchNotifications = async () => {
         try {
@@ -282,8 +300,9 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                                     justifyContent={"center"}
                                     position={"relative"}
                                 >
+
                                     <Image
-                                        src="https://i.gyazo.com/df168e15d60588f5f47e2faa9e9cae6c.png"
+                                        src={user.img}
                                         w={"100%"}
                                         h={"100%"}
                                         rounded={10}

@@ -18,6 +18,8 @@ import {
     ModalCloseButton,
     ModalBody,
     ModalFooter,
+    Link,
+    Card,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React from "react";
@@ -25,7 +27,9 @@ import { useEffect, useState } from "react";
 import { FaSearch, FaStar } from "react-icons/fa"; // Import FaPlus for the add button
 import defaultPic from "../../assets/default-profile.jpg";
 import AddPackage from "../addpackage/AddPackage";
-
+import { BsArrowRight } from "react-icons/bs";
+import { CiCalendarDate } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
 interface User {
     id: number;
     name: string;
@@ -46,6 +50,8 @@ interface Pack {
     // Ajoutez d'autres propriétés selon vos besoins
 }
 const Profile: React.FC = () => {
+    const navigate = useNavigate();
+
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     //Models
@@ -115,7 +121,9 @@ const Profile: React.FC = () => {
             );
         }
     }
-
+    const handleClickShow = (pack: any) => {
+        navigate(`/package/${pack.id}`);
+    };
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
 
@@ -189,8 +197,7 @@ const Profile: React.FC = () => {
     };
 
     return (
-
-        <Box maxW={"1230px"} pt={20} ml={'auto'}mr={'auto'}>
+        <Box maxW={"1230px"} pt={20} ml={"auto"} mr={"auto"}>
             <Flex flexDirection={"column"} gap={1} alignItems={"left"}>
                 <Flex flexDirection={"column"} gap={1} alignItems={"center"}>
                     <Box position="relative" display="inline-block">
@@ -333,10 +340,12 @@ const Profile: React.FC = () => {
             </Flex>
 
             <Flex mt={5}>
-                <InputGroup size="md">
+                <InputGroup size="md" ml={100} mr={100}>
                     <Input
                         borderColor={"gray.700"}
                         placeholder="Search section"
+                        borderRadius={"20px"}
+                        bg={"gray.600"}
                         value={searchQuery}
                         name="search"
                         onChange={handleChangeSearch}
@@ -357,93 +366,145 @@ const Profile: React.FC = () => {
                 {searchQuery.length === 0
                     ? // If searchResults is empty, display all packs
                       packs.map((pack: Pack, index: number) => (
-                          <Box
+                          <Card
+                              w="300px"
                               key={index}
-                              h={280}
-                              w={300}
-                              rounded={10}
-                              border={" solid 1px "}
-                              borderColor={"gray.600"}
-                              overflow={"hidden"}
-                              p={2}
+                              m={3}
+                              h={"380px"}
+                              borderRadius={"10px"}
+                              border={"1px solid "}
+                              borderColor={"gray.700"}
+                              bg={"transparent"}
+                              p={3}
                           >
-                              <Image
-                                  src={pack.img}
-                                  maxH={120}
-                                  w={"100%"}
-                                  objectFit={"cover"}
-                                  rounded={5}
-                              />
-
-                              <Text as={"b"} mt={2}>
-                                  {pack.title}
-                              </Text>
-
-                              <Text color={"gray.400"}>{pack.description}</Text>
-
-                              <Flex
-                                  alignItems={"center"}
-                                  gap={"5px"}
-                                  color={"yellow.300"}
-                                  fontSize={"xs"}
-                                  mt={3}
-                              >
-                                  <FaStar />
-                                  <FaStar />
-                                  <FaStar />
-                                  <FaStar />
-                                  <FaStar />
+                              <Flex direction={"column"} gap={2}>
+                                  <Image
+                                      borderRadius={"30px"}
+                                      w={"300px"}
+                                      h={"200px"}
+                                      objectFit="cover"
+                                      src={pack.img}
+                                      alt="Dan Abramov"
+                                  />
+                                  <Flex
+                                      alignItems={"center"}
+                                      justifyContent={"right"}
+                                      gap={6}
+                                  >
+                                      <Flex alignItems={"center"} gap={1}>
+                                          <CiCalendarDate color={"cyan"} />{" "}
+                                          <Text color={"gray.400"}>
+                                              12/05/2012
+                                          </Text>
+                                      </Flex>
+                                  </Flex>
+                                  <Text as={"b"} fontSize={"xl"}>
+                                      {pack.title}
+                                  </Text>
+                                  <Text color={"gray"}>{pack.description}</Text>
+                                  <Text
+                                      display={"flex"}
+                                      alignItems={"center"}
+                                      fontSize={"sm"}
+                                      color={"yellow.400"}
+                                      gap={1}
+                                  >
+                                      <FaStar />
+                                      <FaStar />
+                                      <FaStar />
+                                      <FaStar />
+                                      <FaStar />
+                                  </Text>
+                                  <Flex
+                                      alignItems={"center"}
+                                      gap={1}
+                                      justifyContent={"space-between"}
+                                  >
+                                      <Flex alignItems={"center"} gap={1}>
+                                          <Link
+                                              color={"cyan"}
+                                              onClick={() =>
+                                                  handleClickShow(pack)
+                                              }
+                                          >
+                                              Show{" "}
+                                          </Link>
+                                          <BsArrowRight color="cyan" />
+                                      </Flex>
+                                  </Flex>
                               </Flex>
-
-                              <Button mt={3} w={"100%"}>
-                                  Check
-                              </Button>
-                          </Box>
+                          </Card>
                       ))
                     : // If searchResults is not empty, display search results
                       searchResults.map((pack: Pack, index: number) => (
-                          <Box
+                          <Card
+                              w="300px"
                               key={index}
-                              h={280}
-                              w={300}
-                              rounded={10}
-                              border={" solid 1px "}
-                              borderColor={"gray.600"}
-                              overflow={"hidden"}
-                              p={2}
+                              m={3}
+                              h={"380px"}
+                              borderRadius={"10px"}
+                              border={"1px solid "}
+                              borderColor={"gray.700"}
+                              bg={"transparent"}
+                              p={3}
                           >
-                              <Image
-                                  src={pack.img}
-                                  maxH={120}
-                                  w={"100%"}
-                                  objectFit={"cover"}
-                                  rounded={5}
-                              />
-
-                              <Text as={"b"} mt={2}>
-                                  {pack.title}
-                              </Text>
-
-                              <Text color={"gray.400"}>{pack.description}</Text>
-
-                              <Flex
-                                  alignItems={"center"}
-                                  gap={"5px"}
-                                  color={"yellow.300"}
-                                  fontSize={"xs"}
-                                  mt={3}
-                              >
-                                  <FaStar />
-                                  <FaStar />
-                                  <FaStar />
-                                  <FaStar />
-                                  <FaStar />
+                              <Flex direction={"column"} gap={2}>
+                                  <Image
+                                      borderRadius={"30px"}
+                                      w={"300px"}
+                                      h={"200px"}
+                                      objectFit="cover"
+                                      src={pack.img}
+                                      alt="Dan Abramov"
+                                  />
+                                  <Flex
+                                      alignItems={"center"}
+                                      justifyContent={"right"}
+                                      gap={6}
+                                  >
+                                      <Flex alignItems={"center"} gap={1}>
+                                          <CiCalendarDate color={"cyan"} />{" "}
+                                          <Text color={"gray.400"}>
+                                              12/05/2012
+                                          </Text>
+                                      </Flex>
+                                  </Flex>
+                                  <Text as={"b"} fontSize={"xl"}>
+                                      {pack.title}
+                                  </Text>
+                                  <Text color={"gray"}>{pack.description}</Text>
+                                  <Text
+                                      display={"flex"}
+                                      alignItems={"center"}
+                                      fontSize={"sm"}
+                                      color={"yellow.400"}
+                                      gap={1}
+                                  >
+                                      <FaStar />
+                                      <FaStar />
+                                      <FaStar />
+                                      <FaStar />
+                                      <FaStar />
+                                  </Text>
+                                  <Flex
+                                      alignItems={"center"}
+                                      gap={1}
+                                      justifyContent={"space-between"}
+                                  >
+                                      <Flex alignItems={"center"} gap={1}>
+                                          <Link
+                                              color={"cyan"}
+                                              onClick={() =>
+                                                  handleClickShow(pack)
+                                              }
+                                          >
+                                              Show{" "}
+                                          </Link>
+                                          <BsArrowRight color="cyan" />
+                                      </Flex>
+                                  </Flex>
                               </Flex>
-
-                              <Button mt={3} w={"100%"}>
-                                  Check
-                              </Button>
-                          </Box>
+                          </Card>
                       ))}
             </Wrap>
         </Box>
