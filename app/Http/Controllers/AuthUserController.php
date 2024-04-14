@@ -27,7 +27,7 @@ class AuthUserController extends Controller
         } catch (JWTException $e) {
             return response()->json([
                 'response' => 'error',
-                'message' => "Token creation failed $e", 
+                'message' => "Token creation failed $e",
             ]);
         }
 
@@ -99,7 +99,6 @@ class AuthUserController extends Controller
             $data = "public/images/user"; // chemin de destination pour stocker les images
             $image->move(public_path($data), $imageName);
             $user->img = url($data . '/' . $imageName); // Générer l'URL complète de l'image
- // Renvoyer l'URL complète de l'image
         }
 
         if (!$user) {
@@ -113,5 +112,21 @@ class AuthUserController extends Controller
         }
         $user->update();
         return response()->json(['success' => true, 'message' => 'User updated successfully', 'user' => $user]);
+    }
+
+    public function getUsersById($userId)
+    {
+        try {
+            $user = User::find($userId);
+            return response()->json([
+                'success' => true,
+                'user' => $user
+            ]);
+        } catch (Exception $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage(),
+            ], 500);
+        }
     }
 }
