@@ -9,21 +9,15 @@ import {
     Input,
     InputGroup,
     InputRightElement,
-    ButtonGroup,
-    CardFooter,
-    Stack,
-    CardBody,
-    Heading,
     Card,
     useToast,
-    Select,
     Link,
     TagLabel,
     TagCloseButton,
     Tag,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { FaFilter, FaList, FaSearch, FaStar } from "react-icons/fa";
+import { FaFilter, FaSearch, FaStar } from "react-icons/fa";
 import { CiUser } from "react-icons/ci";
 import {
     NavLink,
@@ -33,7 +27,7 @@ import {
 } from "react-router-dom";
 import { CiCalendarDate } from "react-icons/ci";
 import AddPackage from "../addpackage/AddPackage";
-import { BsArrowRight, BsFilter } from "react-icons/bs";
+import { BsArrowRight} from "react-icons/bs";
 import { CiShoppingCart } from "react-icons/ci";
 
 const pastelColors = [
@@ -388,13 +382,17 @@ const Marketplace = () => {
                                   </Card>
                               ))
                             : searchResults.map((pack: any, index: number) => (
-                                  <Card
-                                      w="300px"
-                                      key={index}
-                                      h={"380px"}
-                                      bg={"transparent"}
-                                      p={2}
-                                  >
+                                <Card
+                                w="300px"
+                                key={index}
+                                m={3}
+                                h={"380px"}
+                                borderRadius={"10px"}
+                                border={"1px solid "}
+                                borderColor={"gray.700"}
+                                bg={"transparent"}
+                                p={3}
+                            >
                                       <Flex direction={"column"} gap={2}>
                                           <Image
                                               borderRadius={"30px"}

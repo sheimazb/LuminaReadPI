@@ -85,7 +85,7 @@ const Homepage = () => {
     return (
         <Box>
             <Flex
-                h={"calc(100vh - 60px)"}
+                h={"calc(50vh - 10px)"}
                 alignContent={"center"}
                 justifyContent={"center"}
             >
