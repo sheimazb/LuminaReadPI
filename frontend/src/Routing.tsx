@@ -14,11 +14,14 @@ import AddPackage from "./pages/addpackage/AddPackage";
 import AddNovella from "./pages/addnovella/AddNovella";
 import NovellaContent from "./pages/novella/NovellaContent";
 import ConfirmPurchase from "./pages/ConfirmPurchase/ConfirmPurchase";
+import Chat from "./pages/chat/chat";
 
 function App() {
     return (
         <Routes>
             <Route path="/" element={<Homepage />} />
+            <Route path="/chat" element={<Chat/>} />
+
             <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/package/:id" element={<Package />} />
             <Route path="/profile" element={<Profile />} />

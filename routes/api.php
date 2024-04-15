@@ -1,11 +1,13 @@
 <?php
 
+use App\Events\NewMessageEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthUserController;
 use App\Http\Controllers\BooksController;
 use App\Http\Controllers\BlogsController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PacksController;
 use App\Http\Controllers\NovellaController;
 use App\Http\Controllers\ReviewController;
@@ -53,6 +55,7 @@ Route::middleware('api-header')->group(function () {
     Route::get('/books', [BooksController::class, 'index']);
     Route::get('/blog', [BlogsController::class, 'index']);
     Route::post('/storeBlog', [BlogsController::class, 'store']);
+    Route::post('/testSendMessage',[MessageController::class,'store']);
 
     Route::post('/save', [BooksController::class, 'store']);
     Route::put('/update/{id}', [BooksController::class, 'update']);

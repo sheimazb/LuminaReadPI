@@ -151,9 +151,9 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                             <BsStars color="cyan" />
                         </Button>
                     </NavLink>
-                    <NavLink to="/package">
+                    <NavLink to="/chat">
                         <Button size={"sm"} color={"gray.400"} variant="ghost">
-                            Package
+                            Chat
                         </Button>
                     </NavLink>
                     <NavLink to="/novella/1">
