@@ -18,6 +18,7 @@ import {
     DrawerHeader,
     DrawerBody,
     IconButton,
+    useColorMode,
 } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 import { BsStars } from "react-icons/bs";
@@ -28,6 +29,7 @@ import { FaBookReader, FaSun, FaMoon } from "react-icons/fa";
 import CartContent from "./CartContent";
 import { useUserStore } from "../stores/user";
 import axios from "axios";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 interface Notification {
     id: number;
@@ -36,18 +38,14 @@ interface Notification {
     seen: boolean;
 }
 
-interface NavbarProps {
-    toggleColorMode: () => void;
-    colorMode: any;
-}
-
-const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
+const Navbar = () => {
     const [cartItems, setCartItems] = useState([]);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const { logout } = useUserStore();
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const isLoggedIn = localStorage.getItem("token") !== null;
-    const id =localStorage.getItem('id');
+    const id = localStorage.getItem("id");
+    const { colorMode } = useColorMode();
 
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
@@ -59,7 +57,7 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
         (async () => await fetchUser())();
     }, []);
     async function fetchUser() {
-        const token = localStorage.getItem("token"); // Récupérer le token JWT depuis le stockage local
+        const token = localStorage.getItem("token");
         const response = await axios.get("http://127.0.0.1:8000/api/users", {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -69,11 +67,10 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
         console.log(response.data.user);
     }
 
-
     const fetchNotifications = async () => {
         try {
             const response = await fetch(
-                "http://127.0.0.1:8000/api/notifications/"+id
+                "http://127.0.0.1:8000/api/notifications/" + id
             );
             const data = await response.json();
             setNotifications(data);
@@ -120,7 +117,7 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
             display="flex"
             h="60px"
             px="15px"
-            bg={'#37484951'}
+            bg={colorMode === "light" ? "gray.50" : "#37484951"}
         >
             <Flex gap={5}>
                 <NavLink to="/">
@@ -130,34 +127,55 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                         display={"flex"}
                         alignItems={"center"}
                         gap={2}
-                        color={"gray.50"}
+                        color={colorMode === "light" ? "gray.900" : "gray.50"}
                     >
-                        <Box color="cyan.600">
+                        <Box
+                            color={
+                                colorMode === "light" ? "cyan.600" : "cyan.600"
+                            }
+                        >
                             <FaBookReader />
                         </Box>
                         Lumina Read
                     </Text>
                 </NavLink>
                 <Flex gap="5px" alignItems={"end"}>
-                
                     <NavLink to="/marketplace">
                         <Button
                             size={"sm"}
-                            color={"gray.400"}
+                            color={
+                                colorMode === "light" ? "gray.900" : "gray.300"
+                            }
                             variant="ghost"
                             gap={1}
                         >
                             Market Place
-                            <BsStars color="cyan" />
+                            <BsStars
+                                color={
+                                    colorMode === "light" ? "cyan.900" : "cyan"
+                                }
+                            />
                         </Button>
                     </NavLink>
                     <NavLink to="/package">
-                        <Button size={"sm"} color={"gray.400"} variant="ghost">
+                        <Button
+                            size={"sm"}
+                            color={
+                                colorMode === "light" ? "gray.900" : "gray.300"
+                            }
+                            variant="ghost"
+                        >
                             Package
                         </Button>
                     </NavLink>
                     <NavLink to="/novella/1">
-                        <Button size={"sm"} color={"gray.400"} variant="ghost">
+                        <Button
+                            size={"sm"}
+                            color={
+                                colorMode === "light" ? "gray.900" : "gray.300"
+                            }
+                            variant="ghost"
+                        >
                             Novella
                         </Button>
                     </NavLink>
@@ -165,13 +183,8 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
             </Flex>
 
             <Flex alignItems={"center"} gap={3}>
-             
-            <IconButton
-                    size={"sm"}
-                    icon={colorMode === "dark" ? <FaSun /> : <FaMoon />}
-                    onClick={toggleColorMode}
-                    aria-label="Toggle Dark Mode"
-                />
+                <ThemeSwitcher />
+
                 {isLoggedIn ? (
                     <Flex gap={3} alignItems={"center"}>
                         <Menu>
@@ -202,27 +215,27 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                                 )}
                             </MenuButton>
                             <Menu>
-                    <MenuButton
-                        as={Button}
-                        size={"sm"}
-                        position="relative"
-                        onClick={toggleDrawer}
-                    >
-                        <IoMdCart />
-                        {cartItems.length > 0 && (
-                            <Badge
-                                position="absolute"
-                                top="-5px"
-                                right="-5px"
-                                colorScheme="red"
-                                borderRadius="full"
-                                px="2"
-                            >
-                                {cartItems.length}
-                            </Badge>
-                        )}
-                    </MenuButton>
-                </Menu>
+                                <MenuButton
+                                    as={Button}
+                                    size={"sm"}
+                                    position="relative"
+                                    onClick={toggleDrawer}
+                                >
+                                    <IoMdCart />
+                                    {cartItems.length > 0 && (
+                                        <Badge
+                                            position="absolute"
+                                            top="-5px"
+                                            right="-5px"
+                                            colorScheme="red"
+                                            borderRadius="full"
+                                            px="2"
+                                        >
+                                            {cartItems.length}
+                                        </Badge>
+                                    )}
+                                </MenuButton>
+                            </Menu>
                             <MenuList
                                 style={{
                                     minWidth: "unset",
@@ -300,7 +313,6 @@ const Navbar = ({ toggleColorMode, colorMode }: NavbarProps) => {
                                     justifyContent={"center"}
                                     position={"relative"}
                                 >
-
                                     <Image
                                         src={user.img}
                                         w={"100%"}
