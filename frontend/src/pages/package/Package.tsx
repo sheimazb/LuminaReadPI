@@ -12,11 +12,13 @@ import {
     CardBody,
     Heading,
     Card,
+    useColorMode,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaSearch, FaStar } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
+import StarRating from "./StarRating";
 
 const Package = () => {
     const [novellas, setNovellas] = useState([]);
@@ -24,17 +26,20 @@ const Package = () => {
     const [rating, setRating] = useState(0);
     const { id } = useParams(); // Obtenir le paramètre 'id' depuis l'URL
     const userId = localStorage.getItem("id");
+
     const [packUserId, setPackUserId] = useState(null);
     const handleNavigate = () => {
         navigate(`/addnovella/${id}`);
     };
-
-    const handleRatingChange = (event:any) => {
-        setRating(event.target.value);
+    const handleBackNavigate = () => {
+        navigate("/marketplace");
     };
+    const handleRatingChange = (newRating) => {
+        setRating(newRating);
+      };
 
     const handleSubmitRating = () => {
-        const token = localStorage.getItem("token"); 
+        const token = localStorage.getItem("token");
 
         axios
             .post(
@@ -49,6 +54,7 @@ const Package = () => {
             )
             .then((response) => {
                 console.log(response.data);
+                console.log("Submitted rating:", rating);
             })
             .catch((error) => {
                 console.error("Erreur lors de l'envoi du rating:", error);
@@ -60,7 +66,7 @@ const Package = () => {
             try {
                 const result = await axios.get(
                     `http://127.0.0.1:8000/api/pack/${id}/novellas`
-                ); 
+                );
                 setNovellas(result.data.novellas);
             } catch (error) {
                 console.error("Erreur lors du chargement des novellas:", error);
@@ -69,14 +75,14 @@ const Package = () => {
 
         loadNovellas();
     }, [id]); // Inclure 'id' en tant que dépendance dans useEffect pour déclencher l'effet lorsque 'id' change
- 
+
     //get user id de pack d'aprés le pack id que se trouve dans l URL
     useEffect(() => {
         const loadUserID = async () => {
             try {
                 const result = await axios.get(
                     `http://127.0.0.1:8000/api/packsBy/${id}`
-                ); 
+                );
                 setPackUserId(result.data.pack.user_id);
             } catch (error) {
                 console.error(error);
@@ -84,15 +90,32 @@ const Package = () => {
         };
 
         loadUserID();
-    }, [id])
+    }, [id]);
+    const [packId, setPackId] = useState("");
 
+    useEffect(() => {
+        const loadPackID = async () => {
+            try {
+                const result = await axios.get(
+                    `http://127.0.0.1:8000/api/packsBy/${id}`
+                );
+                setPackId(result.data.pack);
+            } catch (error) {
+                console.error(error);
+            }
+        };
 
-    const handleCheckNovella = (novella:any):void => {
+        loadPackID();
+    }, [id]);
+
+    const handleCheckNovella = (novella: any): void => {
         navigate(`/novella/${novella.id}`);
     };
+    const { colorMode } = useColorMode();
 
     return (
         <Box w={"90%"} pt={20} mx={"auto"}>
+            
             <Flex flexDirection={"column"} gap={2}>
                 <Flex
                     h={300}
@@ -102,11 +125,7 @@ const Package = () => {
                     position={"relative"}
                     overflow={"hidden"}
                 >
-                    <Image
-                        src="https://i.gyazo.com/933ed1aa06f63a98d12891af67fbcee0.jpg"
-                        w={"100%"}
-                        objectFit={"cover"}
-                    />
+                    <Image src={packId.img} w={"100%"} objectFit={"cover"} />
                     <Box
                         position={"absolute"}
                         top={0}
@@ -123,70 +142,28 @@ const Package = () => {
                             rounded={20}
                             ml={1}
                         />
-                        <Text fontSize={"2xl"}>Fantasy Books</Text>
-                        <Text>
-                            Lorem ipsum, dolor sit amet consectetur adipisicing
-                            elit.
-                        </Text>
-                        <Box>
-                    <Input
-                        type="number"
-                        value={rating}
-                        onChange={handleRatingChange}
-                    />
-                    <Button onClick={handleSubmitRating}>Envoyer Rating</Button>
-                </Box>
-                        <Flex
-                            alignItems={"center"}
-                            gap={"5px"}
-                            mt={2}
-                            color={"yellow.300"}
-                        >
-                            <FaStar />
-                            <FaStar />
-                            <FaStar />
-                            <FaStar />
-                            <FaStar />
-                        </Flex>
+                        <Text fontSize={"2xl"}>{packId.title}</Text>
+                        <Text>{packId.description}</Text>
+                       
                     </Box>
                     <Box position={"absolute"} mt={5} bottom={4} right={2}>
-    {userId == packUserId && (
-        <Button onClick={handleNavigate}>
-            Add Novella
-        </Button>
-    )}
-    <Button ml={3} colorScheme="cyan" size={"sm"}>
-        Buy This Pack
-    </Button>
-</Box>
-                </Flex>
-                <Flex flexDirection={"column"} gap={3} mx={3}>
-                    <InputGroup size="md">
-                        <Input
-                            borderColor={"gray.700"}
-                            placeholder="Search section"
-                        />
-                        <InputRightElement>
-                            <Button size="xs" mr={1} color={"white"}>
-                                <FaSearch />
+                        {userId == packUserId && (
+                            <Button onClick={handleNavigate}>
+                                Add Novella
                             </Button>
-                        </InputRightElement>
-                    </InputGroup>
-                    <Flex>
-                        <Button mr={1} size={"sm"} rounded={20}>
-                            Blog
+                        )}
+                        <Button ml={3} colorScheme="cyan" size={"sm"}>
+                            Buy This Pack
                         </Button>
-                        <Button mr={1} size={"sm"} rounded={20}>
-                            Book
-                        </Button>
-                        <Button mr={1} size={"sm"} rounded={20}>
-                            Music
-                        </Button>
-                        <Button mr={1} size={"sm"} rounded={20}>
-                            More
-                        </Button>
-                    </Flex>
+                    </Box>
                 </Flex>
+                <Flex gap={5} justifyContent={'space-between'}>
+                    <Flex direction={'column'} w={'1200px'}>
+               <Text as={'b'} fontSize={'xl'} 
+                 color={
+                    colorMode === "light" ? "cyan.900" : "gray.300"
+                }
+               >Novellas</Text>
                 <Wrap w={"100%"} p={2}>
                     {novellas.map((novella: any, index: number) => (
                         <Card
@@ -209,8 +186,12 @@ const Package = () => {
                                     <Text color={"gray.300"} fontSize={"sm"}>
                                         {novella.description}
                                     </Text>
-                                    <Button mt={2} size={"sm"}
-                                    onClick={() => handleCheckNovella(novella)}
+                                    <Button
+                                        mt={2}
+                                        size={"sm"}
+                                        onClick={() =>
+                                            handleCheckNovella(novella)
+                                        }
                                     >
                                         Check novella
                                     </Button>
@@ -218,8 +199,38 @@ const Package = () => {
                             </CardBody>
                         </Card>
                     ))}
-                </Wrap>
+                </Wrap></Flex>
+                <Flex direction={'column'} 
+                border={'1px solid'}
+                borderColor={'gray.700'}
+                borderRadius={'5'}
+                p={3}
+                w={'450px'}
+                gap={3}
+                >
+                <Text as={'b'} fontSize={'xl'} 
+                textAlign={'center'}
+                 color={
+                    colorMode === "light" ? "cyan.900" : "gray.300"
+                }
+               >Customer reviews & ratings</Text>
+                <Flex
+                direction={'column'}
+                gap={5}
+                justifyContent={'center'}
+                >
+                        <StarRating totalStars={5} onChange={handleRatingChange} />
+                            <button onClick={handleSubmitRating}>
+                                Submit Rating
+                            </button>
+                        </Flex>
+                </Flex>
             </Flex>
+            <Flex></Flex>
+            </Flex>
+            <Box>
+                <Button onClick={() => handleBackNavigate()}>Back</Button>
+            </Box>
         </Box>
     );
 };

@@ -3,7 +3,6 @@ import Homepage from "./pages/homepage/Homepage";
 import Marketplace from "./pages/marketpalce/Marketplace";
 import Package from "./pages/package/Package";
 import Novella from "./pages/novella/Novella";
-import TTS from "./pages/novella/TTS-page";
 import {Auth} from "./authentication/Auth";
 import Login from "./authentication/Login";
 import Signup from "./authentication/Signup";
@@ -14,13 +13,11 @@ import AddPackage from "./pages/addpackage/AddPackage";
 import AddNovella from "./pages/addnovella/AddNovella";
 import NovellaContent from "./pages/novella/NovellaContent";
 import ConfirmPurchase from "./pages/ConfirmPurchase/ConfirmPurchase";
-import Chat from "./pages/chat/chat";
 
 function App() {
     return (
         <Routes>
             <Route path="/" element={<Homepage />} />
-            <Route path="/chat" element={<Chat/>} />
 
             <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/package/:id" element={<Package />} />
