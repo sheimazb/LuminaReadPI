@@ -17,7 +17,6 @@ import {
     DrawerOverlay,
     DrawerHeader,
     DrawerBody,
-    IconButton,
     useColorMode,
 } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
@@ -25,7 +24,7 @@ import { BsStars } from "react-icons/bs";
 import { TiStar } from "react-icons/ti";
 import { IoNotifications } from "react-icons/io5";
 import { IoMdCart } from "react-icons/io";
-import { FaBookReader, FaSun, FaMoon } from "react-icons/fa";
+import { FaBookReader } from "react-icons/fa";
 import CartContent from "./CartContent";
 import { useUserStore } from "../stores/user";
 import axios from "axios";
@@ -157,7 +156,7 @@ const Navbar = () => {
                             />
                         </Button>
                     </NavLink>
-                    <NavLink to="/package">
+                    <NavLink to="/chat">
                         <Button
                             size={"sm"}
                             color={
