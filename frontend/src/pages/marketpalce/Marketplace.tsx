@@ -27,7 +27,7 @@ import {
 } from "react-router-dom";
 import { CiCalendarDate } from "react-icons/ci";
 import AddPackage from "../addpackage/AddPackage";
-import { BsArrowRight} from "react-icons/bs";
+import { BsArrowRight } from "react-icons/bs";
 import { CiShoppingCart } from "react-icons/ci";
 
 const pastelColors = [
@@ -50,8 +50,8 @@ const Marketplace = () => {
     const [categoryValue, setCategoryValue] = useState("");
     const { search, category } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
-    const id = localStorage.getItem("id");
-
+    const idString = localStorage.getItem("id");
+    const id = idString ? parseInt(idString, 10) : 0;
     useEffect(() => {
         setSearchValue(search || "");
         setCategoryValue(category || "");
@@ -138,6 +138,7 @@ const Marketplace = () => {
         setCart(updatedCart);
         localStorage.setItem("cart", JSON.stringify(updatedCart));
     };
+
 
     return (
         <Box>
@@ -359,40 +360,38 @@ const Marketplace = () => {
                                                   <Text ml={1} fontSize={"xs"}>
                                                       €
                                                   </Text>
-
-                                                  <Button
-                                                      bg={"transparent"}
-                                                      _hover={{
-                                                          bg: "tarnsparent",
-                                                          borderColor:
-                                                              "transparent",
-                                                      }}
-                                                      onClick={() =>
-                                                        addToCart(pack)
-                                                    }
-                                                  >
-                                                      <CiShoppingCart
-                                                          color="cyan"
-                                                          fontSize={25}
-                                                      />
-                                                  </Button>
+                                                  {pack.user_id !== id && pack.packStatus === 0 && (
+                <Button
+                    bg={"transparent"}
+                    _hover={{
+                        bg: "transparent",
+                        borderColor: "transparent",
+                    }}
+                    onClick={() => addToCart(pack)}
+                >
+                    <CiShoppingCart
+                        color="cyan"
+                        fontSize={25}
+                    />
+                </Button>
+            )}
                                               </Flex>
                                           </Flex>
                                       </Flex>
                                   </Card>
                               ))
                             : searchResults.map((pack: any, index: number) => (
-                                <Card
-                                w="300px"
-                                key={index}
-                                m={3}
-                                h={"380px"}
-                                borderRadius={"10px"}
-                                border={"1px solid "}
-                                borderColor={"gray.700"}
-                                bg={"transparent"}
-                                p={3}
-                            >
+                                  <Card
+                                      w="300px"
+                                      key={index}
+                                      m={3}
+                                      h={"380px"}
+                                      borderRadius={"10px"}
+                                      border={"1px solid "}
+                                      borderColor={"gray.700"}
+                                      bg={"transparent"}
+                                      p={3}
+                                  >
                                       <Flex direction={"column"} gap={2}>
                                           <Image
                                               borderRadius={"30px"}
@@ -471,23 +470,27 @@ const Marketplace = () => {
                                                       €
                                                   </Text>
 
-                                                  <Button
-                                                      bg={"transparent"}
-                                                      size={"sm"}
-                                                      onClick={() =>
-                                                          addToCart(pack)
-                                                      }
-                                                      _hover={{
-                                                        bg: "tarnsparent",
-                                                        borderColor:
-                                                            "transparent",
-                                                    }}
-                                                  >
-                                                      <CiShoppingCart
-                                                          color="cyan"
-                                                          fontSize={25}
-                                                      />
-                                                  </Button>
+                                                  {pack.user_id !==id &&
+                                                      pack.packStatus === 0 && (
+                                                          <Button
+                                                              bg={"transparent"}
+                                                              _hover={{
+                                                                  bg: "transparent",
+                                                                  borderColor:
+                                                                      "transparent",
+                                                              }}
+                                                              onClick={() =>
+                                                                  addToCart(
+                                                                      pack
+                                                                  )
+                                                              }
+                                                          >
+                                                              <CiShoppingCart
+                                                                  color="cyan"
+                                                                  fontSize={25}
+                                                              />
+                                                          </Button>
+                                                      )}
                                               </Flex>
                                           </Flex>
                                       </Flex>
