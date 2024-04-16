@@ -201,28 +201,19 @@ const AddNovella: React.FC = () => {
                                 />
                             </Flex>
                             <Flex
-                                justifyContent={"space-between"}
-                                alignItems={"center"}
-                                gap={3}
+                                alignItems={"left"}
                             >
                                 <label>Langue :</label>
 
                                 <Input
                                     w="sm"
                                     mt="2"
+                                    ml={10}
+
                                     placeholder="Langue"
                                   
                                 />
-                                <label>Price :</label>
-
-                                <Input
-                                    w="sm"
-                                    mt="2"
-                                    placeholder="Price"
-                                    onChange={handleChange}
-                                    name="progress"
-                                    value={formData.progress}
-                                />
+                               
                             </Flex>
                         </Flex>
                         <Divider mt={8} />
