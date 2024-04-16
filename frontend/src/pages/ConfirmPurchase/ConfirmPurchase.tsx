@@ -10,6 +10,7 @@ import {
   Select,
   Input,
   Button,
+  useToast
 } from "@chakra-ui/react";
 export interface Item {
   img: string | undefined;
@@ -21,6 +22,10 @@ export interface Item {
 const ConfirmPurchase: React.FC = () => {
   const [selectedCard, setSelectedCard] = useState("Visa");
   const [items, setItems] = useState<Item[]>([]);
+  const toast = useToast();
+  const id= localStorage.getItem('id');
+
+
   useEffect(() => {
     const storedItems = localStorage.getItem("cart");
     if (storedItems) {
@@ -43,6 +48,77 @@ const totalPrice = items.reduce((acc, item) => {
   }
   return acc;
 }, 0);
+
+const order = async () => {
+  try {
+      const response = await fetch('http://127.0.0.1:8000/api/orders', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              user_id: id,
+              packs_ids: items.map(item => item.id), // Envoyer tous les IDs des packs dans le panier
+          }),
+      });
+
+      if (!response.ok) {
+          throw new Error('Failed to create order');
+      }
+
+      const orderData = await response.json();
+      console.log('Order created successfully:', orderData);
+      toast({
+          title: "Order created successfully",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+      });
+      // Effacer le panier après la commande
+      localStorage.removeItem("cart");
+      setItems([]);
+      await addNotification();
+
+  } catch (error:any) {
+      console.error('Error creating order:', error);
+      toast({
+          title: "Error creating order",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+      });
+  }
+};
+
+const addNotification = async () => {
+  try {
+      const response = await fetch('http://127.0.0.1:8000/api/add-notification/' + id, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              content: "Votre commande a été passée avec succès.",
+              seen: false,
+          }),
+      });
+
+      if (!response.ok) {
+          throw new Error('Failed to add notification');
+      }
+
+      const responseData = await response.json();
+      console.log('Notification added successfully:', responseData);
+  } catch (error:any) {
+      console.error('Error adding notification:', error);
+      toast({
+          title: "Error adding notification",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+      });
+  }
+};
 
   return (
     <Flex justifyContent="center" alignItems="center" height="100%" >
@@ -169,7 +245,7 @@ const totalPrice = items.reduce((acc, item) => {
               <Input className="input-field" />
             </Box>
           </Flex>
-          <Button className="pay-btn"  marginTop="15px" marginBottom="15px">Checkout</Button>
+          <Button className="pay-btn"  marginTop="15px" marginBottom="15px">Confirm</Button>
         </Box>
       </Box>
     </Flex>
