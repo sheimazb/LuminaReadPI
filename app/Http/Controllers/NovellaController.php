@@ -87,4 +87,69 @@ class NovellaController extends Controller
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
+
+
+
+    public function exportNovellasToCSV()
+    {
+        $fileName = 'novellas.csv';
+        $novellas = Novella::join('packs', 'novellas.pack_id', '=', 'packs.id')
+                            ->select('novellas.id', 'novellas.title', 'novellas.description', 'novellas.content', 'packs.category', 'packs.langue', 'packs.price')
+                            ->get();
+    
+        // Prepare CSV content
+        $csvData = [];
+        $csvData[] = ['Novella ID', 'Title', 'Description', 'Content', 'Category', 'Langue', 'Price'];
+    
+        foreach ($novellas as $novella) {
+            $csvData[] = [
+                $novella->id,
+                $novella->title,
+                $novella->description,
+                $novella->content,
+                $novella->category,
+                $novella->langue,
+                $novella->price,
+            ];
+        }
+    
+        // Create the download directory if it doesn't exist
+        $downloadPath = public_path('download');
+        if (!file_exists($downloadPath)) {
+            mkdir($downloadPath, 0755, true);
+        }
+    
+        // Write CSV content to file
+        $filePath = $downloadPath . DIRECTORY_SEPARATOR . $fileName;
+    
+        $file = fopen($filePath, 'w');
+        if (!$file) {
+            // Log error or throw exception
+            return response()->json(['error' => 'Failed to open file for writing'], 500);
+        }
+    
+        foreach ($csvData as $row) {
+            if (!fputcsv($file, $row)) {
+                // Log error or throw exception
+                fclose($file);
+                return response()->json(['error' => 'Failed to write data to file'], 500);
+            }
+        }
+    
+        fclose($file);
+    
+        // Provide the file as a download
+        $headers = [
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        ];
+    
+        return response()->download($filePath, $fileName, $headers)->deleteFileAfterSend(true);
+    }
+    
+    
+    
 }

@@ -31,8 +31,11 @@ use App\Mail\OrderConfirmation;
 */
 
 // Public routes
+Route::get('/export-novellas', [NovellaController::class, 'exportNovellasToCSV']);
+
 Route::post('/login', [AuthUserController::class, 'login']);
 Route::post('/register', [AuthUserController::class, 'register']);
+
 
 // Protected routes
 Route::middleware(['jwt.auth', 'api-header'])->group(function () {
@@ -48,6 +51,8 @@ Route::middleware(['jwt.auth', 'api-header'])->group(function () {
     Route::get('/packk', [PacksController::class, 'getPacksByUserId']);
     Route::post('/pack/review/{id}', [ReviewController::class, 'reviewstore']);
     Route::post('/Addcomments', [CommentController::class, 'addComment']);
+
+
 
 });
 
@@ -71,6 +76,7 @@ Route::middleware('api-header')->group(function () {
     Route::get('/pack/{id}/novellas', [NovellaController::class, 'show']);
 
     Route::get('/AllPack', [PacksController::class, 'AllPack']);
+
 //find pack by id
 Route::get('/packsBy/{id}', [PacksController::class, 'findPackById']);
 Route::get('/usersBy/{id}', [AuthUserController::class, 'getUsersById']);
@@ -90,6 +96,8 @@ Route::get('/usersBy/{id}', [AuthUserController::class, 'getUsersById']);
     Route::get('/sse', [SseController::class, 'SEETEST']);
 
     Route::post('/upload', [PacksController::class, 'upload']);
+
+
 });
 
 // Protected route to retrieve authenticated user details
