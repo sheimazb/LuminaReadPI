@@ -99,32 +99,7 @@ class PacksController extends Controller
             return response()->json(['error' => 'Aucune image n\'a été envoyée.'], 400);
         }
     }
-    /*
-    
-     * test filter pack
-     * 
-     * 
-     
-    public function filterByCategory(Request $request)
-    {
-        // Vérifier si des catégories sont spécifiées dans la requête
-        if ($request->has('categories')) {
-            $categories = $request->input('categories');
-
-            // Filtrer les packs selon les catégories spécifiées
-            $packs = Pack::whereHas('categories', function ($query) use ($categories) {
-                $query->whereIn('id', $categories);
-            })->get();
-
-            // Retourner les packs filtrés en réponse
-            return response()->json(['packs' => $packs], 200);
-        } else {
-            // Si aucune catégorie spécifiée, retourner une réponse avec un message d'erreur
-            return response()->json(['error' => 'Veuillez spécifier au moins une catégorie.'], 400);
-        }
-    }
-    */
-    /**
+       /**
      *  get pack information by user id 
      * 
      */
