@@ -232,7 +232,7 @@ const TextReader = () => {
                     <Spinner size="xl" color="cyan.500" />
                 </Flex>
             )}
-            <Flex maxW={"1400px"} flexDirection="column" p={3} m={"auto"}>
+            <Flex maxW={"1400px"} flexDirection="column" p={3} m={"auto"}>  
                 <Flex
                     w={"100%"}
                     justifyContent={"space-between"}
