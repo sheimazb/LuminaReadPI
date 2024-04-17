@@ -1,33 +1,77 @@
 import { useState } from "react";
-import { Flex, Input, Button, Text, Divider,useToast, FormLabel, FormControl } from "@chakra-ui/react";
+import { Flex, Input, Button, Text, Divider, useToast, FormLabel, FormControl } from "@chakra-ui/react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
+
 function Signup() {
-    const toast =useToast();
+    const toast = useToast();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         password: "",
     });
-    const navigate = useNavigate();
-    const handleChange = (e: any) => {
+
+    const [errors, setErrors] = useState({
+        name: "",
+        email: "",
+        password: "",
+    });
+
+    const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
         });
     };
 
-    const handleSubmit = async (e: any) => {
+    const validateForm = () => {
+        let valid = true;
+        const newErrors = { ...errors };
+
+        if (formData.name === "") {
+            newErrors.name = "Please enter your name.";
+            valid = false;
+        } else {
+            newErrors.name = "";
+        }
+
+        if (formData.email === "") {
+            newErrors.email = "Please enter your email.";
+            valid = false;
+        } else {
+            newErrors.email = "";
+        }
+
+        if (formData.password === "") {
+            newErrors.password = "Please enter your password.";
+            valid = false;
+        } else if (formData.password.length < 6) {
+            newErrors.password = "Password must be at least 6 characters long.";
+            valid = false;
+        } else {
+            newErrors.password = "";
+        }
+
+        setErrors(newErrors);
+        return valid;
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
+        if (!validateForm()) {
+            return; // Stop the submission if validation fails
+        }
+
         try {
             const response = await axios.post(
                 "http://127.0.0.1:8000/api/register",
                 formData
             );
-          
+
             console.log("Response:", response.data);
-    
+
             if (response.status === 201) {
                 toast({
                     title: "Account created.",
@@ -46,7 +90,7 @@ function Signup() {
                     isClosable: true,
                 });
             }
-        } catch (error:any) {
+        } catch (error) {
             console.error("Error:", error.response);
             if (error.response.status === 400) {
                 // Handle validation errors
@@ -70,7 +114,6 @@ function Signup() {
             }
         }
     };
-    
 
     return (
         <Flex
@@ -85,40 +128,43 @@ function Signup() {
 
             <form onSubmit={handleSubmit}>
                 <Flex flexDirection={"column"} mb={5}>
-                <FormControl mb='5' >
-                    <FormLabel color={"purple.100"}>Full Name</FormLabel>
-                    <Input
-                        variant="filled"
-                        placeholder="Full Name"
-                        w={300}
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                    />
+                    <FormControl mb="5" isInvalid={errors.name}>
+                        <FormLabel color={"purple.100"}>Full Name</FormLabel>
+                        <Input
+                            variant="filled"
+                            placeholder="Full Name"
+                            w={300}
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                        />
+                        {errors.name && <Text color="red.500">{errors.name}</Text>}
                     </FormControl>
-                    <FormControl mb='5' >
-                    <FormLabel color={"purple.100"}>Email</FormLabel>
-                    <Input
-                        variant="filled"
-                        placeholder="Email"
-                        type="email"
-                        w={300}
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                    />
+                    <FormControl mb="5" isInvalid={errors.email}>
+                        <FormLabel color={"purple.100"}>Email</FormLabel>
+                        <Input
+                            variant="filled"
+                            placeholder="Email"
+                            type="email"
+                            w={300}
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                        />
+                        {errors.email && <Text color="red.500">{errors.email}</Text>}
                     </FormControl>
-                    <FormControl mb='5' >
-                    <FormLabel color={"purple.100"}>Password</FormLabel>
-                    <Input
-                        variant="filled"
-                        placeholder="Password"
-                        type="password"
-                        w={300}
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                    />
+                    <FormControl mb="5" isInvalid={errors.password}>
+                        <FormLabel color={"purple.100"}>Password</FormLabel>
+                        <Input
+                            variant="filled"
+                            placeholder="Password"
+                            type="password"
+                            w={300}
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                        />
+                        {errors.password && <Text color="red.500">{errors.password}</Text>}
                     </FormControl>
                     <Button type="submit" colorScheme="blue" mb={3}>
                         Sign Up

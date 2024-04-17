@@ -32,6 +32,7 @@ const AddPackage: React.FC = () => {
 
     const inputRef = useRef(null);
     const [image, setImage] = useState("");
+    const [isDescriptionValid, setIsDescriptionValid] = useState(true);
 
     const handleImageClick = () => {
         inputRef.current.click();
@@ -81,7 +82,36 @@ const AddPackage: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+    
+        // Validate price
+        const priceRegex = /^\d+$/;
+        if (!priceRegex.test(formData.price)) {
+            toast({
+                title: "Error",
+                description: "Price must be an integer",
+                status: "error",
+                duration: 1000,
+                isClosable: true,
+            });
+            return;
+        }
+    
+        // Validate description
+        const words = formData.description.trim().split(/\s+/);
+        if (words.length < 5) {
+            setIsDescriptionValid(false);
+            toast({
+                title: "Error",
+                description: "Description must contain at least 5 words",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+            return;
+        } else {
+            setIsDescriptionValid(true);
+        }
+    
         try {
             const formDataToSend = new FormData();
             formDataToSend.append("title", formData.title);
@@ -92,7 +122,7 @@ const AddPackage: React.FC = () => {
             if (formData.img) {
                 formDataToSend.append("image", formData.img);
             }
-
+    
             const response = await axios.post(
                 "http://127.0.0.1:8000/api/add-pack",
                 formDataToSend,
@@ -125,6 +155,7 @@ const AddPackage: React.FC = () => {
             console.error("Error:", error);
         }
     };
+    
 
     return (
         <>

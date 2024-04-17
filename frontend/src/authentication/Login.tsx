@@ -29,7 +29,7 @@ const handleSubmit = async (e: any) => {
 
     try {
         await login(formData);
-        setLoginResponse(201);
+        //setLoginResponse(201);
         if (loginResponse === 201) {
             toast({
                 title: "Success",
@@ -40,11 +40,12 @@ const handleSubmit = async (e: any) => {
             });
             navigate("/marketplace");
         }else{
+            navigate("/marketplace");
             toast({
                 title: "Error",
                 description: "Logged in failed! check your data! ",
                 status: "error",
-                duration: 3000,
+                duration: 10,
                 isClosable: true,
             });
         }
