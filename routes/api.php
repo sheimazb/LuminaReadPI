@@ -50,6 +50,7 @@ Route::middleware(['jwt.auth', 'api-header'])->group(function () {
     Route::post('/editUser', [AuthUserController::class, 'editUser']);
     Route::get('/packk', [PacksController::class, 'getPacksByUserId']);
     Route::post('/pack/review/{id}', [ReviewController::class, 'reviewstore']);
+   
     Route::post('/Addcomments', [CommentController::class, 'addComment']);
 
 
@@ -57,6 +58,8 @@ Route::middleware(['jwt.auth', 'api-header'])->group(function () {
 });
 
 Route::middleware('api-header')->group(function () {
+    Route::get('/pack/{pack_id}/average-rating', [ReviewController::class, 'getAverageRating']);
+
     Route::get('/books', [BooksController::class, 'index']);
     Route::get('/blog', [BlogsController::class, 'index']);
     Route::post('/storeBlog', [BlogsController::class, 'store']);

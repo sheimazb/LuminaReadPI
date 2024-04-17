@@ -7,7 +7,7 @@ function App() {
     return (
         <ChakraProvider>
             <BrowserRouter>
-                <Box position="fixed" w="100%" zIndex="99">
+                <Box position="fixed" w="100%" zIndex="99" >
                     <Navbar />
                 </Box>
                 <Routing />{" "}

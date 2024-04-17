@@ -197,7 +197,7 @@ const Profile: React.FC = () => {
     };
 
     return (
-        <Box maxW={"1230px"} pt={20} ml={"auto"} mr={"auto"}>
+        <Box  pt={20} ml={"auto"} mr={"auto"} bg={'black'}>
             <Flex flexDirection={"column"} gap={1} alignItems={"left"}>
                 <Flex flexDirection={"column"} gap={1} alignItems={"center"}>
                     <Box position="relative" display="inline-block">
@@ -342,10 +342,10 @@ const Profile: React.FC = () => {
             <Flex mt={5}>
                 <InputGroup size="md" ml={100} mr={100}>
                     <Input
-                        borderColor={"gray.700"}
+                        borderColor={"teal.700"}
                         placeholder="Search section"
                         borderRadius={"20px"}
-                        bg={"gray.600"}
+                        bg={"black"}
                         value={searchQuery}
                         name="search"
                         onChange={handleChangeSearch}
@@ -362,7 +362,7 @@ const Profile: React.FC = () => {
                     </InputRightElement>
                 </InputGroup>
             </Flex>
-            <Wrap minH={500} mt={3}>
+            <Wrap minH={500} ml={60}>
                 {searchQuery.length === 0
                     ? // If searchResults is empty, display all packs
                       packs.map((pack: Pack, index: number) => (
@@ -370,10 +370,10 @@ const Profile: React.FC = () => {
                               w="300px"
                               key={index}
                               m={3}
-                              h={"380px"}
+                              h={"390px"}
                               borderRadius={"10px"}
                               border={"1px solid "}
-                              borderColor={"gray.700"}
+                              borderColor={"teal.700"}
                               bg={"transparent"}
                               p={3}
                           >

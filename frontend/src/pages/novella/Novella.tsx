@@ -79,7 +79,7 @@ const Novella: React.FC = () => {
         }
     };
     return (
-        <>
+        < Box bg={'black'}>
             <Flex
                 w={"1200px"}
                 pt={20}
@@ -231,7 +231,7 @@ const Novella: React.FC = () => {
                     </PopoverContent>
                 </Popover>
             </Flex>
-        </>
+        </ Box>
     );
 };
 

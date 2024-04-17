@@ -12,6 +12,7 @@ import {
     TagRightIcon,
     Spinner,
     useToast,
+    useColorMode,
 } from "@chakra-ui/react";
 import { FaCopy, FaPause, FaStepForward, FaStop } from "react-icons/fa";
 import { IoQrCodeOutline } from "react-icons/io5";
@@ -214,9 +215,10 @@ const TextReader = () => {
             </Flex>
         );
     }
+    const { colorMode } = useColorMode();
 
     return (
-        <Box  pt={20} mx={"auto"}>
+        <Box  pt={20} mx={"auto"}  bg={colorMode === "light" ? "gray.200" : "black"}>
             {isLoading && (
                 <Flex
                     alignItems="center"
@@ -243,7 +245,7 @@ const TextReader = () => {
                     py={2}
                     borderColor={"gray.700"}
                 >
-                    <Flex gap={2}>
+                    <Flex gap={2} >
                         <Button size={"sm"} onClick={speakText}>
                             <Box fontSize={"sm"}>
                                 <FaStepForward />
@@ -338,6 +340,7 @@ const TextReader = () => {
                     w={"100%"}
                     flexDirection={view ? "column" : "row"}
                     gap={3}
+                    
                 >
                     <Box w={view ? "100%" : "50%"}>
                         <Text mt={6} fontSize="sm" color={"cyan.500"}>
@@ -376,7 +379,7 @@ const TextReader = () => {
             </Flex>
             <Flex
                 w={"100%"}
-                bg={"gray.700"}
+                bg={"gray.900"}
                 h={isBoxVisible ? 81 : 0}
                 position={"fixed"}
                 p={isBoxVisible ? 3 : 0}

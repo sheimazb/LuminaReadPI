@@ -13,6 +13,7 @@ import {
     Heading,
     Card,
     useColorMode,
+    Divider,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -26,7 +27,7 @@ const Package = () => {
     const [rating, setRating] = useState(0);
     const { id } = useParams(); // Obtenir le paramètre 'id' depuis l'URL
     const userId = localStorage.getItem("id");
-
+const uId =parseInt(userId);
     const [packUserId, setPackUserId] = useState(null);
     const handleNavigate = () => {
         navigate(`/addnovella/${id}`);
@@ -36,7 +37,7 @@ const Package = () => {
     };
     const handleRatingChange = (newRating) => {
         setRating(newRating);
-      };
+    };
 
     const handleSubmitRating = () => {
         const token = localStorage.getItem("token");
@@ -92,7 +93,6 @@ const Package = () => {
         loadUserID();
     }, [id]);
     const [packId, setPackId] = useState("");
-
     useEffect(() => {
         const loadPackID = async () => {
             try {
@@ -112,10 +112,33 @@ const Package = () => {
         navigate(`/novella/${novella.id}`);
     };
     const { colorMode } = useColorMode();
+    const [averageRating, setAverageRating] = useState(1);
+    useEffect(() => {
+        const fetchAverageRating = async () => {
+            try {
+                const response = await axios.get(
+                    `http://127.0.0.1:8000/api/pack/${id}/average-rating`
+                );
+                // Si la réponse est vide ou si elle renvoie une erreur 404, définir averageRating sur 0
+                if (!response.data) {
+                    setAverageRating(1);
+                } else {
+                    setAverageRating(response.data);
+                }
+            } catch (error) {
+                // Si une erreur se produit, définir averageRating sur 0
+                console.error("Error fetching average rating:", error);
+                setAverageRating(0);
+            }
+        };
+
+        fetchAverageRating();
+    }, [id]);
+    console.log('test',packId.user_id);
+    console.log('test2',uId);
 
     return (
         <Box w={"90%"} pt={20} mx={"auto"}>
-            
             <Flex flexDirection={"column"} gap={2}>
                 <Flex
                     h={300}
@@ -144,7 +167,6 @@ const Package = () => {
                         />
                         <Text fontSize={"2xl"}>{packId.title}</Text>
                         <Text>{packId.description}</Text>
-                       
                     </Box>
                     <Box position={"absolute"} mt={5} bottom={4} right={2}>
                         {userId == packUserId && (
@@ -157,76 +179,123 @@ const Package = () => {
                         </Button>
                     </Box>
                 </Flex>
-                <Flex gap={5} justifyContent={'space-between'}>
-                    <Flex direction={'column'} w={'1200px'}>
-               <Text as={'b'} fontSize={'xl'} 
-                 color={
-                    colorMode === "light" ? "cyan.900" : "gray.300"
-                }
-               >Novellas</Text>
-                <Wrap w={"100%"} p={2}>
-                    {novellas.map((novella: any, index: number) => (
-                        <Card
-                            maxW="270px"
-                            key={index}
-                            bg={"transparent"}
-                            border={"var(--bordercolor) solid 1px "}
-                            p={0}
+                <Flex gap={5} justifyContent={"space-between"}>
+                    <Flex direction={"column"} w={"1200px"}>
+                        <Text
+                            as={"b"}
+                            fontSize={"xl"}
+                            color={
+                                colorMode === "light" ? "cyan.900" : "gray.300"
+                            }
                         >
-                            <CardBody>
-                                <Image
-                                    src={novella.img}
-                                    alt="Green double couch with wooden legs"
-                                    borderRadius="lg"
-                                    w={"100%"}
-                                    h={160}
-                                />
-                                <Stack mt="3" spacing="1">
-                                    <Heading size="md">{novella.title}</Heading>
-                                    <Text color={"gray.300"} fontSize={"sm"}>
-                                        {novella.description}
+                            Novellas
+                        </Text>
+                        {packId.packStatus ===0 && packId.user_id !== uId&&(
+                            <Text color={'red'}>
+                                You cannot access the content of the novellas 
+                                without purchasing the pack first, dear user
+                            </Text>
+                        )}
+                        <Wrap w={"100%"} p={2}>
+                            {novellas.map((novella: any, index: number) => (
+                                <Card
+                                    maxW="270px"
+                                    key={index}
+                                    bg={"transparent"}
+                                    border={"var(--bordercolor) solid 1px "}
+                                    p={0}
+                                >
+                                    <CardBody>
+                                        <Image
+                                            src={novella.img}
+                                            alt="Green double couch with wooden legs"
+                                            borderRadius="lg"
+                                            w={"100%"}
+                                            h={160}
+                                        />
+                                        <Stack mt="3" spacing="1">
+                                            <Heading size="md">
+                                                {novella.title}
+                                            </Heading>
+                                            <Text
+                                                color={"gray.300"}
+                                                fontSize={"sm"}
+                                            >
+                                                {novella.description}
+                                            </Text>
+                                            {packId.packStatus !== 0  && (
+    <Button
+        mt={2}
+        size={"sm"}
+        onClick={() => handleCheckNovella(novella)}
+    >
+        Check novella
+    </Button>
+)}
+                                        </Stack>
+                                    </CardBody>
+                                </Card>
+                            ))}
+                        </Wrap>
+                    </Flex>
+                    <Flex
+                        direction={"column"}
+                        border={"1px solid"}
+                        borderColor={"gray.700"}
+                        borderRadius={"5"}
+                        p={3}
+                        w={"450px"}
+                        gap={3}
+                    >
+                        <Text
+                            as={"b"}
+                            fontSize={"xl"}
+                            textAlign={"left"}
+                            color={
+                                colorMode === "light" ? "cyan.900" : "gray.300"
+                            }
+                        >
+                            Customer reviews & ratings
+                        </Text>
+                        <Flex justifyContent={"center"}>
+                            {averageRating !== undefined &&
+                            averageRating !== null &&
+                            averageRating !== 0 ? (
+                                <Flex
+                                    gap={3}
+                                    alignItems={"center"}
+                                    justifyContent={"center"}
+                                >
+                                    <FaStar color="yellow" fontSize={"50px"} />
+                                    <Text as={"b"} fontSize={"50px"}>
+                                        {/** 
+                                       * 
+                                        {averageRating.toFixed(1)}
+                                       * 
+                                      */}
                                     </Text>
-                                    <Button
-                                        mt={2}
-                                        size={"sm"}
-                                        onClick={() =>
-                                            handleCheckNovella(novella)
-                                        }
-                                    >
-                                        Check novella
-                                    </Button>
-                                </Stack>
-                            </CardBody>
-                        </Card>
-                    ))}
-                </Wrap></Flex>
-                <Flex direction={'column'} 
-                border={'1px solid'}
-                borderColor={'gray.700'}
-                borderRadius={'5'}
-                p={3}
-                w={'450px'}
-                gap={3}
-                >
-                <Text as={'b'} fontSize={'xl'} 
-                textAlign={'center'}
-                 color={
-                    colorMode === "light" ? "cyan.900" : "gray.300"
-                }
-               >Customer reviews & ratings</Text>
-                <Flex
-                direction={'column'}
-                gap={5}
-                justifyContent={'center'}
-                >
-                        <StarRating totalStars={5} onChange={handleRatingChange} />
-                            <button onClick={handleSubmitRating}>
-                                Submit Rating
-                            </button>
+                                </Flex>
+                            ) : (
+                                <Text>Loading average rating...</Text>
+                            )}
                         </Flex>
+                        <Divider />
+                        <Flex
+                            direction={"column"}
+                            gap={5}
+                            justifyContent={"center"}
+                        >
+                            <StarRating
+                                totalStars={5}
+                                onChange={handleRatingChange}
+                            />
+                            <Button onClick={handleSubmitRating}>
+                                Submit Rating
+                            </Button>
+                        </Flex>
+                    </Flex>
                 </Flex>
-            </Flex>
-            <Flex></Flex>
+                <Flex></Flex>
             </Flex>
             <Box>
                 <Button onClick={() => handleBackNavigate()}>Back</Button>

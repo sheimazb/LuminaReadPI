@@ -15,9 +15,15 @@ class ReviewController extends Controller
         $review = new Review();
         $pack = Pack::findOrFail($id);
         $review->pack_id = $pack->id;
-        $review->star_rating = $request->input('rating');
+        // Vérifiez si le rating est fourni dans la requête, sinon définissez-le sur 1 par défaut
+        $review->star_rating = $request->input('rating', 1);
         $review->user_id = Auth::user()->id;
         $review->save();
         return response()->json($review, 200);
+    }
+    public function getAverageRating($packId)
+    {
+        $averageRating = Review::where('pack_id', $packId)->avg('star_rating');
+        return response()->json($averageRating, 200);
     }
 }

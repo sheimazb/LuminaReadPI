@@ -211,7 +211,7 @@ const NovellaContent: React.FC = () => {
 
 
     return (
-        <Box  pt={20} mx={"auto"}>
+        <Box  pt={20} mx={"auto"} bg={'black'}>
         {isLoading && (
             <Flex
                 alignItems="center"

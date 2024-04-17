@@ -116,29 +116,33 @@ const Navbar = () => {
             display="flex"
             h="60px"
             px="15px"
-            bg={colorMode === "light" ? "gray.50" : "#37484951"}
+            bg={colorMode === "light" ? "gray.50" : "#1a1c1cd7"}
         >
             <Flex gap={5}>
                 <NavLink to="/">
+                    <Flex gap={5} alignContent={'center'} alignItems={'center'} justifyContent={'center'}>
+                    <Box
+                            color={
+                                colorMode === "light" ? "teal.300" : "teal.300"
+                            }
+                        >
+                            <FaBookReader fontSize={25} />
+                        </Box>
                     <Text
-                        mb={1}
                         fontSize={"xl"}
                         display={"flex"}
                         alignItems={"center"}
                         gap={2}
                         color={colorMode === "light" ? "gray.900" : "gray.50"}
+                        fontFamily={'fantasy'}
+                        letterSpacing={'5px'}
                     >
-                        <Box
-                            color={
-                                colorMode === "light" ? "cyan.600" : "cyan.600"
-                            }
-                        >
-                            <FaBookReader />
-                        </Box>
+                        
                         Lumina Read
                     </Text>
+                    </Flex>
                 </NavLink>
-                <Flex gap="5px" alignItems={"end"}>
+                <Flex gap="5px" alignItems={"end"} ml={'550px'}>
                     <NavLink to="/marketplace">
                         <Button
                             size={"sm"}
@@ -147,11 +151,13 @@ const Navbar = () => {
                             }
                             variant="ghost"
                             gap={1}
+                            fontFamily={'unset'}
+                            fontSize={'15px'}
                         >
                             Market Place
                             <BsStars
                                 color={
-                                    colorMode === "light" ? "cyan.900" : "cyan"
+                                    colorMode === "light" ? "orange" : "Yellow"
                                 }
                             />
                         </Button>
@@ -163,6 +169,8 @@ const Navbar = () => {
                                 colorMode === "light" ? "gray.900" : "gray.300"
                             }
                             variant="ghost"
+                            fontSize={'15px'}
+
                         >
                             Package
                         </Button>
@@ -174,6 +182,8 @@ const Navbar = () => {
                                 colorMode === "light" ? "gray.900" : "gray.300"
                             }
                             variant="ghost"
+                            fontSize={'15px'}
+
                         >
                             Novella
                         </Button>

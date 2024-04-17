@@ -15,6 +15,8 @@ import {
     TagLabel,
     TagCloseButton,
     Tag,
+    useColorMode,
+    Divider,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { FaFilter, FaSearch, FaStar } from "react-icons/fa";
@@ -52,6 +54,8 @@ const Marketplace = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const idString = localStorage.getItem("id");
     const id = idString ? parseInt(idString, 10) : 0;
+    const isLoggedIn = localStorage.getItem("token") !== null;
+
     useEffect(() => {
         setSearchValue(search || "");
         setCategoryValue(category || "");
@@ -138,10 +142,11 @@ const Marketplace = () => {
         setCart(updatedCart);
         localStorage.setItem("cart", JSON.stringify(updatedCart));
     };
+    const { colorMode } = useColorMode();
 
 
     return (
-        <Box>
+        <Box bg={colorMode === "light" ? "gray.200" : "black"}>
             <Flex
                 h={250}
                 bg={"var(--lvl1-darkcolor)"}
@@ -161,11 +166,12 @@ const Marketplace = () => {
                     bottom={0}
                     left={0}
                     right={0}
-                    bgGradient="linear(to-t,  #1b202d , transparent)"
+                    bgGradient="linear(to-t,  #140e0e53 , transparent)"
                 />
 
                 <Box position={"absolute"} textAlign={"center"} mb={5}>
-                    <Text fontSize={"3xl"} zIndex={1}>
+                    <Text fontSize={"3xl"} zIndex={1}
+                    color={colorMode === "light" ? "White" : "White"}>
                         Packages Market Place
                     </Text>
                     <Text fontSize={"md"} zIndex={1} color={"gray.300"} mb={5}>
@@ -186,12 +192,13 @@ const Marketplace = () => {
                     <Flex alignItems={"center"} gap={3}>
                         <InputGroup size="md" ml={500} mr={500}>
                             <Input
-                                borderColor={"gray.700"}
-                                placeholder="Search section"
+                                borderColor={colorMode === "light" ? "teal.300" : "teal.900"}
+                                placeholder="Search pack"
                                 name="search"
                                 borderRadius={"20px"}
                                 value={searchValue}
-                                bg={"gray.600"}
+                                bg={colorMode === "light" ? "gray.100" : "black"}
+                                
                                 onChange={(e) => setSearchValue(e.target.value)}
                             />
                             <InputRightElement>
@@ -199,10 +206,10 @@ const Marketplace = () => {
                                     onClick={handleSearch}
                                     size="xs"
                                     mr={1}
-                                    color={"white"}
+                                    color={colorMode === "light" ? "white" : "black"}
                                     type="button"
                                     borderRadius={"35"}
-                                    bg={"cyan.300"}
+                                    bg={"teal.300"}
                                 >
                                     <FaSearch color="gray" />
                                 </Button>
@@ -213,17 +220,17 @@ const Marketplace = () => {
 
                 <Flex gap={3}>
                     <Flex
-                        w={"400px"}
+                        minW={"350"}
                         h={900}
                         rounded={10}
                         direction={"column"}
-                        p={2}
+                        p={4}
                     >
                         <Flex
                             justifyContent={"space-between"}
                             alignItems={"center"}
                         >
-                            <Text as={"b"} fontSize={"3xl"}>
+                            <Text  fontSize={"xl"}>
                                 Categories
                             </Text>
 
@@ -239,8 +246,12 @@ const Marketplace = () => {
                                 <FaFilter color="white" />
                             </Button>
                         </Flex>
-
+<Divider mb={5} mt={2}
+bg={colorMode === "light" ? "black" : "teal.500"}
+/>
                         <Flex gap={2} p={2}>
+                        
+                            <Wrap>
                             {[
                                 ...new Set(packs.map((pack) => pack.category)),
                             ].map((category, index) => (
@@ -249,7 +260,7 @@ const Marketplace = () => {
                                     size="md"
                                     h={"max-content"}
                                     variant="solid"
-                                    color={"gray"}
+                                    color={"gray.900"}
                                     backgroundColor={
                                         pastelColors[
                                             index % pastelColors.length
@@ -263,9 +274,16 @@ const Marketplace = () => {
                                     <TagCloseButton />
                                 </Tag>
                             ))}
+                            </Wrap>
                         </Flex>
                     </Flex>
-
+                    <Flex direction={'column'} p={4} gap={3}>
+                        <Text fontSize={'xl'}>Packages Available</Text>
+                        <Tag
+                        w={'max-content'}
+                        color={colorMode === "light" ? "orange" : "pink"}
+                        bg={colorMode === "light" ? "gray.300" : "gray.700"}
+                        > Once logged in, you can purchase a package</Tag>
                     <Wrap w={"calc(100vw - 300px)"} p={2}>
                         {searchValue.length === 0 && categoryValue.length === 0
                             ? packs.map((pack: any, index: any) => (
@@ -276,7 +294,7 @@ const Marketplace = () => {
                                       h={"380px"}
                                       borderRadius={"10px"}
                                       border={"1px solid "}
-                                      borderColor={"gray.700"}
+                                      borderColor={colorMode === "light" ? "teal.300" : "teal.800"}
                                       bg={"transparent"}
                                       p={3}
                                   >
@@ -339,11 +357,12 @@ const Marketplace = () => {
                                               gap={1}
                                               justifyContent={"space-between"}
                                           >
-                                              <Flex
-                                                  alignItems={"center"}
-                                                  gap={1}
-                                              >
-                                                  <Link
+                                              
+                                              {isLoggedIn &&( 
+                                                <Flex
+                                                alignItems={"center"}
+                                                gap={1}
+                                            >   <Link
                                                       color={"cyan"}
                                                       onClick={() =>
                                                           handleClickShow(pack)
@@ -353,6 +372,8 @@ const Marketplace = () => {
                                                   </Link>
                                                   <BsArrowRight color="cyan" />
                                               </Flex>
+
+                                                )}
                                               <Flex alignItems={"center"}>
                                                   <Text fontSize={"2xl"}>
                                                       {pack.price}{" "}
@@ -496,7 +517,7 @@ const Marketplace = () => {
                                       </Flex>
                                   </Card>
                               ))}
-                    </Wrap>
+                    </Wrap></Flex>
                 </Flex>
             </Flex>
         </Box>

@@ -6,7 +6,7 @@
   --bordercolor: #2f3b4b;
   --maincolor: #3055fe;
   --hover-maincolor: #1039f3;
-  background-color: var(--chakra-colors-chakra-body-bg);
+  background-color: black;
   color: var(--chakra-colors-chakra-body-text);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
