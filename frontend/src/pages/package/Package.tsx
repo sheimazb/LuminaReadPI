@@ -268,11 +268,9 @@ const uId =parseInt(userId);
                                 >
                                     <FaStar color="yellow" fontSize={"50px"} />
                                     <Text as={"b"} fontSize={"50px"}>
-                                        {/** 
-                                       * 
-                                        {averageRating.toFixed(1)}
-                                       * 
-                                      */}
+                                      
+                                        {averageRating ? "0":averageRating.toFixed(1) }
+                                       
                                     </Text>
                                 </Flex>
                             ) : (

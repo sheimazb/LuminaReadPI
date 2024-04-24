@@ -50,11 +50,8 @@ Route::middleware(['jwt.auth', 'api-header'])->group(function () {
     Route::post('/editUser', [AuthUserController::class, 'editUser']);
     Route::get('/packk', [PacksController::class, 'getPacksByUserId']);
     Route::post('/pack/review/{id}', [ReviewController::class, 'reviewstore']);
-   
+
     Route::post('/Addcomments', [CommentController::class, 'addComment']);
-
-
-
 });
 
 Route::middleware('api-header')->group(function () {
@@ -63,7 +60,7 @@ Route::middleware('api-header')->group(function () {
     Route::get('/books', [BooksController::class, 'index']);
     Route::get('/blog', [BlogsController::class, 'index']);
     Route::post('/storeBlog', [BlogsController::class, 'store']);
-    Route::post('/testSendMessage',[MessageController::class,'store']);
+    Route::post('/testSendMessage', [MessageController::class, 'store']);
 
     Route::post('/save', [BooksController::class, 'store']);
     Route::put('/update/{id}', [BooksController::class, 'update']);
@@ -80,15 +77,15 @@ Route::middleware('api-header')->group(function () {
 
     Route::get('/AllPack', [PacksController::class, 'AllPack']);
 
-//find pack by id
-Route::get('/packsBy/{id}', [PacksController::class, 'findPackById']);
-Route::get('/usersBy/{id}', [AuthUserController::class, 'getUsersById']);
+    //find pack by id
+    Route::get('/packsBy/{id}', [PacksController::class, 'findPackById']);
+    Route::get('/usersBy/{id}', [AuthUserController::class, 'getUsersById']);
     Route::get('/list-novella', [NovellaController::class, 'index']);
     Route::get('/novellas/{id}', [NovellaController::class, 'FindNovellaByID']);
 
     Route::post('/AddText',    [TextController::class, 'AddText']);
     Route::post('/LogCode',    [TextController::class, 'getTextByPin']);
-   
+
     Route::get('/text/{code}', [TextController::class, 'getTextByCode']);
     Route::put('/updateText/{code}', [TextController::class, 'updateText']);
 
@@ -99,8 +96,6 @@ Route::get('/usersBy/{id}', [AuthUserController::class, 'getUsersById']);
     Route::get('/sse', [SseController::class, 'SEETEST']);
 
     Route::post('/upload', [PacksController::class, 'upload']);
-
-
 });
 
 // Protected route to retrieve authenticated user details

@@ -37,7 +37,7 @@ const AddNovella: React.FC = () => {
         description: "",
         img: null,
         content: "",
-        progress: "",
+        progress: "50",
     });
 
     const handleChange = (

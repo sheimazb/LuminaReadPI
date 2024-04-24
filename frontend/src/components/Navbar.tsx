@@ -120,29 +120,35 @@ const Navbar = () => {
         >
             <Flex gap={5}>
                 <NavLink to="/">
-                    <Flex gap={5} alignContent={'center'} alignItems={'center'} justifyContent={'center'}>
-                    <Box
+                    <Flex
+                        gap={5}
+                        alignContent={"center"}
+                        alignItems={"center"}
+                        justifyContent={"center"}
+                    >
+                        <Box
                             color={
                                 colorMode === "light" ? "teal.300" : "teal.300"
                             }
                         >
                             <FaBookReader fontSize={25} />
                         </Box>
-                    <Text
-                        fontSize={"xl"}
-                        display={"flex"}
-                        alignItems={"center"}
-                        gap={2}
-                        color={colorMode === "light" ? "gray.900" : "gray.50"}
-                        fontFamily={'fantasy'}
-                        letterSpacing={'5px'}
-                    >
-                        
-                        Lumina Read
-                    </Text>
+                        <Text
+                            fontSize={"xl"}
+                            display={"flex"}
+                            alignItems={"center"}
+                            gap={2}
+                            color={
+                                colorMode === "light" ? "gray.900" : "gray.50"
+                            }
+                            fontFamily={"fantasy"}
+                            letterSpacing={"5px"}
+                        >
+                            Lumina Read
+                        </Text>
                     </Flex>
                 </NavLink>
-                <Flex gap="5px" alignItems={"end"} ml={'550px'}>
+                <Flex gap="5px" alignItems={"center"} justifyContent={"center"}>
                     <NavLink to="/marketplace">
                         <Button
                             size={"sm"}
@@ -151,8 +157,8 @@ const Navbar = () => {
                             }
                             variant="ghost"
                             gap={1}
-                            fontFamily={'unset'}
-                            fontSize={'15px'}
+                            fontFamily={"unset"}
+                            fontSize={"15px"}
                         >
                             Market Place
                             <BsStars
@@ -160,32 +166,6 @@ const Navbar = () => {
                                     colorMode === "light" ? "orange" : "Yellow"
                                 }
                             />
-                        </Button>
-                    </NavLink>
-                    <NavLink to="/chat">
-                        <Button
-                            size={"sm"}
-                            color={
-                                colorMode === "light" ? "gray.900" : "gray.300"
-                            }
-                            variant="ghost"
-                            fontSize={'15px'}
-
-                        >
-                            Package
-                        </Button>
-                    </NavLink>
-                    <NavLink to="/novella/1">
-                        <Button
-                            size={"sm"}
-                            color={
-                                colorMode === "light" ? "gray.900" : "gray.300"
-                            }
-                            variant="ghost"
-                            fontSize={'15px'}
-
-                        >
-                            Novella
                         </Button>
                     </NavLink>
                 </Flex>

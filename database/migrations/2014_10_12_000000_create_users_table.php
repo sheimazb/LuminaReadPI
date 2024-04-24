@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('img')->nullable(); 
             $table->string('description')->nullable();
             $table->String('auth_token');
+            $table->Boolean('verified')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
