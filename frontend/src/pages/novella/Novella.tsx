@@ -190,7 +190,7 @@ const Novella: React.FC = () => {
                                             <Radio value="en" name="language">
                                                 English
                                             </Radio>
-                                            <Radio value="zh" name="language">
+                                            <Radio value="ar" name="language">
                                                 Arabic
                                             </Radio>
                                         </Stack>
