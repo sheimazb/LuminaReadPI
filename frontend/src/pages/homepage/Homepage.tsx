@@ -20,7 +20,7 @@ import {
     useDisclosure,
     useToast,
 } from "@chakra-ui/react";
-import { FaReadme, FaRegArrowAltCircleRight } from "react-icons/fa";
+import { FaReadme } from "react-icons/fa";
 import { FaEarListen, FaHandPeace, FaPenClip } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { IoIosArrowForward } from "react-icons/io";
@@ -268,15 +268,7 @@ const Homepage = () => {
                                 </ModalFooter>
                             </ModalContent>
                         </Modal>
-                        <Button
-                            colorScheme="gray"
-                            rightIcon={<FaRegArrowAltCircleRight />}
-                            mt={10}
-                            variant="outline"
-                            rounded={20}
-                        >
-                            Get in touch
-                        </Button>
+                    
                     </Box>
                 </Flex>
             </Flex>

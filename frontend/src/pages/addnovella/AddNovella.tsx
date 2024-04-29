@@ -78,7 +78,7 @@ const AddNovella: React.FC = () => {
             formDataToSend.append("title", formData.title);
             formDataToSend.append("description", formData.description);
             formDataToSend.append("content", formData.content);
-            formDataToSend.append("progress", formData.progress);
+            formDataToSend.append("progress", "hiiii");
             if (formData.img) {
                 formDataToSend.append("image", formData.img);
             }
