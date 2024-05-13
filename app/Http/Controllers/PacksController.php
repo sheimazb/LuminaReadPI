@@ -32,10 +32,10 @@ class PacksController extends Controller
             $query->where('title', 'like', "$search%");
         }
 
-        /* if ($request->has('searchByDescription')) { // Correction: changer 'searchByTitle' à 'searchByDescription'
+        if ($request->has('searchByDescription')) {
             $search = $request->input('searchByDescription');
             $query->where('description', 'like', "$search%");
-        }*/
+        }
 
         if ($request->has('price')) {
             $price = $request->input('price');
@@ -44,7 +44,7 @@ class PacksController extends Controller
 
         $packs = $query->get();
 
-        return response()->json(['packs' => $packs]);
+        return response()->json($packs);
     }
 
 
