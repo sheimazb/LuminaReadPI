@@ -83,7 +83,7 @@ const Profile: React.FC = () => {
         (async () => await fetchUser())();
     }, []);
     async function fetchUser() {
-        const token = localStorage.getItem("token"); // Récupérer le token JWT depuis le stockage local
+        const token = localStorage.getItem("to&ken"); // Récupérer le token JWT depuis le stockage local
         const response = await axios.get("http://127.0.0.1:8000/api/users", {
             headers: {
                 Authorization: `Bearer ${token}`,
