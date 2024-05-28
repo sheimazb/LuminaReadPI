@@ -56,4 +56,15 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     {
         return [];
     }
+
+        /**
+     * Get a user by ID.
+     *
+     * @param int $userId
+     * @return \App\Models\User|null
+     */
+    public static function getUserById(int $userId)
+    {
+        return self::find($userId);
+    }
 }
