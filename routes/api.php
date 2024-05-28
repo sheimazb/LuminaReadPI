@@ -82,6 +82,7 @@ Route::middleware('api-header')->group(function () {
     Route::get('/usersBy/{id}', [AuthUserController::class, 'getUsersById']);
     Route::get('/list-novella', [NovellaController::class, 'index']);
     Route::get('/novellas/{id}', [NovellaController::class, 'FindNovellaByID']);
+    Route::get('/novel/{id}', [NovellaController::class, 'FindNovellasByPackID']);
 
     Route::post('/AddText',    [TextController::class, 'AddText']);
     Route::post('/LogCode',    [TextController::class, 'getTextByPin']);

@@ -88,7 +88,18 @@ class NovellaController extends Controller
         }
     }
 
-
+public function FindNovellasByPackID($pack_id) {
+    try {
+        $novellas = Novella::where('pack_id', $pack_id)->get();
+        if ($novellas->isEmpty()) {
+            return response()->json(['message' => 'No novellas found for this pack'], 404);
+        } else {
+            return response()->json($novellas, 200);
+        }
+    } catch (\Exception $e) {
+        return response()->json(['message' => $e->getMessage()], 500);
+    }
+}
 
     public function exportNovellasToCSV()
     {
