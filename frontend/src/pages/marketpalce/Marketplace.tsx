@@ -12,6 +12,7 @@ import {
     Card,
     useToast,
     Link,
+    TagLabel,
     TagCloseButton,
     Tag,
     useColorMode,
@@ -22,7 +23,9 @@ import { FaFilter, FaSearch, FaStar } from "react-icons/fa";
 import { CiUser } from "react-icons/ci";
 import {
     NavLink,
+    useNavigate,
     useParams,
+    useSearchParams,
 } from "react-router-dom";
 import { CiCalendarDate } from "react-icons/ci";
 import AddPackage from "../addpackage/AddPackage";
@@ -44,10 +47,12 @@ const pastelColors = [
 
 const Marketplace = () => {
     const toast = useToast();
+    const navigate = useNavigate();
     const [searchResults, setSearchResults] = useState([]);
     const [searchValue, setSearchValue] = useState("");
     const [categoryValue, setCategoryValue] = useState("");
     const { search, category } = useParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const idString = localStorage.getItem("id");
     const id = idString ? parseInt(idString, 10) : 0;
     const isLoggedIn = localStorage.getItem("token") !== null;
@@ -155,7 +160,9 @@ const Marketplace = () => {
     };
 
     const { colorMode } = useColorMode();
-
+    const handleClickShow = (pack) => {
+        navigate(`/package/${pack.id}`);
+    };
     return (
         <Box bg={colorMode === "light" ? "gray.200" : "black"}>
             <Flex
