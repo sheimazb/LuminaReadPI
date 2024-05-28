@@ -8,18 +8,24 @@ app = Flask(__name__)
 CORS(app)
 
 
+logging.basicConfig(level=logging.INFO)
 
-
-popular_df = pd.read_pickle(".\novella_top10")
-print(popular_df.head())
-
-logging.info("Pickle file loaded successfully.")
-
+try:
+    popular_df = pd.read_pickle("./novella_top10")
+    logging.info("Pickle file loaded successfully.")
+except Exception as e:
+    logging.error(f"Error loading pickle file: {e}")
+    try:
+        popular_df = pd.read_csv("C:/Users/asus/Downloads/novella_top10.csv")
+        logging.info("CSV file loaded successfully as fallback.")
+    except Exception as e:
+        logging.error(f"Error loading CSV file: {e}")
+        popular_df = pd.DataFrame()
 
 
 @app.route('/', methods=['POST'])
 def index():
-    data = request.get_json()  
+    data = request.get_json()
     input_title = data['title']
 
     results = novella_recommendations(input_title, cosine_sim_df)
@@ -53,7 +59,7 @@ def top10():
 
 @app.route('/novella', methods=['POST'])
 def novella():
-    data = request.get_json()  # Assuming JSON input
+    data = request.get_json()
     input_title = data['title']
 
     results = novella_recommendations(input_title, cosine_sim_df)
