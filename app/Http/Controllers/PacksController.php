@@ -44,6 +44,39 @@ class PacksController extends Controller
 
         $packs = $query->get();
 
+        return response()->json(['packs' => $packs]);
+    }
+    public function AllPackDesk(Request $request)
+    {
+        $query = Pack::query()->with('usser'); // Charger la relation utilisateur
+
+        if ($request->has('category')) {
+            $category = $request->input('category');
+            $query->where('category', $category);
+        }
+
+        if ($request->has('langue')) {
+            $langue = $request->input('langue');
+            $query->where('langue', $langue);
+        }
+        
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('title', 'like', "$search%");
+        }
+
+        if ($request->has('searchByDescription')) {
+            $search = $request->input('searchByDescription');
+            $query->where('description', 'like', "$search%");
+        }
+
+        if ($request->has('price')) {
+            $price = $request->input('price');
+            $query->where('price', $price);
+        }
+
+        $packs = $query->get();
+
         return response()->json($packs);
     }
 
