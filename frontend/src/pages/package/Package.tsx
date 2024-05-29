@@ -190,12 +190,7 @@ const uId =parseInt(userId);
                         >
                             Novellas
                         </Text>
-                        {packId.packStatus ===0 && packId.user_id !== uId&&(
-                            <Text color={'red'}>
-                                You cannot access the content of the novellas 
-                                without purchasing the pack first, dear user
-                            </Text>
-                        )}
+                       
                         <Wrap w={"100%"} p={2}>
                             {novellas.map((novella: any, index: number) => (
                                 <Card
@@ -223,7 +218,7 @@ const uId =parseInt(userId);
                                             >
                                                 {novella.description}
                                             </Text>
-                                            {packId.packStatus !== 0  && (
+                                            {packId.packStatus !== 1  && (
     <Button
         mt={2}
         size={"sm"}
